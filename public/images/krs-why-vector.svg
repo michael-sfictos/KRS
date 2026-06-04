@@ -1,0 +1,33 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="640" fill="#F4EFE6"/>
+  <path d="M158 480h644" stroke="#071823" stroke-width="2"/>
+  <path d="M158 480c88-12 125-68 191-114 74-52 142-13 205-64 61-50 86-126 248-142" stroke="#B68A35" stroke-width="4" stroke-linecap="round"/>
+  <path d="M158 480c62-34 126-38 192-30 76 9 136-13 196-48 81-48 144-55 256-45" stroke="#071823" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>
+  <g>
+    <rect x="132" y="128" width="184" height="112" rx="2" fill="#071823"/>
+    <rect x="150" y="148" width="72" height="8" fill="#B68A35"/>
+    <rect x="150" y="174" width="128" height="8" fill="#F4EFE6" opacity=".72"/>
+    <rect x="150" y="198" width="98" height="8" fill="#F4EFE6" opacity=".42"/>
+  </g>
+  <g>
+    <rect x="382" y="92" width="196" height="132" rx="2" fill="#F4EFE6" stroke="#071823" stroke-opacity=".16"/>
+    <circle cx="426" cy="150" r="24" fill="#B68A35"/>
+    <path d="M480 126h58M480 150h72M480 174h44" stroke="#071823" stroke-width="8" stroke-linecap="square" opacity=".72"/>
+  </g>
+  <g>
+    <rect x="648" y="188" width="180" height="128" rx="2" fill="#0D2A3A"/>
+    <path d="M682 272h112M682 238h72M682 222h118" stroke="#F4EFE6" stroke-width="8" opacity=".72"/>
+    <circle cx="794" cy="236" r="18" fill="#B68A35"/>
+  </g>
+  <g fill="#071823" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" letter-spacing="2">
+    <text x="158" y="528">01 ONE PLATFORM</text>
+    <text x="382" y="528">02 FAST ANSWERS</text>
+    <text x="640" y="528">03 REALTIME CONTROL</text>
+  </g>
+  <g fill="#B68A35">
+    <circle cx="158" cy="480" r="7"/>
+    <circle cx="349" cy="366" r="7"/>
+    <circle cx="554" cy="302" r="7"/>
+    <circle cx="802" cy="160" r="7"/>
+  </g>
+</svg>
