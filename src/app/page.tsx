@@ -2,18 +2,13 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  BadgeCheck,
-  FileCheck2,
+  ChevronDown,
   Gauge,
-  Landmark,
   Languages,
   MessageSquareText,
   Network,
   PanelsTopLeft,
-  ReceiptText,
-  ShieldCheck,
   Sparkles,
-  Workflow,
 } from "lucide-react";
 
 import {
@@ -22,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AgentsSection } from "@/components/agents-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProcessTimeline } from "@/components/process-timeline";
@@ -30,12 +26,190 @@ import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { label: "Services", href: "#services" },
-  { label: "Industries", href: "#why" },
-  { label: "Guides", href: "#process" },
-  { label: "About Us", href: "#about" },
-  { label: "Blog", href: "#field-notes" },
+type MegaMenuLink = {
+  label: string;
+  description?: string;
+  href: string;
+};
+
+type MegaMenuColumn = {
+  title: string;
+  links: MegaMenuLink[];
+};
+
+type MegaMenuFeature = MegaMenuLink & {
+  eyebrow: string;
+};
+
+type MegaNavItem = {
+  label: string;
+  href: string;
+  eyebrow: string;
+  description: string;
+  columns: MegaMenuColumn[];
+  features: MegaMenuFeature[];
+  ctaLabel: string;
+  ctaHref: string;
+};
+
+const navItems: MegaNavItem[] = [
+  {
+    label: "Services",
+    href: "#services",
+    eyebrow: "KRS AI Services",
+    description: "Accounting, payroll, tax advisory, and platform workflows organized like Integral's service menu.",
+    ctaLabel: "Talk to our team",
+    ctaHref: "#contact",
+    columns: [
+      {
+        title: "Our Services",
+        links: [
+          { label: "Tax Advisory", description: "Personal advice directly on our platform", href: "#services" },
+          { label: "Bookkeeping", description: "Digital accounting for businesses", href: "#services" },
+          { label: "Tax Return", description: "Professional preparation and timely filing", href: "#services" },
+          { label: "Annual Financial Statements", description: "Compliant statements with partner tax advisor", href: "#services" },
+          { label: "Payroll Accounting", description: "Accurate payroll fully integrated", href: "#services" },
+        ],
+      },
+      {
+        title: "Platform Features",
+        links: [
+          { label: "Meet Tax Deadlines", description: "All deadlines automatically tracked", href: "#process" },
+          { label: "Manage Tax Documents", description: "Documents digitally organized and secure", href: "#agents" },
+          { label: "Get Expert Advice", description: "Direct questions to your tax advisor", href: "#contact" },
+          { label: "Automated Data Exchange", description: "Seamlessly connect your tools", href: "#agents" },
+        ],
+      },
+    ],
+    features: [
+      { eyebrow: "Book a demo", label: "Talk to our expert team", description: "See how the operating file works before onboarding.", href: "#contact" },
+      { eyebrow: "Guide", label: "Taxes, Accounting, and Tips for Starting a Business", description: "A practical entry point for founders and operators.", href: "#field-notes" },
+    ],
+  },
+  {
+    label: "Industries",
+    href: "#why",
+    eyebrow: "By company type",
+    description: "Common company structures and business stages from the Integral menu, adapted for KRS positioning.",
+    ctaLabel: "Book a free demo",
+    ctaHref: "#contact",
+    columns: [
+      {
+        title: "By company type",
+        links: [
+          { label: "Tax Advisory for UG", description: "Tailored tax advice for your UG", href: "#contact" },
+          { label: "Tax Advisory for GmbH", description: "Custom tax advice for limited liability companies", href: "#contact" },
+          { label: "Tax Advisory for Holding", description: "Specialized advice for holding structures", href: "#contact" },
+          { label: "Tax Advisory for Startups", description: "Smart tax support for your startup", href: "#contact" },
+          { label: "Tax Advisory for Companies", description: "Personal tax advice for SMEs", href: "#contact" },
+          { label: "Tax Advisory for Founders", description: "Professional guidance from day one", href: "#contact" },
+        ],
+      },
+    ],
+    features: [
+      { eyebrow: "Learn more", label: "Tax Advisor Costs", description: "The costs of a tax advisor explained.", href: "#field-notes" },
+      { eyebrow: "Learn more", label: "Tax Advisor Obligation", description: "Is a tax advisor mandatory?", href: "#faq" },
+    ],
+  },
+  {
+    label: "Guides",
+    href: "#process",
+    eyebrow: "Guide hub",
+    description: "A resource menu with the same topical grouping Integral uses for advisory, bookkeeping, and tax tips.",
+    ctaLabel: "Explore our guides",
+    ctaHref: "#field-notes",
+    columns: [
+      {
+        title: "Tax Advisory",
+        links: [
+          { label: "Tax Advisor Search", href: "#field-notes" },
+          { label: "Tax Advisor Costs", href: "#field-notes" },
+          { label: "Tax Advisor Switch", href: "#field-notes" },
+          { label: "Free tax advice", href: "#field-notes" },
+          { label: "Do I need a tax advisor?", href: "#faq" },
+        ],
+      },
+      {
+        title: "Bookkeeping",
+        links: [
+          { label: "Bookkeeper search", href: "#field-notes" },
+          { label: "Bookkeeping costs", href: "#field-notes" },
+          { label: "Bookkeeping outsourcing", href: "#field-notes" },
+          { label: "Bookkeeping UG", href: "#field-notes" },
+          { label: "Bookkeeping GmbH", href: "#field-notes" },
+        ],
+      },
+      {
+        title: "Tax tips",
+        links: [
+          { label: "Tax return documents", href: "#field-notes" },
+          { label: "Deducting tax consulting costs", href: "#field-notes" },
+          { label: "Common questions about tax advisors", href: "#faq" },
+          { label: "When should I consult a tax advisor?", href: "#faq" },
+          { label: "Tax Advisor Comparison", href: "#field-notes" },
+        ],
+      },
+    ],
+    features: [
+      { eyebrow: "Learn more", label: "Cost calculator", description: "Calculate costs for tax consulting and accounting.", href: "#contact" },
+      { eyebrow: "Learn more", label: "Digital tax advice", description: "Benefits and practical tips.", href: "#services" },
+    ],
+  },
+  {
+    label: "About Us",
+    href: "#about",
+    eyebrow: "About KRS AI",
+    description: "Company, careers, FAQs, and contact entries shaped like Integral's about menu.",
+    ctaLabel: "Book a free demo",
+    ctaHref: "#contact",
+    columns: [
+      {
+        title: "About KRS AI",
+        links: [
+          { label: "About us", description: "KRS AI's story and mission", href: "#about" },
+          { label: "Why KRS AI?", description: "Benefits of our platform and advice", href: "#why" },
+          { label: "Careers", description: "Open positions at KRS AI", href: "#careers" },
+          { label: "FAQs", description: "Answers to common questions", href: "#faq" },
+          { label: "Contact us", description: "Personal contact with our team", href: "#contact" },
+        ],
+      },
+    ],
+    features: [
+      { eyebrow: "Learn more", label: "Book a Demo", description: "Talk to our expert team.", href: "#contact" },
+      { eyebrow: "Learn more", label: "Open positions", description: "Your start at KRS AI.", href: "#careers" },
+    ],
+  },
+  {
+    label: "Blog",
+    href: "#field-notes",
+    eyebrow: "Field notes",
+    description: "The blog item keeps Integral's guide-card structure while using this site's current article themes.",
+    ctaLabel: "Read all articles",
+    ctaHref: "#field-notes",
+    columns: [
+      {
+        title: "Latest articles",
+        links: [
+          { label: "What agentic accounting changes for Greek SMEs.", description: "Brief / 08 min", href: "#field-notes" },
+          { label: "myDATA as an operating rhythm, not an afterthought.", description: "Guide / 11 min", href: "#field-notes" },
+          { label: "The CFO question founders ask too late.", description: "Conversation / 17 min", href: "#field-notes" },
+        ],
+      },
+      {
+        title: "Browse topics",
+        links: [
+          { label: "Accounting", href: "#field-notes" },
+          { label: "Payroll", href: "#field-notes" },
+          { label: "Tax Filings", href: "#field-notes" },
+          { label: "Tax tips", href: "#field-notes" },
+        ],
+      },
+    ],
+    features: [
+      { eyebrow: "Guide Hub", label: "Taxes, Accounting, and Tips for Starting a Business", description: "A founder-friendly resource path.", href: "#field-notes" },
+      { eyebrow: "Press", label: "Known from", description: "Media, updates, and public notes from KRS AI.", href: "#media" },
+    ],
+  },
 ];
 
 const mediaSignals = [
@@ -43,50 +217,6 @@ const mediaSignals = [
   { label: "Kathimerini Business", mark: "K", note: "Greek SME advisory", href: "https://www.kathimerini.gr/economy/business/" },
   { label: "Naftemporiki", mark: "N", note: "Tax technology", href: "https://www.naftemporiki.gr/" },
   { label: "Startupper", mark: "S", note: "Founder finance", href: "https://www.startupper.gr/" },
-];
-
-const governmentConnections: Array<{
-  name: string;
-  description: string;
-  status: string;
-  icon: LucideIcon;
-}> = [
-  {
-    name: "AADE",
-    description: "VAT, myDATA, tax certificates, company obligations.",
-    status: "Tax authority",
-    icon: Landmark,
-  },
-  {
-    name: "EFKA",
-    description: "Employer insurance contributions and payroll obligations.",
-    status: "Social security",
-    icon: ShieldCheck,
-  },
-  {
-    name: "Taxisnet",
-    description: "Declarations, authorisations, and tax account access.",
-    status: "Identity gateway",
-    icon: FileCheck2,
-  },
-  {
-    name: "ERGANI",
-    description: "Hiring, payroll notices, and labour compliance flows.",
-    status: "Labour filings",
-    icon: Workflow,
-  },
-  {
-    name: "gov.gr",
-    description: "Certificates, statements, and public-service documents.",
-    status: "Public services",
-    icon: BadgeCheck,
-  },
-  {
-    name: "myDATA",
-    description: "Document matching, e-books, and reporting continuity.",
-    status: "Digital books",
-    icon: ReceiptText,
-  },
 ];
 
 const processSteps = [
@@ -183,9 +313,14 @@ const faqs = [
   },
 ];
 
+const careersClockTicks = Array.from({ length: 12 }, (_, index) => ({
+  angle: index * 30,
+  highlighted: index < 6,
+}));
+
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
+    <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <AnnouncementBar />
       <Header />
       <HeroSection />
@@ -217,19 +352,13 @@ function AnnouncementBar() {
 function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-primary/12 bg-background/88 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-12">
+      <nav className="relative mx-auto flex h-18 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-12">
         <a aria-label="KRS AI home" className="flex items-center" href="#">
-          <Image alt="KRS AI" className="h-9 w-auto" height={36} src="/logos/krs-full-logo-dark.svg" unoptimized width={152} />
+          <Image alt="KRS AI" className="h-14 w-auto" height={157} src="/logos/Full%20logo%20Dark.svg" unoptimized width={382} />
         </a>
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden h-full items-center gap-2 lg:flex">
           {navItems.map((item) => (
-            <a
-              className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
-              href={item.href}
-              key={item.label}
-            >
-              {item.label}
-            </a>
+            <HeaderMegaNavItem item={item} key={item.label} />
           ))}
         </div>
         <div className="flex items-center gap-2">
@@ -254,17 +383,107 @@ function Header() {
   );
 }
 
+function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
+  return (
+    <div className="mega-menu-group flex h-full items-center">
+      <button
+        aria-haspopup="true"
+        className="flex h-full appearance-none items-center gap-1 bg-transparent px-2 text-sm font-medium text-muted-foreground outline-none transition hover:text-foreground focus-visible:text-foreground"
+        type="button"
+      >
+        {item.label}
+        <ChevronDown
+          aria-hidden="true"
+          className="mega-menu-chevron size-3.5 transition duration-200"
+          strokeWidth={1.75}
+        />
+      </button>
+      <div
+        className="mega-menu-panel absolute left-1/2 top-full z-50 w-[min(1040px,calc(100vw-3rem))] pt-3 transition duration-200 ease-out"
+      >
+        <div className="grid overflow-hidden border border-primary/15 bg-white shadow-[var(--shadow-xl)] lg:grid-cols-[1fr_320px]">
+          <div className="bg-white p-5 sm:p-6">
+            <div className={cn("grid gap-x-8 gap-y-6", item.columns.length > 2 ? "lg:grid-cols-3" : item.columns.length > 1 ? "md:grid-cols-2" : "grid-cols-1")}>
+              {item.columns.map((column) => (
+                <div key={column.title}>
+                  <p className="mono-label mb-3 text-muted-foreground">{column.title}</p>
+                  <ul>
+                    {column.links.map((link) => (
+                      <li className="border-t border-primary/10 first:border-t-0" key={link.label}>
+                        <a className="group/link block py-3 outline-none" href={link.href}>
+                          <span className="flex items-start justify-between gap-4">
+                            <span className="text-sm font-semibold leading-5 text-foreground transition group-hover/link:text-secondary group-focus-visible/link:text-secondary">
+                              {link.label}
+                            </span>
+                            <ArrowRight
+                              aria-hidden="true"
+                              className="mt-0.5 size-3.5 shrink-0 text-muted-foreground opacity-0 transition group-hover/link:translate-x-0.5 group-hover/link:opacity-100 group-focus-visible/link:opacity-100"
+                              strokeWidth={1.75}
+                            />
+                          </span>
+                          {link.description ? <span className="mt-1 block text-xs leading-5 text-muted-foreground">{link.description}</span> : null}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex min-h-full flex-col justify-between bg-primary p-5 text-primary-foreground sm:p-6">
+            <div>
+              <div className="grid gap-3">
+                {item.features.map((feature) => (
+                  <a
+                    className="group/card block border border-primary-foreground/12 bg-primary-foreground/8 p-4 outline-none transition hover:bg-primary-foreground/12 focus-visible:bg-primary-foreground/12"
+                    href={feature.href}
+                    key={feature.label}
+                  >
+                    <span className="flex items-start justify-between gap-4">
+                      <span>
+                        <span className="mono-label text-secondary">{feature.eyebrow}</span>
+                        <span className="mt-2 block text-base font-semibold leading-5 text-primary-foreground">{feature.label}</span>
+                      </span>
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="mt-1 size-4 shrink-0 text-primary-foreground/40 transition group-hover/card:translate-x-0.5 group-hover/card:text-secondary group-focus-visible/card:text-secondary"
+                        strokeWidth={1.75}
+                      />
+                    </span>
+                    <span className="mt-3 block text-xs leading-5 text-primary-foreground/58">{feature.description}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <a
+              className="mt-6 inline-flex h-11 w-fit items-center justify-center gap-2 rounded-full bg-primary-foreground px-5 text-sm font-semibold text-primary transition hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+              href={item.ctaHref}
+            >
+              {item.ctaLabel}
+              <ArrowRight className="size-4" strokeWidth={1.75} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden border-b border-primary/12 bg-background">
+    <section className="relative overflow-hidden border-b border-primary/12 bg-[#FDF8F0]">
       <div className="relative mx-auto max-w-[1400px] px-4 pb-8 pt-10 sm:px-6 lg:px-12 lg:pt-16">
-        <div className="mb-20 flex flex-col gap-5 md:mb-24 md:flex-row md:items-end md:justify-between lg:mb-32">
-          <div className="mono-label flex flex-wrap gap-x-5 gap-y-2 text-muted-foreground">
+        <div className="mb-20 flex flex-col gap-6 md:mb-24 md:flex-row md:items-end md:justify-between lg:mb-32">
+          <div className="flex items-center gap-6 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">
             <span>No. 001</span>
-            <span>Field Manual</span>
-            <span>Greek Business Services</span>
+            <span className="hidden text-primary/35 md:inline">/</span>
+            <span className="hidden md:inline">Field Manual</span>
+            <span className="hidden text-primary/35 lg:inline">/</span>
+            <span className="hidden lg:inline">Greek Business Services</span>
           </div>
-          <p className="mono-label text-muted-foreground">Athens / EU / 2026</p>
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">Athens / EU / 2026</p>
         </div>
 
         <div className="grid grid-cols-12 items-end gap-6 lg:gap-8">
@@ -316,41 +535,39 @@ function HeroVisualStrip() {
         />
       </div>
 
-      <div className="flex min-h-[360px] flex-col justify-between bg-primary p-5 text-primary-foreground">
-        <div className="mono-label text-primary-foreground/48">Close state</div>
+      <div className="flex min-h-[360px] flex-col justify-between bg-secondary p-5 text-secondary-foreground">
+        <div className="mono-label text-secondary-foreground/68">Close state</div>
         <div>
-          <p className="font-heading text-7xl font-medium leading-none text-secondary">02</p>
-          <p className="mono-label mt-3 text-primary-foreground/62">open questions</p>
+          <p className="font-heading text-7xl font-medium leading-none text-white">02</p>
+          <p className="mono-label mt-3 text-secondary-foreground/78">open questions</p>
         </div>
       </div>
 
-      <div className="min-h-[360px] bg-card p-5">
+      <div className="min-h-[360px] bg-tertiary p-5 text-tertiary-foreground">
         <div className="flex h-full flex-col justify-between">
-          <p className="mono-label text-muted-foreground">Advisor queue</p>
+          <p className="mono-label text-tertiary-foreground/68">Advisor queue</p>
           <div className="space-y-3">
             {["VAT position", "Payroll change", "myDATA match"].map((item, index) => (
-              <div className="grid grid-cols-[auto_1fr] items-center gap-3 border-t border-primary/12 pt-3" key={item}>
+              <div className="grid grid-cols-[auto_1fr] items-center gap-3 border-t border-tertiary-foreground/18 pt-3" key={item}>
                 <span className="font-mono text-xs text-secondary">0{index + 1}</span>
                 <span className="text-sm font-semibold">{item}</span>
               </div>
             ))}
           </div>
-          <Badge className="w-fit rounded-full bg-primary text-primary-foreground">live file</Badge>
+          <Badge className="w-fit rounded-full bg-tertiary-foreground text-tertiary">live file</Badge>
         </div>
       </div>
 
       <div className="relative min-h-[360px] overflow-hidden bg-primary text-primary-foreground">
-        <div className="absolute left-0 top-1/2 h-px w-full bg-primary-foreground/12" />
-        <div className="absolute left-1/2 top-0 h-full w-px bg-primary-foreground/12" />
         <div className="relative flex h-full flex-col justify-between p-5">
-          <p className="mono-label text-secondary">Topology</p>
+          <p className="mono-label text-primary-foreground/68">Topology</p>
           <div>
             <div className="mb-6 grid grid-cols-3 gap-3">
               {["AADE", "EFKA", "ERGANI", "KRS", "myDATA", "gov.gr"].map((node, index) => (
                 <span
                   className={cn(
-                    "flex aspect-square items-center justify-center border border-primary-foreground/14 text-center font-mono text-[0.62rem] uppercase text-primary-foreground/54",
-                    index === 3 && "bg-secondary text-secondary-foreground"
+                    "flex aspect-square items-center justify-center border border-primary-foreground/16 bg-primary-foreground/5 text-center font-mono text-[0.62rem] uppercase text-primary-foreground/58",
+                    index === 3 && "border-primary-foreground bg-primary-foreground text-primary"
                   )}
                   key={node}
                 >
@@ -411,9 +628,15 @@ function ManifestoSection() {
         04
       </div>
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-12 gap-8 px-4 sm:px-6 lg:px-12">
-        <div className="col-span-12 lg:col-span-3">
-          <p className="mono-label text-secondary">Manifesto / 01</p>
-          <p className="mt-5 max-w-xs text-sm leading-7 text-primary-foreground/56">
+        <div
+          className="relative col-span-12 min-h-[420px] overflow-hidden bg-left-bottom bg-no-repeat lg:col-span-3 lg:min-h-[520px]"
+          style={{
+            backgroundImage: "url('/images/FounderKRS.webp')",
+            backgroundSize: "min(22rem, 92%) auto",
+          }}
+        >
+          <p className="relative z-10 mono-label text-secondary">Manifesto / 01</p>
+          <p className="relative z-10 mt-5 max-w-xs text-sm leading-7 text-primary-foreground/56">
             Accounting should feel like an operating discipline, not a periodic scramble through portals, folders, and
             inboxes.
           </p>
@@ -421,7 +644,7 @@ function ManifestoSection() {
         <div className="col-span-12 lg:col-span-9">
           <p className="font-heading text-balance text-4xl font-light leading-[1.04] sm:text-5xl md:text-6xl lg:text-7xl">
             We believe trust is built through evidence, cadence, and accountable review.
-            <span className="text-secondary"> AI should not obscure the work.</span> It should make the work inspectable.
+            <span className="italic text-secondary"> AI should not obscure the work.</span> It should make the work inspectable.
           </p>
           <div className="mt-12 flex flex-wrap gap-x-10 gap-y-3 font-mono text-sm text-primary-foreground/60">
             <span className="uppercase tracking-widest">Signed</span>
@@ -506,68 +729,13 @@ function SlimCta() {
   );
 }
 
-function AgentsSection() {
-  return (
-    <section className="relative overflow-hidden bg-primary px-4 py-24 text-primary-foreground sm:px-6 lg:px-12" id="agents">
-      <div className="relative mx-auto max-w-[1400px]">
-        <SectionIntro
-          eyebrow="KRS AI Agents"
-          inverted
-          text="Agents prepare the context, connect the relevant authority workflow, and route exceptions to the right licensed professional before a deadline becomes a problem."
-          title="The connection layer between your business file and Greek compliance systems."
-        />
-
-        <div className="mt-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-          <div className="gradient-shell shadow-[var(--shadow-xl)]">
-            <div className="relative min-h-[520px] overflow-hidden bg-primary">
-              <Image
-                alt="KRS AI agent network connecting Greek compliance systems"
-                className="h-full min-h-[520px] w-full object-contain p-4"
-                height={640}
-                src="/images/krs-agent-network.svg"
-                unoptimized
-                width={960}
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-px border border-primary-foreground/12 bg-primary-foreground/12">
-            {governmentConnections.map((connection) => {
-              const Icon = connection.icon;
-
-              return (
-                <div className="grid gap-4 bg-primary p-5 sm:grid-cols-[auto_1fr_auto] sm:items-center" key={connection.name}>
-                  <span className="flex size-11 items-center justify-center border border-primary-foreground/14 bg-primary-foreground/8">
-                    <Icon className="size-5 text-secondary" />
-                  </span>
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <h3 className="text-xl font-semibold">{connection.name}</h3>
-                      <Badge className="rounded-full bg-secondary text-secondary-foreground" variant="secondary">
-                        {connection.status}
-                      </Badge>
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-primary-foreground/62">{connection.description}</p>
-                  </div>
-                  <ArrowRight className="hidden size-5 text-primary-foreground/34 sm:block" />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ProcessSection() {
   return (
-    <section className="relative overflow-hidden bg-primary px-4 py-24 text-primary-foreground sm:px-6 lg:px-12" id="process">
+    <section className="relative overflow-hidden border-y border-primary/12 bg-muted/55 px-4 py-24 text-foreground sm:px-6 lg:px-12" id="process">
       <div className="relative mx-auto max-w-[1400px]">
         <SectionIntro
           className="lg:grid-cols-[0.65fr_0.35fr]"
           eyebrow="Your start at KRS AI"
-          inverted
           text="The timeline remains simple: start, monthly close, annual filings, and ongoing advisory. Each phase has visible evidence and a clear owner."
           title="A timeline for accounting work that normally disappears into inboxes."
         />
@@ -696,20 +864,39 @@ function CareersSection() {
           <div className="relative aspect-[3/4] overflow-hidden bg-background p-8 text-foreground">
             <div className="relative flex h-full flex-col justify-between">
               <div className="flex items-center justify-between">
-                <Image alt="KRS AI" className="h-8 w-auto" height={32} src="/logos/krs-full-logo-dark.svg" unoptimized width={135} />
+                <Image alt="KRS AI" className="h-8 w-auto" height={157} src="/logos/Full%20logo%20Dark.svg" unoptimized width={382} />
                 <span className="mono-label text-muted-foreground">No. 1619</span>
               </div>
-              <div className="mx-auto flex aspect-square w-[74%] items-center justify-center rounded-full bg-primary">
-                <div className="relative size-40 rounded-full border border-secondary/70">
-                  <span className="absolute left-1/2 top-0 size-4 -translate-x-1/2 rounded-full bg-secondary" />
-                  <span className="absolute bottom-0 left-1/2 size-4 -translate-x-1/2 rounded-full bg-secondary" />
-                  <span className="absolute left-0 top-1/2 size-4 -translate-y-1/2 rounded-full bg-secondary" />
-                  <span className="absolute right-0 top-1/2 size-4 -translate-y-1/2 rounded-full bg-secondary" />
+              <div className="relative mx-auto flex aspect-square w-[74%] items-center justify-center rounded-full border border-primary/10 bg-primary text-primary-foreground">
+                <span aria-hidden="true" className="pointer-events-none absolute inset-5 rounded-full">
+                  {careersClockTicks.map((tick) => (
+                    <span
+                      className="absolute left-1/2 top-1/2 h-full w-px"
+                      key={tick.angle}
+                      style={{ transform: `translate(-50%, -50%) rotate(${tick.angle}deg)` }}
+                    >
+                      <span
+                        className={cn(
+                          "absolute left-1/2 top-1 -translate-x-1/2 rounded-full",
+                          tick.highlighted ? "h-9 w-1.5 bg-secondary" : "h-5 w-px bg-primary-foreground/18"
+                        )}
+                      />
+                    </span>
+                  ))}
+                </span>
+                <div className="relative flex size-44 items-center justify-center rounded-full border border-secondary/70">
+                  <span className="absolute right-9 top-9 size-3 rounded-full bg-secondary" />
+                  <div className="relative z-10 text-center">
+                    <p className="font-heading text-7xl font-medium leading-none text-secondary">6h</p>
+                    <p className="mono-label mt-2 text-primary-foreground/62">focused day</p>
+                  </div>
                 </div>
               </div>
               <div className="text-center">
-                <p className="font-heading text-balance text-4xl font-normal leading-none">Build the advisory firm operators deserve.</p>
-                <p className="mono-label mt-5 text-muted-foreground">Athens / Remote</p>
+                <p className="font-heading text-balance text-4xl font-normal leading-none">
+                  Six focused hours. Work worth doing.
+                </p>
+                <p className="mono-label mt-5 text-muted-foreground">Athens / Remote / Healthy rhythm</p>
               </div>
             </div>
           </div>
@@ -718,18 +905,19 @@ function CareersSection() {
         <div>
           <p className="mono-label text-secondary">FEATURE / SPRING EDITION</p>
           <h2 className="mt-6 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-            Join the team turning accounting into an operating advantage.
+            Join the team building a 6-hour working day with Agentic AI.
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-primary-foreground/72">
-            KRS AI is looking for advisors, operators, engineers, and client-facing specialists who care about precision,
-            calm execution, and the future of Greek business services.
+            KRS AI is built around focused work, healthy lifestyle, and fewer repetitive loops. Agentic workflows handle
+            document chasing, routing, and mundane portal work so advisors, operators, and engineers can spend their best
+            hours on judgment, systems, and client outcomes.
           </p>
           <div className="mt-10 grid grid-cols-2 gap-6">
             {[
-              ["12", "operating disciplines"],
-              ["24h", "response culture"],
-              ["EU", "business scope"],
-              ["01", "shared file"],
+              ["6h", "focused working day"],
+              ["AI", "agentic workflows"],
+              ["No", "mundane work"],
+              ["Life", "healthy lifestyle"],
             ].map(([value, label]) => (
               <div key={label}>
                 <p className="font-heading text-5xl font-medium text-secondary">{value}</p>

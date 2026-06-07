@@ -109,11 +109,18 @@ function FooterLinkColumn({ group }: { group: FooterLinkGroup }) {
 export function SiteFooter() {
   return (
     <footer className="bg-primary text-primary-foreground">
-      <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-12">
+      <div className="box-content mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-12">
         <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
             <a aria-label="KRS AI home" className="inline-flex items-center" href="#">
-              <Image alt="KRS AI" className="h-11 w-auto" height={44} src="/logos/krs-full-logo.svg" unoptimized width={186} />
+              <Image
+                alt="KRS AI"
+                className="h-[88px] w-[216px]"
+                height={157}
+                src="/logos/Full%20logo.svg"
+                unoptimized
+                width={382}
+              />
             </a>
 
             <p className="mt-8 max-w-sm text-balance text-2xl font-semibold leading-tight">

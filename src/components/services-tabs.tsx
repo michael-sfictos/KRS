@@ -142,8 +142,6 @@ function ServiceOperatingPanel({ service }: { service: ServiceTab }) {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-primary text-primary-foreground">
-      <div className="absolute left-0 top-1/2 h-px w-full bg-primary-foreground/14" />
-      <div className="absolute left-1/2 top-0 h-full w-px bg-primary-foreground/14" />
       <div className="relative grid min-h-[520px] grid-rows-[auto_1fr_auto] gap-6 p-6 sm:p-8 lg:p-10">
         <div className="flex items-start justify-between gap-6">
           <div>

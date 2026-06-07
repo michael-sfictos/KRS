@@ -26,13 +26,13 @@ function TimelineDot({ active, index }: { active: boolean; index: number }) {
       <span
         className={cn(
           "absolute size-12 rounded-full border transition-colors duration-500",
-          active ? "border-secondary bg-secondary/16" : "border-primary-foreground/20 bg-primary-foreground/6"
+          active ? "border-secondary bg-secondary/18" : "border-primary/16 bg-muted"
         )}
       />
       <span
         className={cn(
           "relative flex size-7 items-center justify-center rounded-full font-mono text-[0.65rem] transition-all duration-500",
-          active ? "scale-100 bg-secondary text-secondary-foreground" : "scale-90 bg-primary-foreground/18 text-primary-foreground/62"
+          active ? "scale-100 bg-secondary text-secondary-foreground" : "scale-90 bg-primary/10 text-primary/58"
         )}
       >
         0{index + 1}
@@ -52,33 +52,33 @@ function TimelineCard({
 }) {
   return (
     <motion.div
-      animate={{ opacity: active ? 1 : 0.58, y: active ? 0 : 10 }}
+      animate={{ opacity: active ? 1 : 0.74, y: active ? 0 : 10 }}
       className="w-full max-w-md lg:ml-auto lg:text-right"
       initial={false}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div
         className={cn(
-          "w-full border border-primary-foreground/14 bg-primary-foreground/8 p-6 text-primary-foreground shadow-[var(--shadow-sm)] backdrop-blur transition-colors duration-500 sm:p-7",
-          active && "border-secondary/50 bg-primary-foreground/12"
+          "w-full border border-primary/12 bg-card p-6 text-foreground shadow-[var(--shadow-sm)] transition-colors duration-500 sm:p-7",
+          active && "border-secondary/50 bg-background"
         )}
       >
         <div className="flex items-center justify-between gap-4 lg:flex-row-reverse">
           <Badge
             className={cn(
               "rounded-full border-transparent",
-              active ? "bg-secondary text-secondary-foreground" : "bg-primary-foreground/12 text-primary-foreground/72"
+              active ? "bg-secondary text-secondary-foreground" : "bg-muted text-muted-foreground"
             )}
             variant="secondary"
           >
             {step.time}
           </Badge>
-          <span className="font-mono text-xs text-primary-foreground/38">T+0{index}</span>
+          <span className="font-mono text-xs text-muted-foreground">T+0{index}</span>
         </div>
         <h3 className="mt-6 text-2xl font-semibold leading-tight">{step.title}</h3>
-        <p className="mt-4 leading-7 text-primary-foreground/72">{step.text}</p>
+        <p className="mt-4 leading-7 text-muted-foreground">{step.text}</p>
         <a
-          className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-primary-foreground transition-colors hover:text-secondary lg:justify-end"
+          className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-secondary lg:justify-end"
           href="#contact"
         >
           {step.cta}
@@ -108,24 +108,24 @@ function TimelineProofPanel({
 
   return (
     <motion.div
-      animate={{ opacity: active ? 1 : 0.58, y: active ? 0 : 10 }}
+      animate={{ opacity: active ? 1 : 0.74, y: active ? 0 : 10 }}
       className="w-full max-w-md"
       initial={false}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div
         className={cn(
-          "gradient-shell shadow-[var(--shadow-sm)] transition-opacity duration-500",
-          active ? "opacity-100" : "opacity-70"
+          "border border-primary/12 bg-card shadow-[var(--shadow-sm)] transition duration-500",
+          active ? "border-secondary/45 opacity-100" : "opacity-70"
         )}
       >
-        <div className="relative min-h-72 overflow-hidden bg-primary p-6 text-primary-foreground">
+        <div className="relative min-h-72 overflow-hidden bg-card p-6 text-foreground">
           <div className="relative flex items-start justify-between">
             <div>
-              <p className="mono-label text-primary-foreground/48">Workflow evidence</p>
+              <p className="mono-label text-muted-foreground">Workflow evidence</p>
               <p className="font-heading mt-3 max-w-52 text-balance text-2xl font-medium leading-tight">{step.title}</p>
             </div>
-            <span className="flex size-12 items-center justify-center border border-primary-foreground/18 bg-primary-foreground/8">
+            <span className="flex size-12 items-center justify-center border border-primary/12 bg-muted">
               <Icon className="size-6 text-secondary" />
             </span>
           </div>
@@ -133,26 +133,26 @@ function TimelineProofPanel({
           <div className="relative mt-12 grid grid-cols-[0.7fr_1.3fr] gap-5">
             <div className="space-y-3">
               {[0, 1, 2].map((item) => (
-                <div className="h-9 border border-primary-foreground/14 bg-primary-foreground/7" key={item}>
+                <div className="h-9 border border-primary/12 bg-muted" key={item}>
                   <div
-                    className={cn("h-full bg-secondary/76", item === 1 ? "w-2/3" : item === 2 ? "w-5/6" : "w-1/2")}
+                    className={cn("h-full bg-secondary/70", item === 1 ? "w-2/3" : item === 2 ? "w-5/6" : "w-1/2")}
                   />
                 </div>
               ))}
             </div>
-            <div className="flex items-end gap-3 border-l border-primary-foreground/14 pl-5">
+            <div className="flex items-end gap-3 border-l border-primary/12 pl-5">
               {bars.map((height, item) => (
                 <div className="flex flex-1 flex-col items-center gap-3" key={`${height}-${item}`}>
-                  <span className={cn("w-full bg-primary-foreground/24", item === 1 && "bg-secondary")} style={{ height }} />
-                  <span className="h-1 w-full bg-primary-foreground/18" />
+                  <span className={cn("w-full bg-primary/20", item === 1 && "bg-secondary")} style={{ height }} />
+                  <span className="h-1 w-full bg-primary/12" />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="relative mt-8 flex items-center justify-between border-t border-primary-foreground/14 pt-4">
-            <p className="font-mono text-xs text-primary-foreground/52">Reviewed by KRS</p>
-            <span className={cn("size-2 rounded-full", active ? "bg-secondary" : "bg-primary-foreground/34")} />
+          <div className="relative mt-8 flex items-center justify-between border-t border-primary/12 pt-4">
+            <p className="font-mono text-xs text-muted-foreground">Reviewed by KRS</p>
+            <span className={cn("size-2 rounded-full", active ? "bg-secondary" : "bg-muted-foreground/34")} />
           </div>
         </div>
       </div>
@@ -183,7 +183,7 @@ export function ProcessTimeline({ steps }: ProcessTimelineProps) {
 
   return (
     <div className="relative mt-16" ref={containerRef}>
-      <div className="absolute bottom-0 left-6 top-0 w-px bg-primary-foreground/18 lg:left-1/2 lg:-translate-x-1/2" />
+      <div className="absolute bottom-0 left-6 top-0 w-px bg-primary/14 lg:left-1/2 lg:-translate-x-1/2" />
       <motion.div
         className="absolute left-6 top-0 w-px origin-top bg-secondary lg:left-1/2 lg:-translate-x-1/2"
         style={{ height: progressHeight }}

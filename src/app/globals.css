@@ -219,6 +219,24 @@
   .ledger-sweep {
     animation: ledger-sweep 7s ease-in-out infinite;
   }
+
+  .mega-menu-panel {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 0.5rem);
+    visibility: hidden;
+  }
+
+  .mega-menu-group:hover .mega-menu-panel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+    visibility: visible;
+  }
+
+  .mega-menu-group:hover .mega-menu-chevron {
+    transform: rotate(180deg);
+  }
 }
 
 @keyframes ticker {
@@ -252,5 +270,9 @@
   .ticker-track,
   .ledger-sweep {
     animation: none;
+  }
+
+  .agent-beam-highlight {
+    display: none;
   }
 }
