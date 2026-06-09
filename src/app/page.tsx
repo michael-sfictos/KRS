@@ -212,6 +212,14 @@ const navItems: MegaNavItem[] = [
   },
 ];
 
+const languageOptions = [
+  { value: "el", label: "Greek" },
+  { value: "en", label: "English" },
+  { value: "he", label: "Hebrew" },
+  { value: "ar", label: "Arabic" },
+  { value: "zh", label: "Chinese" },
+] as const;
+
 const mediaSignals = [
   { label: "Money Review", mark: "MR", note: "AI accounting operations", href: "https://www.moneyreview.gr/" },
   { label: "Kathimerini Business", mark: "K", note: "Greek SME advisory", href: "https://www.kathimerini.gr/economy/business/" },
@@ -362,14 +370,33 @@ function Header() {
           ))}
         </div>
         <div className="flex items-center gap-2">
-          <div aria-label="Language selector" className="hidden items-center gap-2 border-l border-primary/12 pl-4 sm:flex">
+          <div className="hidden items-center gap-2 border-l border-primary/12 pl-4 sm:flex">
+            <label className="sr-only" htmlFor="site-language">
+              Select language
+            </label>
             <Languages className="size-3.5 text-secondary" strokeWidth={1.75} />
-            <span className="font-mono text-[0.68rem] font-semibold uppercase text-foreground">EN</span>
-            <span className="h-3 w-px bg-primary/18" aria-hidden="true" />
-            <span className="font-mono text-[0.68rem] font-semibold uppercase text-muted-foreground">EL</span>
+            <div className="relative">
+              <select
+                aria-label="Language selector"
+                className="h-9 w-[118px] appearance-none rounded-full border border-primary/12 bg-background py-0 pl-3 pr-8 text-xs font-semibold text-foreground outline-none transition hover:border-primary/25 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                defaultValue="en"
+                id="site-language"
+              >
+                {languageOptions.map((language) => (
+                  <option key={language.value} value={language.value}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                aria-hidden="true"
+                className="pointer-events-none absolute right-2.5 top-1/2 size-3 -translate-y-1/2 text-muted-foreground"
+                strokeWidth={1.75}
+              />
+            </div>
           </div>
           <Button asChild className="hidden h-10 rounded-full px-5 sm:inline-flex" variant="ghost">
-            <a href="#login">Log-in</a>
+            <a href="https://krs-platform-staging-6xbnf.ondigitalocean.app/">Log-in</a>
           </Button>
           <Button asChild className="h-10 rounded-full px-5 shadow-sm">
             <a href="#contact">
@@ -698,6 +725,7 @@ function ServicesSection() {
     <section className="bg-background px-4 py-24 sm:px-6 lg:px-12" id="services">
       <div className="mx-auto max-w-[1400px]">
         <SectionIntro
+          className="lg:grid-cols-[0.65fr_0.35fr]"
           eyebrow="Index of service"
           text="Four service lines, one operating file: advisory, accounting, payroll, and statutory returns move through the same controlled system."
           title="Business services designed for decision speed and compliance discipline."

@@ -124,7 +124,7 @@ export function AgentsSection() {
       <div className="grain-overlay absolute inset-0 opacity-30" aria-hidden="true" />
       <div className="absolute left-1/2 top-28 h-72 w-[56rem] -translate-x-1/2 bg-secondary/10 blur-3xl" aria-hidden="true" />
 
-      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-8">
+      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-[60px]">
         <div className="grid gap-6 lg:grid-cols-[0.65fr_0.35fr] lg:items-end">
           <div>
             <p className="mono-label text-secondary">KRS AI Agents</p>
