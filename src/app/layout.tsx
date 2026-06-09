@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krs.ai";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krs-zeta.vercel.app";
 const siteTitle = "KRS AI | Accounting, Tax Advisory & Agentic Operations";
 const siteDescription =
   "Premium accounting, payroll, tax advisory, and agentic compliance operations for modern Greek businesses.";
