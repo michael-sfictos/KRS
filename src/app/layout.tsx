@@ -2,6 +2,17 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krs.ai";
+const siteTitle = "KRS AI | Accounting, Tax Advisory & Agentic Operations";
+const siteDescription =
+  "Premium accounting, payroll, tax advisory, and agentic compliance operations for modern Greek businesses.";
+const ogImage = {
+  url: "/images/ogimage-krs.png",
+  width: 1024,
+  height: 537,
+  alt: "KRS logo on a navy background",
+};
+
 const fraunces = Fraunces({
   display: "swap",
   subsets: ["latin"],
@@ -24,9 +35,23 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KRS AI | Accounting, Tax Advisory & Agentic Operations",
-  description:
-    "Premium accounting, payroll, tax advisory, and agentic compliance operations for modern Greek businesses.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
+    siteName: "KRS AI",
+    images: [ogImage],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: [ogImage],
+  },
 };
 
 export default function RootLayout({
