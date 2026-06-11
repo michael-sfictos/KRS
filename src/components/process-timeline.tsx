@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, BadgeCheck, CalendarClock, FileCheck2, MessageSquareText } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  CalendarClock,
+  FileCheck2,
+  MessageSquareText,
+} from "lucide-react";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +49,25 @@ const monthlyNotifications = [
     text: "Revenue, expenses, and exceptions are packaged for advisor review.",
     status: "Review",
     time: "11:40",
+  },
+];
+
+const annualFolders = [
+  {
+    title: "Tax return",
+    meta: "Income tax / E3",
+    status: "Ready",
+    accent: true,
+  },
+  {
+    title: "Statements",
+    meta: "Balance sheet / P&L",
+    status: "Drafted",
+  },
+  {
+    title: "Obligations",
+    meta: "VAT / payroll / fees",
+    status: "Matched",
   },
 ];
 
@@ -133,11 +158,12 @@ function TimelineProofPanel({
   ][index] ?? [48, 72, 90];
   const isOnboarding = index === 0;
   const isMonthly = index === 1;
+  const isAnnual = index === 2;
 
   return (
     <motion.div
       animate={{ opacity: active ? 1 : 0.74, y: active ? 0 : 10 }}
-      className={cn("w-full", isOnboarding ? "max-w-2xl" : isMonthly ? "max-w-xl" : "max-w-md")}
+      className={cn("w-full", isOnboarding ? "max-w-2xl" : isMonthly || isAnnual ? "max-w-xl" : "max-w-md")}
       initial={false}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
@@ -150,10 +176,10 @@ function TimelineProofPanel({
         <div
           className={cn(
             "relative overflow-hidden bg-card text-foreground",
-            isOnboarding ? "px-8 py-5 sm:px-10" : isMonthly ? "p-5 sm:p-6" : "min-h-72 p-6"
+            isOnboarding ? "px-8 py-5 sm:px-10" : isMonthly || isAnnual ? "p-5 sm:p-6" : "min-h-72 p-6"
           )}
         >
-          {isOnboarding || isMonthly ? null : (
+          {isOnboarding || isMonthly || isAnnual ? null : (
             <div className="relative flex items-start justify-between">
               <div>
                 <p className="mono-label text-muted-foreground">Workflow evidence</p>
@@ -171,6 +197,8 @@ function TimelineProofPanel({
             <OnboardingEvidencePath />
           ) : isMonthly ? (
             <MonthlyNotificationsPanel />
+          ) : isAnnual ? (
+            <AnnualFoldersPanel />
           ) : (
             <div className="relative mt-12 grid grid-cols-[0.7fr_1.3fr] gap-5">
               <div className="space-y-3">
@@ -193,7 +221,7 @@ function TimelineProofPanel({
             </div>
           )}
 
-          {isOnboarding || isMonthly ? null : (
+          {isOnboarding || isMonthly || isAnnual ? null : (
             <div className="relative mt-8 flex items-center justify-between border-t border-primary/12 pt-4">
               <p className="font-mono text-xs text-muted-foreground">Reviewed by KRS</p>
               <span className={cn("size-2 rounded-full", active ? "bg-secondary" : "bg-muted-foreground/34")} />
@@ -202,6 +230,65 @@ function TimelineProofPanel({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function AnnualFoldersPanel() {
+  return (
+    <div className="relative overflow-hidden border border-primary/12 bg-background p-4 shadow-[var(--shadow-xs)]">
+      <div className="flex items-center justify-between border-b border-primary/12 pb-3">
+        <div>
+          <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">Company file</p>
+          <p className="font-heading mt-1 text-xl leading-none text-foreground">Annual package</p>
+        </div>
+        <span className="border border-secondary/40 bg-secondary/12 px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-secondary">
+          2026
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {annualFolders.map((folder) => (
+          <div
+            className={cn(
+              "relative min-h-28 border p-3",
+              folder.accent ? "border-secondary/55 bg-card" : "border-primary/12 bg-muted/38"
+            )}
+            key={folder.title}
+          >
+            <span
+              className={cn(
+                "absolute -top-px left-3 h-2.5 w-14 border border-b-0",
+                folder.accent ? "border-secondary/55 bg-card" : "border-primary/12 bg-muted"
+              )}
+            />
+            <div className="mt-2 h-10 border border-primary/10 bg-background/70">
+              <div className={cn("h-full bg-secondary/58", folder.accent ? "w-2/3" : "w-1/2")} />
+            </div>
+            <p className="mt-3 text-sm font-semibold leading-5 text-foreground">{folder.title}</p>
+            <p className="mt-1 text-[0.68rem] leading-4 text-muted-foreground">{folder.meta}</p>
+            <span
+              className={cn(
+                "mt-3 inline-flex border px-2 py-1 font-mono text-[0.58rem] uppercase leading-none tracking-[0.14em]",
+                folder.accent
+                  ? "border-secondary/40 bg-secondary/12 text-secondary"
+                  : "border-primary/12 bg-card text-muted-foreground"
+              )}
+            >
+              {folder.status}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 grid grid-cols-[1fr_auto] items-center gap-4 border-t border-primary/12 pt-3">
+        <div className="grid grid-cols-3 gap-1.5">
+          <span className="h-1.5 bg-secondary" />
+          <span className="h-1.5 bg-secondary/70" />
+          <span className="h-1.5 bg-primary/16" />
+        </div>
+        <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">3 folders</span>
+      </div>
+    </div>
   );
 }
 

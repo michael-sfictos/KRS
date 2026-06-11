@@ -26,48 +26,30 @@ type ConnectionNode = {
   logoSrc?: string;
 };
 
-const governmentConnections: ConnectionNode[] = [
+const complianceWorkflows: ConnectionNode[] = [
   {
-    name: "AADE",
-    description: "VAT, myDATA, tax certificates, company obligations.",
-    status: "Tax authority",
+    name: "Tax & books",
+    description: "VAT, certificates, and digital books ready for review.",
+    status: "Tax",
     icon: Landmark,
-    logoSrc: "/logos/authorities/aade.png",
   },
   {
-    name: "EFKA",
-    description: "Employer insurance contributions and payroll obligations.",
-    status: "Social security",
+    name: "Payroll & insurance",
+    description: "Payroll changes and contributions kept on schedule.",
+    status: "Payroll",
     icon: ShieldCheck,
-    logoSrc: "/logos/authorities/efka.png",
   },
   {
-    name: "Taxisnet",
-    description: "Declarations, authorisations, and tax account access.",
-    status: "Identity gateway",
+    name: "Filings & access",
+    description: "Declarations, authorisations, and filing context kept ready.",
+    status: "Access",
     icon: FileCheck2,
-    logoSrc: "/logos/authorities/taxisnet.png",
   },
   {
-    name: "ERGANI",
-    description: "Hiring, payroll notices, and labour compliance flows.",
-    status: "Labour filings",
-    icon: Workflow,
-    logoSrc: "/logos/authorities/ergani.png",
-  },
-  {
-    name: "gov.gr",
-    description: "Certificates, statements, and public-service documents.",
-    status: "Public services",
+    name: "People & documents",
+    description: "Hiring notices, certificates, and public records gathered.",
+    status: "Docs",
     icon: BadgeCheck,
-    logoSrc: "/logos/authorities/govgr.png",
-  },
-  {
-    name: "myDATA",
-    description: "Document matching, e-books, and reporting continuity.",
-    status: "Digital books",
-    icon: ReceiptText,
-    logoSrc: "/logos/authorities/mydata.png",
   },
 ];
 
@@ -100,23 +82,23 @@ const clientCompanyConnections: ConnectionNode[] = [
 
 const agentCapabilities = [
   {
-    label: "Prepare context",
-    text: "Collect documents, authorisations, deadlines, and open questions before review starts.",
+    label: "People lead",
+    text: "KRS advisors, payroll operators, and client leads make the calls that need judgment.",
   },
   {
-    label: "Route workflow",
-    text: "Match the task to the right authority path, service line, and KRS professional.",
+    label: "AI prepares",
+    text: "KRS AI gathers evidence, deadlines, and open questions before the next review.",
   },
   {
-    label: "Escalate exceptions",
-    text: "Flag missing evidence, deadline pressure, and decisions that need licensed judgment.",
+    label: "Work stays visible",
+    text: "Every task has context, ownership, and a clear path back to the right person.",
   },
 ];
 
 export function AgentsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const connectionCardRef = useRef<HTMLDivElement>(null);
-  const authorityRefs = useMemo(() => governmentConnections.map(() => createRef<HTMLSpanElement>()), []);
+  const workflowRefs = useMemo(() => complianceWorkflows.map(() => createRef<HTMLSpanElement>()), []);
   const companyRefs = useMemo(() => clientCompanyConnections.map(() => createRef<HTMLSpanElement>()), []);
 
   return (
@@ -129,12 +111,12 @@ export function AgentsSection() {
           <div>
             <p className="mono-label text-secondary">KRS AI Agents</p>
             <h2 className="mt-5 max-w-4xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl lg:text-7xl">
-              KRS AI sits between your company and every Greek compliance workflow.
+              KRS people run the work. KRS AI keeps every file moving.
             </h2>
           </div>
           <p className="max-w-xl text-lg leading-8 text-primary-foreground/68">
-            Agents turn scattered business evidence into authority-ready work packages, with licensed KRS professionals
-            handling the judgment calls.
+            Licensed advisors and operators stay in charge. KRS AI prepares context, routes evidence, and keeps every
+            compliance workflow visible before a person makes the next call.
           </p>
         </div>
 
@@ -143,10 +125,10 @@ export function AgentsSection() {
           ref={containerRef}
         >
           <AgentConnectionColumn
-            items={governmentConnections}
-            pointRefs={authorityRefs}
+            items={complianceWorkflows}
+            pointRefs={workflowRefs}
             side="left"
-            title="Relevant authorities"
+            title="Work KRS handles"
           />
 
           <div className="relative z-20 order-first lg:order-none" ref={connectionCardRef}>
@@ -158,31 +140,42 @@ export function AgentsSection() {
                     <div className="flex items-center justify-between gap-6">
                       <p className="mono-label text-muted-foreground">Connection layer</p>
                       <Badge className="h-7 rounded-full bg-primary px-3 text-primary-foreground">
-                        Advisor reviewed
+                        Human led
                       </Badge>
                     </div>
                     <h3 className="mt-4 max-w-md text-balance text-4xl font-normal leading-[1] sm:text-5xl">
-                      One operating file. Many authority paths.
+                      One operating layer for KRS judgment and AI momentum.
                     </h3>
                   </div>
 
                   <div className="grid gap-5">
-                    <div
-                      className="mx-auto flex size-44 items-center justify-center rounded-full border border-secondary/40 bg-primary p-8 shadow-[inset_0_1px_0_rgba(244,239,230,0.18)]"
-                    >
-                      <Image
-                        alt="KRS AI"
-                        className="h-auto w-full"
-                        height={220}
-                        src="/logos/Logo.svg"
-                        unoptimized
-                        width={220}
-                      />
+                    <div className="mx-auto flex w-full max-w-sm items-center justify-center -space-x-8 sm:-space-x-10">
+                      <div className="relative z-20 flex size-36 overflow-hidden rounded-full border border-secondary/45 bg-primary shadow-[0_18px_40px_rgba(0,30,61,0.22),inset_0_1px_0_rgba(244,239,230,0.18)] sm:size-40">
+                        <Image
+                          alt="KRS accountant advisor"
+                          className="object-cover"
+                          fill
+                          sizes="(min-width: 640px) 10rem, 9rem"
+                          src="/images/krs-accountant-advisor.png"
+                        />
+                        <span className="absolute inset-0 bg-primary/10 mix-blend-multiply" aria-hidden="true" />
+                      </div>
+                      <div className="relative z-10 flex size-36 items-center justify-center rounded-full border border-secondary/40 bg-primary p-8 shadow-[inset_0_1px_0_rgba(244,239,230,0.18)] sm:size-40">
+                        <Image
+                          alt="KRS AI"
+                          className="h-auto w-full"
+                          height={220}
+                          src="/logos/Logo.svg"
+                          unoptimized
+                          width={220}
+                        />
+                      </div>
                     </div>
                     <div className="text-center">
-                      <p className="font-heading text-4xl font-medium leading-none text-primary">KRS AI</p>
+                      <p className="font-heading text-4xl font-medium leading-none text-primary">People + AI</p>
                       <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
-                        Context, routing, and exception handling for Greek accounting, payroll, and tax work.
+                        KRS professionals run the show. KRS AI prepares the operating file, keeps the trail clean, and
+                        brings the right work back to the right person.
                       </p>
                     </div>
                   </div>
@@ -209,18 +202,18 @@ export function AgentsSection() {
             title="Client company"
           />
 
-          {authorityRefs.map((ref, index) => (
+          {workflowRefs.map((ref, index) => (
             <AnimatedBeam
               className="z-10 hidden lg:block"
               containerRef={containerRef}
-              curvature={(index - (authorityRefs.length - 1) / 2) * 22}
+              curvature={(index - (workflowRefs.length - 1) / 2) * 22}
               delay={index * 1.15}
               duration={13}
               fromRef={ref}
               gradientStartColor="#ae882f"
               gradientStopColor="#f4efe6"
               highlightOpacity={1}
-              key={`authority-beam-${index}`}
+              key={`workflow-beam-${index}`}
               pathColor="rgba(244, 239, 230, 0.68)"
               pathOpacity={0.54}
               pathWidth={1.15}
@@ -232,7 +225,7 @@ export function AgentsSection() {
               className="z-10 hidden lg:block"
               containerRef={containerRef}
               curvature={(index - (companyRefs.length - 1) / 2) * 24}
-              delay={(index + 6) * 1.15}
+              delay={(index + complianceWorkflows.length) * 1.15}
               duration={13}
               fromRef={ref}
               gradientStartColor="#ae882f"
