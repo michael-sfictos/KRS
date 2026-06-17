@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -139,6 +140,22 @@ const serviceTabs: ServiceTab[] = [
 
 function ServiceOperatingPanel({ service }: { service: ServiceTab }) {
   const Icon = service.icon;
+
+  if (service.value === "advisory") {
+    return (
+      <div className="relative min-h-full overflow-hidden bg-primary p-3 text-primary-foreground sm:p-4 lg:p-5">
+        <div className="relative h-full min-h-[520px] overflow-hidden bg-background shadow-[var(--shadow-lg)]">
+          <Image
+            alt="KRS AI tax advisory and reporting service shown inside a web browser window"
+            className="object-cover object-left-top"
+            fill
+            sizes="(min-width: 1024px) 58vw, 100vw"
+            src="/images/krs-tax-advisory-os-snapshot.webp"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-full overflow-hidden bg-primary text-primary-foreground">
@@ -283,27 +300,27 @@ export function ServicesTabs() {
           key={service.value}
           value={service.value}
         >
-          <div className="grid overflow-hidden border border-primary/15 bg-card shadow-[var(--shadow-lg)] lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="grid overflow-hidden border border-primary/15 bg-card shadow-[var(--shadow-lg)] lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
             <ServiceOperatingPanel service={service} />
-            <div className="grid content-between gap-8 p-6 sm:p-8 lg:p-10">
+            <div className="grid content-between gap-5 p-5 sm:p-6 lg:p-7">
               <div className="grid gap-px border border-primary/12 bg-primary/12">
                 {service.features.map((feature, index) => (
-                  <div className="bg-card p-5" key={feature.title}>
-                    <div className="flex gap-4">
+                  <div className="bg-card p-4" key={feature.title}>
+                    <div className="flex gap-3">
                       <span className="mt-1 flex size-7 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
                         <Check className="size-4" />
                       </span>
                       <div>
                         <p className="font-mono text-xs text-muted-foreground">0{index + 1}</p>
-                        <h4 className="mt-2 text-xl font-semibold leading-tight">{feature.title}</h4>
-                        <p className="mt-3 leading-7 text-muted-foreground">{feature.text}</p>
+                        <h4 className="mt-1.5 text-lg font-semibold leading-tight">{feature.title}</h4>
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.text}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <p className="max-w-xl text-sm leading-7 text-muted-foreground">
+              <p className="max-w-md text-xs leading-6 text-muted-foreground">
                 The technical platform is operated by KRS AI Services. Reserved tasks are performed by licensed
                 accounting and tax professionals within the KRS network.
               </p>

@@ -298,6 +298,27 @@ const fieldNotes = [
   },
 ];
 
+const socialVideos = [
+  {
+    id: "Wl6-gvmHT88",
+    href: "https://www.youtube.com/shorts/Wl6-gvmHT88",
+    title: "Inside the KRS AI operating file.",
+    text: "A short look at how accounting questions become structured advisor work.",
+  },
+  {
+    id: "_HIrEfhkh6Y",
+    href: "https://www.youtube.com/shorts/_HIrEfhkh6Y",
+    title: "How agentic workflows support advisors.",
+    text: "A practical glimpse at human review, routing, and evidence collection.",
+  },
+  {
+    id: "-_k56R5dp7U",
+    href: "https://www.youtube.com/shorts/-_k56R5dp7U",
+    title: "What modern tax support feels like.",
+    text: "Short-form context on faster answers, clearer files, and better visibility.",
+  },
+];
+
 const faqs = [
   {
     question: "Does KRS AI do all bookkeeping tasks for me?",
@@ -343,6 +364,7 @@ export default function Home() {
       <FieldNotesSection />
       <CareersSection />
       <FaqSection />
+      <SocialVideosSection />
       <FinalCta />
       <SiteFooter />
     </main>
@@ -998,6 +1020,63 @@ function FaqSection() {
             </AccordionItem>
           ))}
         </Accordion>
+      </div>
+    </section>
+  );
+}
+
+function SocialVideosSection() {
+  return (
+    <section className="bg-card px-4 pb-24 sm:px-6 lg:px-12" id="social-videos">
+      <div className="mx-auto max-w-[1400px] border-t border-primary/16 pt-16">
+        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mono-label text-secondary">Watch on social</p>
+            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+              Short videos from the KRS AI workflow.
+            </h2>
+          </div>
+          <a
+            className="inline-flex items-center gap-2 text-sm font-semibold transition hover:gap-3"
+            href="https://www.youtube.com/results?search_query=KRS+AI"
+            rel="noreferrer"
+            target="_blank"
+          >
+            View more videos
+            <ArrowRight className="size-4" />
+          </a>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-3">
+          {socialVideos.map((video, index) => (
+            <article className="group" key={video.id}>
+              <div
+                className={cn(
+                  "relative mb-5 aspect-[9/16] overflow-hidden bg-primary shadow-[var(--shadow-sm)] transition duration-500 group-hover:-translate-y-1 group-hover:shadow-[var(--shadow-lg)]",
+                  index === 1 && "bg-secondary",
+                  index === 2 && "bg-tertiary"
+                )}
+              >
+                <iframe
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="absolute inset-0 size-full"
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+                  title={video.title}
+                />
+              </div>
+              <div className="mb-3 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                <span>Short</span>
+                <span>/</span>
+                <span>0{index + 1}</span>
+              </div>
+              <h3 className="text-2xl font-semibold leading-tight">{video.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{video.text}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
