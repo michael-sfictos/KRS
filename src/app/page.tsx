@@ -248,9 +248,9 @@ const processSteps = [
   },
   {
     time: "Always",
-    title: "Proactive advisory",
-    text: "Questions are routed to the right KRS expert, supported by context gathered by agents, and returned with a clear next action.",
-    cta: "Learn more",
+    title: "Talk to real experts",
+    text: "Ask questions directly to KRS advisors and get instant help from real people who understand and care for your business.",
+    cta: "Talk to our team",
   },
 ];
 
@@ -515,8 +515,12 @@ function HeroSection() {
 
         <div className="grid grid-cols-12 items-end gap-6 lg:gap-8">
           <div className="col-span-12 lg:col-span-8">
-            <h1 className="max-w-5xl text-balance text-[56px] font-light leading-[0.88] text-foreground sm:text-[82px] md:text-[104px] lg:text-[116px] xl:text-[132px]">
-              Accounting, <span className="font-light italic text-secondary">evolved into</span> agentic AI.
+            <h1 className="hero-headline max-w-5xl text-balance text-[56px] text-foreground sm:text-[82px] md:text-[104px] lg:text-[116px] xl:text-[148px]">
+              Accounting
+              <br />
+              <span className="hero-headline-accent italic text-secondary">evolved into</span>
+              <br />
+              agentic AI.
             </h1>
           </div>
           <div className="col-span-12 lg:col-span-4 lg:pb-3">

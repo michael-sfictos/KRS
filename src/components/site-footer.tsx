@@ -117,7 +117,7 @@ export function SiteFooter() {
                 alt="KRS AI"
                 className="h-[88px] w-[216px]"
                 height={157}
-                src="/logos/Full%20logo.svg"
+                src="/logos/Footer%20logo.svg"
                 unoptimized
                 width={382}
               />

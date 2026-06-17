@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
@@ -68,6 +69,24 @@ const annualFolders = [
     title: "Obligations",
     meta: "VAT / payroll / fees",
     status: "Matched",
+  },
+];
+
+const personalExperts = [
+  {
+    name: "Alexis",
+    role: "Tax Advisor",
+    image: "/images/krs-expert-tax-advisor.webp",
+  },
+  {
+    name: "Maria",
+    role: "Payroll Specialist",
+    image: "/images/krs-expert-payroll-advisor.webp",
+  },
+  {
+    name: "Nikos",
+    role: "Accounting Advisor",
+    image: "/images/krs-expert-accounting-advisor.webp",
   },
 ];
 
@@ -159,11 +178,12 @@ function TimelineProofPanel({
   const isOnboarding = index === 0;
   const isMonthly = index === 1;
   const isAnnual = index === 2;
+  const isExperts = index === 3;
 
   return (
     <motion.div
       animate={{ opacity: active ? 1 : 0.74, y: active ? 0 : 10 }}
-      className={cn("w-full", isOnboarding ? "max-w-2xl" : isMonthly || isAnnual ? "max-w-xl" : "max-w-md")}
+      className={cn("w-full", isOnboarding ? "max-w-2xl" : isMonthly || isAnnual || isExperts ? "max-w-xl" : "max-w-md")}
       initial={false}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
@@ -176,10 +196,10 @@ function TimelineProofPanel({
         <div
           className={cn(
             "relative overflow-hidden bg-card text-foreground",
-            isOnboarding ? "px-8 py-5 sm:px-10" : isMonthly || isAnnual ? "p-5 sm:p-6" : "min-h-72 p-6"
+            isOnboarding ? "px-8 py-5 sm:px-10" : isMonthly || isAnnual ? "p-5 sm:p-6" : isExperts ? "min-h-72" : "min-h-72 p-6"
           )}
         >
-          {isOnboarding || isMonthly || isAnnual ? null : (
+          {isOnboarding || isMonthly || isAnnual || isExperts ? null : (
             <div className="relative flex items-start justify-between">
               <div>
                 <p className="mono-label text-muted-foreground">Workflow evidence</p>
@@ -199,6 +219,8 @@ function TimelineProofPanel({
             <MonthlyNotificationsPanel />
           ) : isAnnual ? (
             <AnnualFoldersPanel />
+          ) : isExperts ? (
+            <PersonalExpertsPanel />
           ) : (
             <div className="relative mt-12 grid grid-cols-[0.7fr_1.3fr] gap-5">
               <div className="space-y-3">
@@ -221,7 +243,7 @@ function TimelineProofPanel({
             </div>
           )}
 
-          {isOnboarding || isMonthly || isAnnual ? null : (
+          {isOnboarding || isMonthly || isAnnual || isExperts ? null : (
             <div className="relative mt-8 flex items-center justify-between border-t border-primary/12 pt-4">
               <p className="font-mono text-xs text-muted-foreground">Reviewed by KRS</p>
               <span className={cn("size-2 rounded-full", active ? "bg-secondary" : "bg-muted-foreground/34")} />
@@ -230,6 +252,42 @@ function TimelineProofPanel({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function PersonalExpertsPanel() {
+  return (
+    <div className="relative overflow-hidden bg-[radial-gradient(circle_at_8%_8%,rgba(244,239,230,0.92),rgba(174,136,47,0.28)_34%,rgba(1,25,54,0.32)_100%)] p-4 shadow-[var(--shadow-md)] sm:p-5">
+      <div className="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(90deg,rgba(244,239,230,0.16)_1px,transparent_1px),linear-gradient(0deg,rgba(244,239,230,0.14)_1px,transparent_1px)] [background-size:12px_12px]" />
+      <div className="relative bg-background px-5 py-5 shadow-[0_18px_50px_-36px_rgba(1,25,54,0.58)] sm:px-6">
+        <p className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-muted-foreground">Personal experts</p>
+        <p className="font-heading mt-1 text-xl font-medium leading-tight text-foreground sm:text-2xl">Your KRS team is here</p>
+        <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+          Ask anything and get quick help from real advisors who know your file.
+        </p>
+
+        <div className="mt-6 grid gap-6 text-center sm:grid-cols-3 sm:gap-4">
+          {personalExperts.map((expert) => (
+            <div className="min-w-0 text-center" key={expert.name}>
+              <div className="relative mx-auto size-24 sm:size-28">
+                <Image
+                  alt={`${expert.name}, ${expert.role}`}
+                  className="size-full rounded-full border border-primary/10 object-cover shadow-[var(--shadow-sm)]"
+                  height={224}
+                  src={expert.image}
+                  width={224}
+                />
+                <span className="absolute -right-1 top-2 flex size-8 items-center justify-center rounded-full border-2 border-background bg-secondary text-secondary-foreground shadow-[var(--shadow-xs)]">
+                  <BadgeCheck className="size-5" strokeWidth={2.2} />
+                </span>
+              </div>
+              <p className="mt-4 text-lg font-semibold leading-6 text-foreground">{expert.name}</p>
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">{expert.role}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
