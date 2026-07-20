@@ -59,7 +59,7 @@ const navItems: MegaNavItem[] = [
     eyebrow: "KRS AI Services",
     description: "Accounting, payroll, tax advisory, and platform workflows organized like Integral's service menu.",
     ctaLabel: "Talk to our team",
-    ctaHref: "#contact",
+    ctaHref: "/onboarding",
     columns: [
       {
         title: "Our Services",
@@ -97,13 +97,13 @@ const navItems: MegaNavItem[] = [
         links: [
           { label: "Meet Tax Deadlines", description: "All deadlines automatically tracked", href: "#process" },
           { label: "Manage Tax Documents", description: "Documents digitally organized and secure", href: "#agents" },
-          { label: "Get Expert Advice", description: "Direct questions to your tax advisor", href: "#contact" },
+          { label: "Get Expert Advice", description: "Direct questions to your tax advisor", href: "/onboarding" },
           { label: "Automated Data Exchange", description: "Seamlessly connect your tools", href: "#agents" },
         ],
       },
     ],
     features: [
-      { eyebrow: "Book a demo", label: "Talk to our expert team", description: "See how the operating file works before onboarding.", href: "#contact" },
+      { eyebrow: "Book a demo", label: "Talk to our expert team", description: "See how the operating file works before onboarding.", href: "/onboarding" },
       { eyebrow: "Guide", label: "Taxes, Accounting, and Tips for Starting a Business", description: "A practical entry point for founders and operators.", href: "#field-notes" },
     ],
   },
@@ -113,17 +113,17 @@ const navItems: MegaNavItem[] = [
     eyebrow: "By company type",
     description: "Common company structures and business stages from the Integral menu, adapted for KRS positioning.",
     ctaLabel: "Book a free demo",
-    ctaHref: "#contact",
+    ctaHref: "/onboarding",
     columns: [
       {
         title: "By company type",
         links: [
-          { label: "Tax Advisory for UG", description: "Tailored tax advice for your UG", href: "#contact" },
-          { label: "Tax Advisory for GmbH", description: "Custom tax advice for limited liability companies", href: "#contact" },
-          { label: "Tax Advisory for Holding", description: "Specialized advice for holding structures", href: "#contact" },
-          { label: "Tax Advisory for Startups", description: "Smart tax support for your startup", href: "#contact" },
-          { label: "Tax Advisory for Companies", description: "Personal tax advice for SMEs", href: "#contact" },
-          { label: "Tax Advisory for Founders", description: "Professional guidance from day one", href: "#contact" },
+          { label: "Tax Advisory for UG", description: "Tailored tax advice for your UG", href: "/onboarding" },
+          { label: "Tax Advisory for GmbH", description: "Custom tax advice for limited liability companies", href: "/onboarding" },
+          { label: "Tax Advisory for Holding", description: "Specialized advice for holding structures", href: "/onboarding" },
+          { label: "Tax Advisory for Startups", description: "Smart tax support for your startup", href: "/onboarding" },
+          { label: "Tax Advisory for Companies", description: "Personal tax advice for SMEs", href: "/onboarding" },
+          { label: "Tax Advisory for Founders", description: "Professional guidance from day one", href: "/onboarding" },
         ],
       },
     ],
@@ -172,7 +172,7 @@ const navItems: MegaNavItem[] = [
       },
     ],
     features: [
-      { eyebrow: "Learn more", label: "Cost calculator", description: "Calculate costs for tax consulting and accounting.", href: "#contact" },
+      { eyebrow: "Learn more", label: "Cost calculator", description: "Calculate costs for tax consulting and accounting.", href: "/onboarding" },
       { eyebrow: "Learn more", label: "Digital tax advice", description: "Benefits and practical tips.", href: "#services" },
     ],
   },
@@ -182,7 +182,7 @@ const navItems: MegaNavItem[] = [
     eyebrow: "About KRS AI",
     description: "Company, careers, FAQs, and contact entries shaped like Integral's about menu.",
     ctaLabel: "Book a free demo",
-    ctaHref: "#contact",
+    ctaHref: "/onboarding",
     columns: [
       {
         title: "About KRS AI",
@@ -191,12 +191,12 @@ const navItems: MegaNavItem[] = [
           { label: "Why KRS AI?", description: "Benefits of our platform and advice", href: "#why" },
           { label: "Careers", description: "Open positions at KRS AI", href: "#careers" },
           { label: "FAQs", description: "Answers to common questions", href: "#faq" },
-          { label: "Contact us", description: "Personal contact with our team", href: "#contact" },
+          { label: "Contact us", description: "Personal contact with our team", href: "/onboarding" },
         ],
       },
     ],
     features: [
-      { eyebrow: "Learn more", label: "Book a Demo", description: "Talk to our expert team.", href: "#contact" },
+      { eyebrow: "Learn more", label: "Book a Demo", description: "Talk to our expert team.", href: "/onboarding" },
       { eyebrow: "Learn more", label: "Open positions", description: "Your start at KRS AI.", href: "#careers" },
     ],
   },
@@ -442,7 +442,7 @@ function Header() {
             <a href="https://krs-platform-staging-6xbnf.ondigitalocean.app/">Log-in</a>
           </Button>
           <Button asChild className="h-10 rounded-full px-5 shadow-sm">
-            <a href="#contact">
+            <a href="/onboarding">
               Contact
               <ArrowRight className="size-4" />
             </a>
@@ -570,7 +570,7 @@ function HeroSection() {
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col">
               <Button asChild className="h-12 rounded-full px-6 text-base shadow-[var(--shadow-md)]" variant="secondary">
-                <a href="#contact">
+                <a href="/onboarding">
                   Schedule an initial consultation
                   <ArrowRight className="size-5" />
                 </a>
@@ -728,7 +728,7 @@ function SlimCta() {
           <p className="font-heading text-balance text-2xl font-medium leading-tight">Ready for an accounting file that stays ready?</p>
         </div>
         <Button asChild className="h-11 w-fit rounded-full bg-primary px-5">
-          <a href="#contact">
+          <a href="/onboarding">
             Schedule an initial consultation
             <ArrowRight className="size-4" />
           </a>
@@ -1070,7 +1070,7 @@ function FinalCta() {
           </p>
           <div className="mt-8 flex flex-col gap-3">
             <Button asChild className="h-13 justify-between rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-              <a href="mailto:hello@krs.ai">
+              <a href="/onboarding">
                 Get free advice now
                 <ArrowRight className="size-5" />
               </a>

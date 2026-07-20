@@ -237,7 +237,7 @@ function ServiceOperatingPanel({ service }: { service: ServiceTab }) {
           className="h-12 w-fit rounded-full bg-primary-foreground px-5 text-primary hover:bg-primary-foreground/90"
           variant="secondary"
         >
-          <a href="#contact">
+          <a href="/onboarding">
             {service.cta}
             <ArrowRight className="size-4" />
           </a>

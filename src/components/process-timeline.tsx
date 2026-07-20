@@ -149,7 +149,7 @@ function TimelineCard({
         <p className="mt-4 leading-7 text-muted-foreground">{step.text}</p>
         <a
           className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-secondary lg:justify-end"
-          href="#contact"
+          href="/onboarding"
         >
           {step.cta}
           <ArrowRight className="size-4" />

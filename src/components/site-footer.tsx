@@ -72,7 +72,7 @@ const footerLinkGroups: FooterLinkGroup[] = [
       { label: "FAQs", href: "#faq" },
       { label: "Press", href: "#media" },
       { label: "Structure", href: "#" },
-      { label: "Contact us", href: "#contact" },
+      { label: "Contact us", href: "/onboarding" },
     ],
   },
   {
@@ -155,7 +155,7 @@ export function SiteFooter() {
               className="mt-8 h-11 rounded-full bg-primary-foreground px-5 text-primary hover:bg-primary-foreground/90"
               variant="secondary"
             >
-              <a href="#contact">
+              <a href="/onboarding">
                 Contact KRS
                 <ArrowRight className="size-4" />
               </a>
