@@ -18,7 +18,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
-import { Badge } from "@/components/ui/badge";
+import { HeroVisualStrip } from "@/components/hero-visual-strip";
 import { Button } from "@/components/ui/button";
 import { ProcessTimeline } from "@/components/process-timeline";
 import { ServicesTabs } from "@/components/services-tabs";
@@ -64,11 +64,32 @@ const navItems: MegaNavItem[] = [
       {
         title: "Our Services",
         links: [
-          { label: "Tax Advisory", description: "Personal advice directly on our platform", href: "#services" },
-          { label: "Bookkeeping", description: "Digital accounting for businesses", href: "#services" },
-          { label: "Tax Return", description: "Professional preparation and timely filing", href: "#services" },
-          { label: "Annual Financial Statements", description: "Compliant statements with partner tax advisor", href: "#services" },
-          { label: "Payroll Accounting", description: "Accurate payroll fully integrated", href: "#services" },
+          {
+            label: "Tax Advisory",
+            description: "Personal advice on our platform — tax strategy, advice & audit",
+            href: "#services",
+          },
+          {
+            label: "Accounting",
+            description:
+              "Digital accounting for businesses — creation & interruption, records & financial services",
+            href: "#services",
+          },
+          {
+            label: "Payroll Accounting",
+            description: "Accurate payroll fully integrated — cost strategy & program participation",
+            href: "#services",
+          },
+          {
+            label: "Consulting Services",
+            description: "Business plan, funding, and business development support",
+            href: "#services",
+          },
+          {
+            label: "Funding & Grants",
+            description: "Local and European grants — we help you find the right funding",
+            href: "#services",
+          },
         ],
       },
       {
@@ -525,12 +546,8 @@ function HeroSection() {
     <section className="relative overflow-hidden border-b border-primary/12 bg-[#FDF8F0]">
       <div className="relative mx-auto max-w-[1400px] px-4 pb-8 pt-10 sm:px-6 lg:px-12 lg:pt-16">
         <div className="mb-20 flex flex-col gap-6 md:mb-24 md:flex-row md:items-end md:justify-between lg:mb-32">
-          <div className="flex items-center gap-6 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">
-            <span>No. 001</span>
-            <span className="hidden text-primary/35 md:inline">/</span>
-            <span className="hidden md:inline">Field Manual</span>
-            <span className="hidden text-primary/35 lg:inline">/</span>
-            <span className="hidden lg:inline">Greek Business Services</span>
+          <div className="max-w-[640px] font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">
+            Premium accounting, payroll and tax advisory for modern businesses
           </div>
           <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">Athens / EU / 2026</p>
         </div>
@@ -571,68 +588,6 @@ function HeroSection() {
         <HeroVisualStrip />
       </div>
     </section>
-  );
-}
-
-function HeroVisualStrip() {
-  return (
-    <div className="mt-14 grid grid-cols-1 gap-3 md:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-4">
-      <div className="relative min-h-[360px] overflow-hidden bg-primary">
-        <Image
-          alt="Modern Athens accounting operations desk"
-          className="object-cover"
-          fill
-          priority
-          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-          src="/images/krs-athens-operations.png"
-        />
-      </div>
-
-      <div className="flex min-h-[360px] flex-col justify-between bg-secondary p-5 text-secondary-foreground">
-        <div className="mono-label text-secondary-foreground/68">Close state</div>
-        <div>
-          <p className="font-heading text-7xl font-medium leading-none text-white">02</p>
-          <p className="mono-label mt-3 text-secondary-foreground/78">open questions</p>
-        </div>
-      </div>
-
-      <div className="min-h-[360px] bg-tertiary p-5 text-tertiary-foreground">
-        <div className="flex h-full flex-col justify-between">
-          <p className="mono-label text-tertiary-foreground/68">Advisor queue</p>
-          <div className="space-y-3">
-            {["VAT position", "Payroll change", "myDATA match"].map((item, index) => (
-              <div className="grid grid-cols-[auto_1fr] items-center gap-3 border-t border-tertiary-foreground/18 pt-3" key={item}>
-                <span className="font-mono text-xs text-secondary">0{index + 1}</span>
-                <span className="text-sm font-semibold">{item}</span>
-              </div>
-            ))}
-          </div>
-          <Badge className="w-fit rounded-full bg-tertiary-foreground text-tertiary">live file</Badge>
-        </div>
-      </div>
-
-      <div className="relative min-h-[360px] overflow-hidden bg-primary text-primary-foreground">
-        <div className="relative flex h-full flex-col justify-between p-5">
-          <p className="mono-label text-primary-foreground/68">Topology</p>
-          <div>
-            <div className="mb-6 grid grid-cols-3 gap-3">
-              {["AADE", "EFKA", "ERGANI", "KRS", "myDATA", "gov.gr"].map((node, index) => (
-                <span
-                  className={cn(
-                    "flex aspect-square items-center justify-center border border-primary-foreground/16 bg-primary-foreground/5 text-center font-mono text-[0.62rem] uppercase text-primary-foreground/58",
-                    index === 3 && "border-primary-foreground bg-primary-foreground text-primary"
-                  )}
-                  key={node}
-                >
-                  {node}
-                </span>
-              ))}
-            </div>
-            <p className="font-heading max-w-56 text-balance text-3xl font-medium leading-tight">Controlled connection beats scattered portals.</p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
