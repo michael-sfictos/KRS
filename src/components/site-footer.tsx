@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ const footerLinkGroups: FooterLinkGroup[] = [
     title: "Services",
     links: [
       { label: "Tax Advisory", href: "#services" },
-      { label: "Bookkeeping", href: "#services" },
+      { label: "Bookkeeping", href: "/services/accounting" },
       { label: "Financial Statements & Taxes", href: "#services" },
       { label: "Tax Return", href: "#services" },
       { label: "Payroll", href: "#services" },
@@ -42,15 +43,15 @@ const footerLinkGroups: FooterLinkGroup[] = [
   {
     title: "Bookkeeping",
     links: [
-      { label: "Outsource bookkeeping", href: "#" },
-      { label: "Bookkeeping for IKE", href: "#" },
-      { label: "Bookkeeping for EPE", href: "#" },
-      { label: "Bookkeeping for Start-Ups", href: "#" },
-      { label: "Find a Bookkeeping Service", href: "#" },
-      { label: "Bookkeeping Costs", href: "#" },
-      { label: "Digital bookkeeping", href: "#" },
-      { label: "Do Bookkeeping with a Tax Advisor", href: "#" },
-      { label: "Automated bookkeeping", href: "#" },
+      { label: "Outsource bookkeeping", href: "/services/accounting" },
+      { label: "Bookkeeping for IKE", href: "/services/accounting" },
+      { label: "Bookkeeping for EPE", href: "/services/accounting" },
+      { label: "Bookkeeping for Start-Ups", href: "/services/accounting" },
+      { label: "Find a Bookkeeping Service", href: "/services/accounting" },
+      { label: "Bookkeeping Costs", href: "/services/accounting" },
+      { label: "Digital bookkeeping", href: "/services/accounting" },
+      { label: "Do Bookkeeping with a Tax Advisor", href: "/services/accounting" },
+      { label: "Automated bookkeeping", href: "/services/accounting" },
     ],
   },
   {
@@ -112,7 +113,7 @@ export function SiteFooter() {
       <div className="box-content mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-12">
         <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
-            <a aria-label="KRS AI home" className="inline-flex items-center" href="#">
+            <Link aria-label="KRS AI home" className="inline-flex items-center" href="/">
               <Image
                 alt="KRS AI"
                 className="h-[88px] w-[216px]"
@@ -121,7 +122,7 @@ export function SiteFooter() {
                 unoptimized
                 width={382}
               />
-            </a>
+            </Link>
 
             <p className="mt-8 max-w-sm text-balance text-2xl font-semibold leading-tight">
               Accounting, tax advisory, payroll, and compliance operations for Greek businesses that need precision.
@@ -156,7 +157,7 @@ export function SiteFooter() {
               variant="secondary"
             >
               <a href="/onboarding">
-                Contact KRS
+                Talk to KRS
                 <ArrowRight className="size-4" />
               </a>
             </Button>

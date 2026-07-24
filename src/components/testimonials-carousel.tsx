@@ -111,7 +111,7 @@ export function TestimonialsCarousel() {
   }, [active.quote]);
 
   return (
-    <section className="border-y border-primary/12 bg-background px-4 py-24 sm:px-6 lg:px-12">
+    <section className="bg-background px-4 py-24 sm:px-6 lg:px-12">
       <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch">
         <div className="flex flex-col justify-between border-t border-primary/12 pt-6">
           <div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowLeft, Clock3, MessageSquareText, ShieldCheck } from "lucide-react";
 
 import { OnboardingFlow } from "@/components/onboarding-flow";
@@ -20,7 +21,7 @@ export default function OnboardingPage() {
     <main className="min-h-[100dvh] bg-[#FDF8F0] text-foreground">
       <header className="border-b border-primary/12 bg-[#FDF8F0]">
         <div className="mx-auto flex h-18 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-12">
-          <a aria-label="KRS AI home" href="/">
+          <Link aria-label="KRS AI home" href="/">
             <Image
               alt="KRS AI"
               className="h-14 w-auto"
@@ -30,14 +31,14 @@ export default function OnboardingPage() {
               unoptimized
               width={382}
             />
-          </a>
-          <a
+          </Link>
+          <Link
             className="inline-flex h-10 items-center gap-2 rounded-full px-3 text-sm font-semibold text-primary transition hover:bg-primary/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary sm:px-4"
             href="/"
           >
             <ArrowLeft className="size-4" strokeWidth={1.75} />
             Back to KRS
-          </a>
+          </Link>
         </div>
       </header>
 

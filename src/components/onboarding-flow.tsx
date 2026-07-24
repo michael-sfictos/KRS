@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Mail, RotateCcw } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
@@ -272,13 +273,13 @@ export function OnboardingFlow() {
               <Mail className="size-4" strokeWidth={1.75} />
             </button>
           )}
-          <a
+          <Link
             className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-6 text-sm font-semibold text-primary transition hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
             href="/"
           >
             Return to KRS
             <ArrowRight className="size-4" strokeWidth={1.75} />
-          </a>
+          </Link>
         </div>
       </motion.div>
     );
@@ -682,11 +683,8 @@ function PhoneField({
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [isOpen]);
 
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [countryCode, isOpen]);
-
   const selectCountry = (code: string) => {
+    setActiveIndex(0);
     onCountryCodeChange(code);
     setIsOpen(false);
   };
@@ -770,6 +768,7 @@ function PhoneField({
                 setIsOpen(false);
               }}
               onChange={(event) => {
+                setActiveIndex(0);
                 const next = event.target.value;
                 setIsOpen(true);
                 if (next === "" || next === "+") {
@@ -778,10 +777,14 @@ function PhoneField({
                 }
                 onCountryCodeChange(normalizeCountryCode(next));
               }}
-              onFocus={() => setIsOpen(true)}
+              onFocus={() => {
+                setActiveIndex(0);
+                setIsOpen(true);
+              }}
               onKeyDown={handleCountryKeyDown}
               onPaste={(event) => {
                 event.preventDefault();
+                setActiveIndex(0);
                 setIsOpen(true);
                 onCountryCodeChange(normalizeCountryCode(event.clipboardData.getData("text")));
               }}
