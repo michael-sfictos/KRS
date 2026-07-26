@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { accountingPage, serviceMenu } from "@/lib/service-pages";
+import { accountingPage } from "@/lib/service-pages";
 import { cn } from "@/lib/utils";
 
 const ctaLabel = "Talk to KRS";
@@ -24,7 +24,6 @@ export function AccountingServicePage() {
       <Features />
       <InlineCta />
       <Benefits />
-      <OurServices />
       <SwitchProcess />
       <AccountingTestimonials />
       <AccountingFaq />
@@ -180,75 +179,46 @@ function Benefits() {
   );
 }
 
-function OurServices() {
-  return (
-    <section className="px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
-      <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
-        <div>
-          <p className="mono-label text-secondary">Our services</p>
-          <h2 className="mt-6 max-w-md text-balance text-4xl font-normal leading-tight sm:text-5xl">
-            The KRS service team around your business.
-          </h2>
-          <p className="mt-6 max-w-md text-base leading-7 text-muted-foreground">
-            Accounting, tax, payroll and growth support stay connected as your business needs change.
-          </p>
-        </div>
-
-        <div className="border-t border-primary/16">
-          {serviceMenu.map((service) => (
-            <Link
-              aria-current={service.available ? "page" : undefined}
-              className={cn(
-                "group grid gap-4 border-b border-primary/14 py-7 transition hover:bg-primary/4 sm:grid-cols-[60px_0.65fr_1.35fr_24px] sm:items-start sm:px-4",
-                service.available && "bg-primary text-primary-foreground hover:bg-primary"
-              )}
-              href={service.href}
-              key={service.title}
-            >
-              <span className={cn("font-mono text-xs font-semibold text-secondary", service.available && "text-secondary")}>
-                {service.index}
-              </span>
-              <h3 className="text-xl font-semibold leading-tight">{service.title}</h3>
-              <p className={cn("text-sm leading-6 text-muted-foreground", service.available && "text-primary-foreground/62")}>
-                {service.description}
-              </p>
-              <ArrowRight
-                aria-hidden="true"
-                className={cn(
-                  "size-4 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-secondary",
-                  service.available && "text-primary-foreground/50"
-                )}
-                strokeWidth={1.75}
-              />
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function SwitchProcess() {
   return (
     <section className="border-y border-primary/12 bg-[#fdf8f0] px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-[1400px]">
-        <h2 className="max-w-3xl text-balance text-4xl font-normal leading-tight sm:text-5xl">
-          {accountingPage.processTitle}
-        </h2>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-          {accountingPage.processDescription}
-        </p>
-        <ol className="mt-14 grid border-t border-primary/16 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto max-w-5xl text-center">
+          <h2 className="text-balance text-4xl font-normal leading-tight sm:text-5xl lg:text-6xl">
+            {accountingPage.processTitle}
+          </h2>
+          <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">
+            {accountingPage.processDescription}
+          </p>
+          <Link
+            className="mt-7 inline-flex items-center gap-2 border-b-2 border-primary pb-1 text-sm font-semibold text-primary transition hover:border-secondary hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+            href="/onboarding"
+          >
+            Request a no-obligation quote
+            <ArrowRight className="size-4" strokeWidth={1.75} />
+          </Link>
+        </div>
+
+        <ol className="mt-14 grid gap-4 lg:grid-cols-3">
           {accountingPage.process.map((step, index) => (
             <li
-              className="border-b border-primary/12 py-8 md:border-r md:px-6 md:first:pl-0 lg:border-b-0 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
+              className="flex flex-col overflow-hidden rounded-lg border border-white bg-white/28 p-5 sm:p-6 lg:min-h-[640px]"
               key={step.title}
             >
-              <span className="flex size-9 items-center justify-center rounded-full border border-secondary text-xs font-semibold text-secondary">
-                {index + 1}
+              <span className="flex h-9 w-fit min-w-16 items-center justify-center rounded-full border border-white bg-white/24 px-4 font-mono text-xs font-semibold text-primary">
+                0{index + 1}
               </span>
-              <h3 className="mt-8 text-xl font-semibold">{step.title}</h3>
-              <p className="mt-4 text-sm leading-6 text-muted-foreground">{step.description}</p>
+              <h3 className="mt-5 text-2xl font-semibold leading-tight">{step.title}</h3>
+              <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">{step.description}</p>
+              <div className="relative mt-9 aspect-[4/3] overflow-hidden rounded-md bg-white lg:mt-auto">
+                <Image
+                  alt={step.imageAlt}
+                  className="object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 31vw, 100vw"
+                  src={step.image}
+                />
+              </div>
             </li>
           ))}
         </ol>

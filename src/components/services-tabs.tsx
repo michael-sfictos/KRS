@@ -4,19 +4,13 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowRight,
-  BadgeCheck,
-  Building2,
   Check,
   FileClock,
-  Landmark,
   ReceiptText,
   ShieldCheck,
   UsersRound,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -138,110 +132,38 @@ const serviceTabs: ServiceTab[] = [
   },
 ];
 
-function ServiceOperatingPanel({ service }: { service: ServiceTab }) {
-  const Icon = service.icon;
+const serviceVisuals: Record<string, { src: string; alt: string }> = {
+  advisory: {
+    src: "/images/krs-tax-advisory-balanced.jpg",
+    alt: "A client VAT question with a clear recommendation from a KRS tax advisor",
+  },
+  accounting: {
+    src: "/images/krs-accounting-vignette.jpg",
+    alt: "A monthly accounting close reviewed by a KRS accountant",
+  },
+  payroll: {
+    src: "/images/krs-payroll-vignette.jpg",
+    alt: "An employee change included in a KRS-reviewed payroll run",
+  },
+  filings: {
+    src: "/images/krs-statements-vignette.jpg",
+    alt: "Financial statements and an income tax return ready for signature",
+  },
+};
 
-  if (service.value === "advisory") {
-    return (
-      <div className="relative min-h-full overflow-hidden bg-primary p-3 text-primary-foreground sm:p-4 lg:p-5">
-        <div className="relative h-full min-h-[520px] overflow-hidden bg-background shadow-[var(--shadow-lg)]">
-          <Image
-            alt="KRS AI tax advisory and reporting service shown inside a web browser window"
-            className="object-cover object-left-top"
-            fill
-            sizes="(min-width: 1024px) 58vw, 100vw"
-            src="/images/krs-tax-advisory-os-snapshot.webp"
-          />
-        </div>
-      </div>
-    );
-  }
+function ServiceOperatingPanel({ service }: { service: ServiceTab }) {
+  const visual = serviceVisuals[service.value] ?? serviceVisuals.advisory;
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-primary text-primary-foreground">
-      <div className="relative grid min-h-[520px] grid-rows-[auto_1fr_auto] gap-6 p-6 sm:p-8 lg:p-10">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <p className="mono-label text-secondary">{service.eyebrow}</p>
-            <p className="font-heading mt-5 max-w-xl text-balance text-3xl font-medium leading-[1.04] sm:text-4xl">
-              {service.title}
-            </p>
-          </div>
-          <span className="flex size-12 shrink-0 items-center justify-center border border-primary-foreground/20 bg-primary-foreground/8">
-            <Icon className="size-6 text-secondary" />
-          </span>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-[0.82fr_1.18fr]">
-          <div className="gradient-shell">
-            <div className="flex h-full min-h-64 flex-col justify-between bg-tertiary p-5 text-tertiary-foreground">
-              <div>
-                <p className="mono-label text-primary-foreground/56">Operating metric</p>
-                <p className="font-heading mt-5 text-7xl font-medium leading-none text-secondary">{service.stat}</p>
-                <p className="mt-3 max-w-44 text-sm leading-6 text-primary-foreground/68">{service.statLabel}</p>
-              </div>
-              <div className="mt-8 grid grid-cols-4 items-end gap-2">
-                {[44, 72, 58, 92, 66, 84, 76, 96].map((height, index) => (
-                  <span
-                    className={cn(
-                      "block bg-primary-foreground/28",
-                      index === 3 || index === 7 ? "bg-secondary" : ""
-                    )}
-                    key={`${service.value}-${height}-${index}`}
-                    style={{ height }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-3">
-            <div className="bg-card p-5 text-foreground">
-              <div className="flex items-center justify-between gap-4">
-                <p className="mono-label text-muted-foreground">Routing map</p>
-                <Badge className="border-primary/15 bg-transparent text-foreground" variant="outline">
-                  advisor reviewed
-                </Badge>
-              </div>
-              <div className="mt-5 grid gap-3">
-                {service.routing.map((item, index) => (
-                  <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-t border-border pt-3" key={item}>
-                    <span className="font-mono text-xs text-secondary">0{index + 1}</span>
-                    <span className="text-sm font-semibold">{item}</span>
-                    <BadgeCheck className="size-4 text-secondary" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: "AADE", icon: Landmark },
-                { label: "myDATA", icon: Building2 },
-              ].map((item) => {
-                const ItemIcon = item.icon;
-
-                return (
-                  <div className="flex min-h-28 flex-col justify-between bg-primary-foreground/8 p-4" key={item.label}>
-                    <ItemIcon className="size-5 text-secondary" />
-                    <p className="mono-label text-primary-foreground/72">{item.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <Button
-          asChild
-          className="h-12 w-fit rounded-full bg-primary-foreground px-5 text-primary hover:bg-primary-foreground/90"
-          variant="secondary"
-        >
-          <a href="/onboarding">
-            {service.cta}
-            <ArrowRight className="size-4" />
-          </a>
-        </Button>
+    <div className="relative min-h-full overflow-hidden bg-[#fdf8f0]">
+      <div className="relative h-full min-h-[520px] w-full overflow-hidden bg-[#fdf8f0]">
+        <Image
+          alt={visual.alt}
+          className="object-cover object-center"
+          fill
+          sizes="(min-width: 1024px) 58vw, 100vw"
+          src={visual.src}
+        />
       </div>
     </div>
   );

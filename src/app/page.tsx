@@ -407,11 +407,10 @@ function WhySection() {
           </div>
           <div className="gradient-shell shadow-[var(--shadow-lg)]">
             <Image
-              alt="Vector visualization of KRS AI benefits"
+              alt="A connected KRS AI operating layer for accounting, advice, compliance, and live reporting"
               className="w-full bg-card"
               height={640}
-              src="/images/krs-why-vector.svg"
-              unoptimized
+              src="/images/krs-why-ai-phone.jpg"
               width={960}
             />
           </div>

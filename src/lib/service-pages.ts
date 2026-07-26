@@ -1,49 +1,3 @@
-export type ServiceMenuItem = {
-  index: string;
-  title: string;
-  description: string;
-  href: string;
-  available: boolean;
-};
-
-export const serviceMenu: ServiceMenuItem[] = [
-  {
-    index: "01",
-    title: "Tax Advisory",
-    description: "Tax strategy, direct expert advice and support through important business decisions.",
-    href: "/#services",
-    available: false,
-  },
-  {
-    index: "02",
-    title: "Accounting",
-    description: "Formation, recurring books, reporting and closure in one accountable relationship.",
-    href: "/services/accounting",
-    available: true,
-  },
-  {
-    index: "03",
-    title: "Payroll Accounting",
-    description: "Accurate payroll operations, employee changes and labour-cost planning.",
-    href: "/#services",
-    available: false,
-  },
-  {
-    index: "04",
-    title: "Consulting Services",
-    description: "Business planning, management support and practical guidance for the next stage.",
-    href: "/#services",
-    available: false,
-  },
-  {
-    index: "05",
-    title: "Funding & Grants",
-    description: "Identify suitable programmes and build a better-prepared funding process.",
-    href: "/#services",
-    available: false,
-  },
-];
-
 export const accountingPage = {
   title: "Accounting that keeps business in view.",
   description:
@@ -99,25 +53,30 @@ export const accountingPage = {
         "Review open periods and obligations, coordinate the required actions and finish with a clear, documented record.",
     },
   ],
-  processTitle: "How to switch your accounting to KRS",
+  processTitle: "Switch your accounting to KRS in three clear steps.",
   processDescription:
-    "A controlled handover protects current deadlines while creating a better rhythm for the next monthly close.",
+    "Changing accountants takes coordination. KRS manages the background work, protects active deadlines and prepares your first monthly close.",
   process: [
     {
-      title: "Understand the business",
-      description: "We map the entities, activity, team, systems, obligations and the questions management needs answered.",
+      title: "Free initial consultation",
+      description:
+        "Tell us how your business operates and where the current process is falling short. We review the fit and send a clear, no-obligation proposal.",
+      image: "/images/krs-switch-consultation.jpg",
+      imageAlt: "A KRS accounting consultation shown on a modern smartphone",
     },
     {
-      title: "Review the accounting file",
-      description: "KRS examines current records, open periods, missing evidence and responsibilities held by the existing provider.",
+      title: "Managed data transfer",
+      description:
+        "Once you choose KRS, we coordinate the handover with your previous accountant, collect the records and protect active deadlines.",
+      image: "/images/krs-switch-transfer.jpg",
+      imageAlt: "Accounting documents moving securely into the KRS operating file",
     },
     {
-      title: "Plan the handover",
-      description: "You receive a clear transition plan covering information requests, dates, owners and continuity of active obligations.",
-    },
-    {
-      title: "Run the first KRS close",
-      description: "We connect the working flows, resolve inherited gaps and establish the reporting cadence going forward.",
+      title: "First monthly close",
+      description:
+        "Meet the KRS team responsible for your file, connect the working flows and receive your first monthly accounting overview.",
+      image: "/images/krs-switch-first-close.jpg",
+      imageAlt: "A completed KRS monthly accounting report",
     },
   ],
   testimonials: [
