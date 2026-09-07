@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 type FooterLinkGroup = {
   title: string;
@@ -14,11 +13,11 @@ const footerLinkGroups: FooterLinkGroup[] = [
   {
     title: "Services",
     links: [
-      { label: "Tax Advisory", href: "#services" },
+      { label: "Tax Advisory", href: "/services/tax-advisory" },
       { label: "Bookkeeping", href: "/services/accounting" },
-      { label: "Financial Statements & Taxes", href: "#services" },
-      { label: "Tax Return", href: "#services" },
-      { label: "Payroll", href: "#services" },
+      { label: "Consulting Services", href: "/services/consulting" },
+      { label: "Funding & Grants", href: "/services/funding-grants" },
+      { label: "Payroll", href: "/services/payroll" },
     ],
   },
   {
@@ -74,6 +73,8 @@ const footerLinkGroups: FooterLinkGroup[] = [
       { label: "Press", href: "#media" },
       { label: "Structure", href: "#" },
       { label: "Contact us", href: "/onboarding" },
+      { label: "Design system", href: "/design-system" },
+      { label: "Component index", href: "/components" },
     ],
   },
   {
@@ -109,18 +110,19 @@ function FooterLinkColumn({ group }: { group: FooterLinkGroup }) {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="box-content mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:px-12">
-        <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-12 lg:gap-10">
+    <footer className="isolate bg-primary text-primary-foreground">
+      <div className="relative box-content mx-auto max-w-[1400px] overflow-hidden px-4 pb-[min(42vw,520px)] pt-16 sm:px-6 lg:px-12">
+        <div className="relative z-10">
+          <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
             <Link aria-label="KRS AI home" className="inline-flex items-center" href="/">
               <Image
                 alt="KRS AI"
-                className="h-[88px] w-[216px]"
-                height={157}
+                className="h-[88px] w-auto"
+                height={208}
                 src="/logos/Full%20logo.svg"
                 unoptimized
-                width={382}
+                width={504}
               />
             </Link>
 
@@ -183,8 +185,22 @@ export function SiteFooter() {
             <p className="mono-label text-primary-foreground/36">Athens / Remote / EU</p>
           </div>
         </div>
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0"
+        >
+          <Image
+            alt=""
+            className="h-auto w-full select-none"
+            height={1435}
+            sizes="(max-width: 1400px) 100vw, 1496px"
+            src="/images/Footer-bg.png"
+            width={2560}
+          />
+          <div className="absolute inset-x-0 top-0 h-[32%] bg-gradient-to-b from-primary to-transparent" />
+        </div>
       </div>
-      <Separator className="bg-primary-foreground/10" />
     </footer>
   );
 }

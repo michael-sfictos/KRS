@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { AccountingServicePage } from "@/components/accounting-service-page";
+import { ServicePage } from "@/components/accounting-service-page";
 import { accountingPage } from "@/lib/service-pages";
 
 export const metadata: Metadata = {
@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function AccountingPage() {
-  return <AccountingServicePage />;
+  return <ServicePage page={accountingPage} />;
 }

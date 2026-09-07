@@ -1,0 +1,166 @@
+import Image from "next/image";
+import type { Metadata } from "next";
+import { ArrowRight, FileText, Landmark, UsersRound } from "lucide-react";
+
+import { PricingCalculator } from "@/components/pricing-calculator";
+import { PricingPlans } from "@/components/pricing-plans";
+import { Reveal, RevealFade } from "@/components/reveal";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Pricing | KRS AI",
+  description: "Transparent accounting, payroll, and tax advisory pricing for Greek businesses.",
+};
+
+const pricingFaqs = [
+  {
+    question: "Are the listed prices monthly fees?",
+    answer:
+      "Yes. The plan prices are monthly starting fees for ongoing accounting support. They exclude VAT and are confirmed once we understand your business structure, document volume, and reporting needs.",
+  },
+  {
+    question: "What is included in the monthly price?",
+    answer:
+      "Each plan includes the recurring bookkeeping and compliance work shown in the comparison table. The exact mix of VAT, myDATA, annual filings, reporting, and advisor support depends on the plan you choose.",
+  },
+  {
+    question: "How is payroll priced?",
+    answer:
+      "Payroll administration and ERGANI coordination start at €14 per employee per month. We confirm the final payroll scope before onboarding, especially when there are variable schedules or additional employment requirements.",
+  },
+  {
+    question: "What happens if my business grows or becomes more complex?",
+    answer:
+      "Your scope can grow with your business. If document volume, payroll, entities, or reporting needs change, your advisor will explain the revised scope and fee before any change takes effect.",
+  },
+  {
+    question: "Are formation costs included when I am starting a company?",
+    answer:
+      "Formation support has a separate starting estimate, shown in the calculator. Notarial, legal, specialist tax, and other third-party requirements are scoped separately and confirmed in writing before work begins.",
+  },
+];
+
+export default function PricingPage() {
+  return (
+    <main className="min-h-screen overflow-x-clip bg-background text-foreground">
+      <SiteHeader />
+      <section className="border-b border-primary/12 bg-[#FDF8F0]">
+        <div className="mx-auto grid max-w-[1400px] gap-12 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.04fr_0.96fr] lg:items-end lg:gap-18 lg:px-12">
+          <div className="max-w-3xl">
+            <p className="mono-label text-secondary">Pricing and plans</p>
+            <h1 className="mt-5 text-balance text-[54px] leading-[0.94] sm:text-7xl lg:text-[88px]">
+              <Reveal play="mount">Clarity for every stage of your business.</Reveal>
+            </h1>
+            <RevealFade className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground" delay={0.12} play="mount">
+              KRS combines Greek accounting expertise with a more visible operating file. Choose a plan that fits today,
+              then extend it as your obligations, team, and reporting needs grow.
+            </RevealFade>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Button asChild className="h-12 rounded-full px-6 shadow-[var(--shadow-md)]" variant="secondary">
+                <a href="#calculator">
+                  Calculate your estimate
+                  <ArrowRight className="size-4" strokeWidth={1.75} />
+                </a>
+              </Button>
+              <Button asChild className="h-12 rounded-full border-primary/20 bg-transparent px-6" variant="outline">
+                <a href="/onboarding">Talk to an advisor</a>
+              </Button>
+            </div>
+          </div>
+          <figure className="relative min-h-88 overflow-hidden border border-primary/15 bg-primary shadow-[var(--shadow-lg)] sm:min-h-112">
+            <Image
+              alt="Business founder and KRS advisor reviewing financial documents"
+              className="object-cover"
+              fill
+              priority
+              sizes="(min-width: 1024px) 46vw, 100vw"
+              src="/images/krs-pricing-advisory-session.png"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <PricingPlans />
+
+      <section className="border-y border-primary/12 bg-primary py-16 text-primary-foreground md:py-20">
+        <div className="mx-auto grid max-w-[1400px] gap-8 px-4 sm:px-6 lg:grid-cols-3 lg:px-12">
+          <div>
+            <Landmark className="size-7 text-secondary" strokeWidth={1.5} />
+            <h2 className="mt-5 text-3xl leading-tight">
+              <Reveal>Built around Greek compliance.</Reveal>
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-primary-foreground/65">AADE, myDATA, EFKA, and ERGANI are not extras. They are part of the operating context.</p>
+          </div>
+          <div>
+            <FileText className="size-7 text-secondary" strokeWidth={1.5} />
+            <h2 className="mt-5 text-3xl leading-tight">
+              <Reveal>One file, visible progress.</Reveal>
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-primary-foreground/65">Your documents, open questions, and filing work remain connected instead of disappearing into an inbox.</p>
+          </div>
+          <div>
+            <UsersRound className="size-7 text-secondary" strokeWidth={1.5} />
+            <h2 className="mt-5 text-3xl leading-tight">
+              <Reveal>People remain accountable.</Reveal>
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-primary-foreground/65">Automation prepares the work. Licensed professionals review it and help you make informed decisions.</p>
+          </div>
+        </div>
+      </section>
+
+      <PricingCalculator />
+
+      <section className="border-b border-primary/12 bg-[#FDF8F0] py-16 md:py-22">
+        <div className="mx-auto grid max-w-[1400px] gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-12">
+          <div className="max-w-2xl">
+            <p className="mono-label text-secondary">A tailored operating scope</p>
+            <h2 className="mt-4 text-balance text-5xl leading-[0.98] sm:text-6xl">
+              <Reveal>Your business does not fit a template? That is normal.</Reveal>
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-muted-foreground">For groups, holding structures, international operations, audits, and specialist filings, KRS builds a scope with the right people and review rhythm.</p>
+          </div>
+          <Button asChild className="h-12 rounded-full px-6 shadow-[var(--shadow-md)]" variant="secondary">
+            <a href="/onboarding">
+              Request a tailored scope
+              <ArrowRight className="size-4" strokeWidth={1.75} />
+            </a>
+          </Button>
+        </div>
+      </section>
+
+      <section className="border-t border-primary/12 px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28" id="pricing-faq">
+        <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-20">
+          <div>
+            <h2 className="text-4xl font-normal leading-tight sm:text-5xl">
+              <Reveal>The details behind your quote.</Reveal>
+            </h2>
+            <p className="mt-6 max-w-md text-base leading-7 text-muted-foreground">
+              A clear scope comes before a commitment. Here are the practical answers clients ask before getting started.
+            </p>
+          </div>
+          <Accordion className="border-t border-primary/16" collapsible type="single">
+            {pricingFaqs.map((faq, index) => (
+              <AccordionItem className="border-primary/14" key={faq.question} value={`pricing-faq-${index}`}>
+                <AccordionTrigger className="py-6 text-left text-lg font-semibold hover:no-underline">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="max-w-3xl pb-7 text-sm leading-7 text-muted-foreground">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+      <SiteFooter />
+    </main>
+  );
+}

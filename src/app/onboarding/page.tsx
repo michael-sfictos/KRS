@@ -25,11 +25,11 @@ export default function OnboardingPage() {
             <Image
               alt="KRS AI"
               className="h-14 w-auto"
-              height={157}
+              height={416}
               priority
-              src="/logos/Full%20logo%20Dark.svg"
+              src="/logos/Full%20logo%20Dark.png"
               unoptimized
-              width={382}
+              width={1008}
             />
           </Link>
           <Link

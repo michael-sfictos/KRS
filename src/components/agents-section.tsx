@@ -15,6 +15,7 @@ import {
 import { createRef, forwardRef, type RefObject, useMemo, useRef } from "react";
 
 import { AnimatedBeam } from "@/components/animated-beam";
+import { Reveal, RevealFade } from "@/components/reveal";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -111,13 +112,13 @@ export function AgentsSection() {
           <div>
             <p className="mono-label text-secondary">KRS AI Agents</p>
             <h2 className="mt-5 max-w-4xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl lg:text-7xl">
-              KRS people run the work. KRS AI keeps every file moving.
+              <Reveal>KRS people run the work. KRS AI keeps every file moving.</Reveal>
             </h2>
           </div>
-          <p className="max-w-xl text-lg leading-8 text-primary-foreground/68">
+          <RevealFade className="max-w-xl text-lg leading-8 text-primary-foreground/68" delay={0.1}>
             Licensed advisors and operators stay in charge. KRS AI prepares context, routes evidence, and keeps every
             compliance workflow visible before a person makes the next call.
-          </p>
+          </RevealFade>
         </div>
 
         <div

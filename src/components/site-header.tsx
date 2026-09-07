@@ -23,7 +23,7 @@ type MegaMenuFeature = MegaMenuLink & {
 type MegaNavItem = {
   label: string;
   columns: MegaMenuColumn[];
-  features: MegaMenuFeature[];
+  features?: MegaMenuFeature[];
   ctaLabel: string;
   ctaHref: string;
 };
@@ -40,7 +40,7 @@ const navItems: MegaNavItem[] = [
           {
             label: "Tax Advisory",
             description: "Personal advice on our platform - tax strategy, advice and audit",
-            href: "/#services",
+            href: "/services/tax-advisory",
           },
           {
             label: "Accounting",
@@ -50,17 +50,17 @@ const navItems: MegaNavItem[] = [
           {
             label: "Payroll Accounting",
             description: "Accurate payroll fully integrated - cost strategy and program participation",
-            href: "/#services",
+            href: "/services/payroll",
           },
           {
             label: "Consulting Services",
             description: "Business plan, funding, and business development support",
-            href: "/#services",
+            href: "/services/consulting",
           },
           {
             label: "Funding & Grants",
             description: "Local and European grants - we help you find the right funding",
-            href: "/#services",
+            href: "/services/funding-grants",
           },
         ],
       },
@@ -224,6 +224,28 @@ const navItems: MegaNavItem[] = [
     ],
   },
   {
+    label: "Pricing",
+    ctaLabel: "Find your plan",
+    ctaHref: "/pricing",
+    columns: [
+      {
+        title: "Pricing",
+        links: [
+          {
+            label: "Pricing plans",
+            description: "Clear monthly plans for Greek businesses.",
+            href: "/pricing",
+          },
+          {
+            label: "Pricing calculator",
+            description: "Estimate a plan based on your operating needs.",
+            href: "/pricing#calculator",
+          },
+        ],
+      },
+    ],
+  },
+  {
     label: "Blog",
     ctaLabel: "Read all articles",
     ctaHref: "/#field-notes",
@@ -232,18 +254,18 @@ const navItems: MegaNavItem[] = [
         title: "Latest articles",
         links: [
           {
-            label: "What agentic accounting changes for Greek SMEs.",
-            description: "Brief / 08 min",
+            label: "VAT and myDATA changes Greek SMEs should track.",
+            description: "News / 08 min",
             href: "/#field-notes",
           },
           {
-            label: "myDATA as an operating rhythm, not an afterthought.",
+            label: "How to keep myDATA current through the year.",
             description: "Guide / 11 min",
             href: "/#field-notes",
           },
           {
-            label: "The CFO question founders ask too late.",
-            description: "Conversation / 17 min",
+            label: "The tax question founders ask too late.",
+            description: "Insight / 17 min",
             href: "/#field-notes",
           },
         ],
@@ -291,11 +313,11 @@ export function SiteHeader() {
           <Image
             alt="KRS AI"
             className="h-14 w-auto"
-            height={157}
+            height={416}
             priority
-            src="/logos/Full%20logo%20Dark.svg"
+            src="/logos/Full%20logo%20Dark.png"
             unoptimized
-            width={382}
+            width={1008}
           />
         </Link>
         <div className="hidden h-full items-center gap-2 lg:flex">
@@ -345,6 +367,9 @@ export function SiteHeader() {
 }
 
 function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
+  const features = item.features ?? [];
+  const hasFeaturePanel = features.length > 0;
+
   return (
     <div className="mega-menu-group flex h-full items-center">
       <button
@@ -359,8 +384,18 @@ function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
           strokeWidth={1.75}
         />
       </button>
-      <div className="mega-menu-panel absolute left-1/2 top-full z-50 w-[min(1040px,calc(100vw-3rem))] pt-3 transition duration-200 ease-out">
-        <div className="grid overflow-hidden border border-primary/15 bg-white shadow-[var(--shadow-xl)] lg:grid-cols-[1fr_320px]">
+      <div
+        className={cn(
+          "mega-menu-panel absolute left-1/2 top-full z-50 pt-3 transition duration-200 ease-out",
+          hasFeaturePanel ? "w-[min(1040px,calc(100vw-3rem))]" : "w-[min(420px,calc(100vw-3rem))]"
+        )}
+      >
+        <div
+          className={cn(
+            "grid overflow-hidden border border-primary/15 bg-white shadow-[var(--shadow-xl)]",
+            hasFeaturePanel && "lg:grid-cols-[1fr_320px]"
+          )}
+        >
           <div className="bg-white p-5 sm:p-6">
             <div
               className={cn(
@@ -403,42 +438,44 @@ function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
             </div>
           </div>
 
-          <div className="flex min-h-full flex-col justify-between bg-primary p-5 text-primary-foreground sm:p-6">
-            <div className="grid gap-3">
-              {item.features.map((feature) => (
-                <a
-                  className="group/card block border border-primary-foreground/12 bg-primary-foreground/8 p-4 outline-none transition hover:bg-primary-foreground/12 focus-visible:bg-primary-foreground/12"
-                  href={feature.href}
-                  key={feature.label}
-                >
-                  <span className="flex items-start justify-between gap-4">
-                    <span>
-                      <span className="mono-label text-secondary">{feature.eyebrow}</span>
-                      <span className="mt-2 block text-base font-semibold leading-5 text-primary-foreground">
-                        {feature.label}
+          {hasFeaturePanel ? (
+            <div className="flex min-h-full flex-col justify-between bg-primary p-5 text-primary-foreground sm:p-6">
+              <div className="grid gap-3">
+                {features.map((feature) => (
+                  <a
+                    className="group/card block border border-primary-foreground/12 bg-primary-foreground/8 p-4 outline-none transition hover:bg-primary-foreground/12 focus-visible:bg-primary-foreground/12"
+                    href={feature.href}
+                    key={feature.label}
+                  >
+                    <span className="flex items-start justify-between gap-4">
+                      <span>
+                        <span className="mono-label text-secondary">{feature.eyebrow}</span>
+                        <span className="mt-2 block text-base font-semibold leading-5 text-primary-foreground">
+                          {feature.label}
+                        </span>
                       </span>
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="mt-1 size-4 shrink-0 text-primary-foreground/40 transition group-hover/card:translate-x-0.5 group-hover/card:text-secondary group-focus-visible/card:text-secondary"
+                        strokeWidth={1.75}
+                      />
                     </span>
-                    <ArrowRight
-                      aria-hidden="true"
-                      className="mt-1 size-4 shrink-0 text-primary-foreground/40 transition group-hover/card:translate-x-0.5 group-hover/card:text-secondary group-focus-visible/card:text-secondary"
-                      strokeWidth={1.75}
-                    />
-                  </span>
-                  <span className="mt-3 block text-xs leading-5 text-primary-foreground/58">
-                    {feature.description}
-                  </span>
-                </a>
-              ))}
-            </div>
+                    <span className="mt-3 block text-xs leading-5 text-primary-foreground/58">
+                      {feature.description}
+                    </span>
+                  </a>
+                ))}
+              </div>
 
-            <a
-              className="mt-6 inline-flex h-11 w-fit items-center justify-center gap-2 rounded-full bg-primary-foreground px-5 text-sm font-semibold text-primary transition hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
-              href={item.ctaHref}
-            >
-              {item.ctaLabel}
-              <ArrowRight className="size-4" strokeWidth={1.75} />
-            </a>
-          </div>
+              <a
+                className="mt-6 inline-flex h-11 w-fit items-center justify-center gap-2 rounded-full bg-primary-foreground px-5 text-sm font-semibold text-primary transition hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                href={item.ctaHref}
+              >
+                {item.ctaLabel}
+                <ArrowRight className="size-4" strokeWidth={1.75} />
+              </a>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

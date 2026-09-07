@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
 import { HeroVisualStrip } from "@/components/hero-visual-strip";
+import { Reveal, RevealFade } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { ProcessTimeline } from "@/components/process-timeline";
 import { ServicesTabs } from "@/components/services-tabs";
@@ -84,22 +85,22 @@ const benefits: Array<{ value: string; text: string; icon: LucideIcon }> = [
 
 const fieldNotes = [
   {
-    type: "Brief",
+    type: "News",
     read: "08 min",
-    title: "What agentic accounting changes for Greek SMEs.",
-    text: "Why the next leap is not replacing accountants, but giving advisors a better operating file before decisions are made.",
+    title: "VAT and myDATA changes Greek SMEs should track.",
+    text: "What recently changed for invoices, filings, and monthly close, and what to do before the next deadline.",
   },
   {
     type: "Guide",
     read: "11 min",
-    title: "myDATA as an operating rhythm, not an afterthought.",
-    text: "A practical view of document evidence, monthly review, and how leadership teams can avoid year-end uncertainty.",
+    title: "How to keep myDATA current through the year.",
+    text: "A practical way to collect invoices, review each month, and avoid a scramble at year-end.",
   },
   {
-    type: "Conversation",
+    type: "Insight",
     read: "17 min",
-    title: "The CFO question founders ask too late.",
-    text: "How tax structure, payroll controls, and reporting discipline become a growth advantage before financing rounds.",
+    title: "The tax question founders ask too late.",
+    text: "How company structure, payroll, and reporting choices affect the business before you need outside capital.",
   },
 ];
 
@@ -107,20 +108,20 @@ const socialVideos = [
   {
     id: "Wl6-gvmHT88",
     href: "https://www.youtube.com/shorts/Wl6-gvmHT88",
-    title: "Inside the KRS AI operating file.",
-    text: "A short look at how accounting questions become structured advisor work.",
+    title: "Building a company in Greece.",
+    text: "The founder on the early decisions that shape a business.",
   },
   {
     id: "_HIrEfhkh6Y",
     href: "https://www.youtube.com/shorts/_HIrEfhkh6Y",
-    title: "How agentic workflows support advisors.",
-    text: "A practical glimpse at human review, routing, and evidence collection.",
+    title: "What entrepreneurship looks like in practice.",
+    text: "A conversation about clients, teams, and staying focused as the company grows.",
   },
   {
     id: "-_k56R5dp7U",
     href: "https://www.youtube.com/shorts/-_k56R5dp7U",
-    title: "What modern tax support feels like.",
-    text: "Short-form context on faster answers, clearer files, and better visibility.",
+    title: "Advice founders usually wait too long to hear.",
+    text: "Tax, cash, and structure, discussed in plain language for people running a business.",
   },
 ];
 
@@ -179,24 +180,19 @@ function HeroSection() {
   return (
     <section className="relative overflow-hidden border-b border-primary/12 bg-[#FDF8F0]">
       <div className="relative mx-auto max-w-[1400px] px-4 pb-8 pt-10 sm:px-6 lg:px-12 lg:pt-16">
-        <div className="mb-20 flex flex-col gap-6 md:mb-24 md:flex-row md:items-end md:justify-between lg:mb-32">
-          <div className="max-w-[640px] font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">
-            Premium accounting, payroll and tax advisory for modern businesses
-          </div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary/55">Athens / EU / 2026</p>
-        </div>
-
         <div className="grid grid-cols-12 items-end gap-6 lg:gap-8">
           <div className="col-span-12 lg:col-span-8">
             <h1 className="hero-headline max-w-5xl text-balance text-[56px] text-foreground sm:text-[82px] md:text-[104px] lg:text-[116px] xl:text-[148px]">
-              Accounting
-              <br />
-              <span className="hero-headline-accent italic text-secondary">evolved into</span>
-              <br />
-              agentic AI.
+              <Reveal play="mount">Accounting</Reveal>
+              <Reveal delay={0.08} play="mount">
+                <span className="hero-headline-accent italic text-secondary">evolved into</span>
+              </Reveal>
+              <Reveal delay={0.16} play="mount">
+                agentic AI.
+              </Reveal>
             </h1>
           </div>
-          <div className="col-span-12 lg:col-span-4 lg:pb-3">
+          <RevealFade className="col-span-12 lg:col-span-4 lg:pb-3" delay={0.24} play="mount">
             <p className="mono-label mb-4 text-secondary">Statement of intent</p>
             <p className="max-w-md text-lg leading-8 text-foreground/72">
               KRS combines licensed accounting and tax professionals with agentic workflows that organize filings,
@@ -216,7 +212,7 @@ function HeroSection() {
                 </a>
               </Button>
             </div>
-          </div>
+          </RevealFade>
         </div>
 
         <HeroVisualStrip />
@@ -231,8 +227,9 @@ function MediaSection() {
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
         <div className="grid gap-8 lg:grid-cols-[0.42fr_1fr] lg:items-center">
           <div>
-            <p className="mono-label text-secondary">KRS AI in the media</p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight">Known where finance operators pay attention.</h2>
+            <h2 className="text-3xl font-semibold leading-tight">
+              <Reveal>Known where finance operators pay attention.</Reveal>
+            </h2>
           </div>
           <div className="overflow-hidden py-4">
             <div className="ticker-track flex w-max gap-3">
@@ -287,15 +284,14 @@ function ManifestoSection() {
         </div>
         <div className="col-span-12 lg:col-span-9">
           <p className="font-heading text-balance text-4xl font-light leading-[1.04] sm:text-5xl md:text-6xl lg:text-7xl">
-            We believe trust is built through evidence, cadence, and accountable review.
-            <span className="italic text-secondary"> AI should not obscure the work.</span> It should make the work inspectable.
+            <Reveal>
+              We believe trust is built through evidence, cadence, and accountable review.
+            </Reveal>
+            <Reveal delay={0.1}>
+              <span className="italic text-secondary"> AI should not obscure the work.</span> It should make the work
+              inspectable.
+            </Reveal>
           </p>
-          <div className="mt-12 flex flex-wrap gap-x-10 gap-y-3 font-mono text-sm text-primary-foreground/60">
-            <span className="uppercase tracking-widest">Signed</span>
-            <span>KRS AI</span>
-            <span>Athens</span>
-            <span>MMXXVI</span>
-          </div>
         </div>
       </div>
     </section>
@@ -325,13 +321,16 @@ function SectionIntro({
             inverted ? "text-primary-foreground" : "text-foreground"
           )}
         >
-          {title}
+          <Reveal>{title}</Reveal>
         </h2>
       </div>
       {text ? (
-        <p className={cn("max-w-xl text-lg leading-8", inverted ? "text-primary-foreground/68" : "text-muted-foreground")}>
+        <RevealFade
+          className={cn("max-w-xl text-lg leading-8", inverted ? "text-primary-foreground/68" : "text-muted-foreground")}
+          delay={0.1}
+        >
           {text}
-        </p>
+        </RevealFade>
       ) : null}
     </div>
   );
@@ -398,7 +397,7 @@ function WhySection() {
           <div>
             <p className="mono-label text-secondary">Why KRS AI?</p>
             <h2 className="mt-5 max-w-3xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              A precise operating layer for founders, finance teams, and owners.
+              <Reveal>A precise operating layer for founders, finance teams, and owners.</Reveal>
             </h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
               The benefit is not a prettier portal. It is fewer unknowns, earlier questions, and better-reviewed
@@ -447,9 +446,9 @@ function FieldNotesSection() {
       <div className="mx-auto max-w-[1400px] border-t border-primary/16 pt-16">
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mono-label text-secondary">Read more on our blog</p>
+            <p className="mono-label text-secondary">From the KRS blog</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              Dispatches from the finance operating file.
+              <Reveal>Tax and accounting news from Greece.</Reveal>
             </h2>
           </div>
           <a className="inline-flex items-center gap-2 text-sm font-semibold transition hover:gap-3" href="#">
@@ -507,9 +506,8 @@ function CareersSection() {
         <div className="gradient-shell shadow-[var(--shadow-xl)]">
           <div className="relative aspect-[3/4] overflow-hidden bg-background p-8 text-foreground">
             <div className="relative flex h-full flex-col justify-between">
-              <div className="flex items-center justify-between">
-                <Image alt="KRS AI" className="h-8 w-auto" height={157} src="/logos/Full%20logo%20Dark.svg" unoptimized width={382} />
-                <span className="mono-label text-muted-foreground">No. 1619</span>
+              <div className="flex items-center justify-center">
+                <Image alt="KRS AI" className="h-8 w-auto" height={416} src="/logos/Full%20logo%20Dark.png" unoptimized width={1008} />
               </div>
               <div className="relative mx-auto flex aspect-square w-[74%] items-center justify-center rounded-full border border-primary/10 bg-primary text-primary-foreground">
                 <span aria-hidden="true" className="pointer-events-none absolute inset-5 rounded-full">
@@ -549,7 +547,7 @@ function CareersSection() {
         <div>
           <p className="mono-label text-secondary">FEATURE / SPRING EDITION</p>
           <h2 className="mt-6 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-            Join the team building a 6-hour working day with Agentic AI.
+            <Reveal>Join the team building a 6-hour working day with Agentic AI.</Reveal>
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-primary-foreground/72">
             KRS AI is built around focused work, healthy lifestyle, and fewer repetitive loops. Agentic workflows handle
@@ -587,13 +585,13 @@ function FaqSection() {
       <div className="mx-auto max-w-[1400px]">
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mono-label text-secondary">Frequently asked questions</p>
+            <p className="mono-label text-secondary">FAQ</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              Frequently asked questions, organized as working notes.
+              <Reveal>What to know before you start.</Reveal>
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-7 text-muted-foreground">
-            A practical index for how KRS AI, licensed advisors, and the client operating file work together.
+            Straight answers on bookkeeping, tax advice, and how KRS works with Greek businesses.
           </p>
         </div>
 
@@ -621,9 +619,9 @@ function SocialVideosSection() {
       <div className="mx-auto max-w-[1400px] pt-16">
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mono-label text-secondary">Watch on social</p>
+            <p className="mono-label text-secondary">Video podcasts</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              Short videos from the KRS AI workflow.
+              <Reveal>The founder on business and entrepreneurship.</Reveal>
             </h2>
           </div>
           <a
@@ -632,7 +630,7 @@ function SocialVideosSection() {
             rel="noreferrer"
             target="_blank"
           >
-            View more videos
+            Watch more episodes
             <ArrowRight className="size-4" />
           </a>
         </div>
@@ -658,7 +656,7 @@ function SocialVideosSection() {
                 />
               </div>
               <div className="mb-3 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                <span>Short</span>
+                <span>Episode</span>
                 <span>/</span>
                 <span>0{index + 1}</span>
               </div>
@@ -693,9 +691,8 @@ function FinalCta() {
         <div className="col-span-12 lg:col-span-8">
           <p className="mono-label mb-6 text-primary-foreground">TAKE THE NEXT STEP</p>
           <h2 className="text-balance text-[72px] font-light leading-[0.86] text-primary-foreground sm:text-[110px] md:text-[148px] lg:text-[180px]">
-            Begin
-            <br />
-            together.
+            <Reveal>Begin</Reveal>
+            <Reveal delay={0.1}>together.</Reveal>
           </h2>
         </div>
         <div className="col-span-12 lg:col-span-4 lg:pb-6">

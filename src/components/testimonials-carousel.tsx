@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useLayoutEffect, useEffect, useMemo, useRef, useState } from "react";
 
+import { Reveal } from "@/components/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -116,7 +117,9 @@ export function TestimonialsCarousel() {
         <div className="flex flex-col justify-between border-t border-primary/12 pt-6">
           <div>
             <p className="mono-label text-secondary">Client testimony</p>
-            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95]">What finance leaders notice first.</h2>
+            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95]">
+              <Reveal>What finance leaders notice first.</Reveal>
+            </h2>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
