@@ -111,7 +111,7 @@ function FooterLinkColumn({ group }: { group: FooterLinkGroup }) {
 export function SiteFooter() {
   return (
     <footer className="isolate bg-primary text-primary-foreground">
-      <div className="relative box-content mx-auto max-w-[1400px] overflow-hidden px-4 pb-[min(42vw,520px)] pt-16 sm:px-6 lg:px-12">
+      <div className="relative box-content mx-auto max-w-[1400px] overflow-hidden px-4 pb-[calc(min(42vw,520px)+100px)] pt-16 sm:px-6 lg:px-12">
         <div className="relative z-10">
           <div className="grid gap-12 border-b border-primary-foreground/12 pb-14 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
