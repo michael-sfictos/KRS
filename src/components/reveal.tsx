@@ -1,6 +1,6 @@
 "use client";
 
-import type { ElementType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -39,23 +39,22 @@ function RevealFrame({
   clip?: boolean;
 }) {
   const reduce = useReducedMotion();
-  const transition = { duration: 0.7, delay, ease: revealEase };
-  const StaticTag: ElementType = as;
   const MotionTag = as === "span" ? motion.span : motion.div;
-
-  if (reduce) {
-    return <StaticTag className={className}>{children}</StaticTag>;
-  }
+  const skipMotion = Boolean(reduce);
 
   return (
     <MotionTag
-      animate={play === "mount" ? "shown" : undefined}
+      animate={play === "mount" || skipMotion ? "shown" : undefined}
       className={cn(clip && "overflow-hidden pb-[0.1em]", as === "span" && "block", className)}
-      initial="hidden"
+      initial={skipMotion ? false : "hidden"}
       viewport={{ once: true, amount: 0.2 }}
-      whileInView={play === "view" ? "shown" : undefined}
+      whileInView={!skipMotion && play === "view" ? "shown" : undefined}
     >
-      <MotionTag className="block" transition={transition} variants={variants}>
+      <MotionTag
+        className="block"
+        transition={{ duration: skipMotion ? 0 : 0.7, delay: skipMotion ? 0 : delay, ease: revealEase }}
+        variants={variants}
+      >
         {children}
       </MotionTag>
     </MotionTag>

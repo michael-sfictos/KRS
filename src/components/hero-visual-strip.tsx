@@ -35,6 +35,8 @@ const heroSlides = [
 
 const carouselTransition = { duration: 0.7, ease: [0.22, 1, 0.36, 1] } as const;
 
+const authorityNodes = ["AADE", "EFKA", "ERGANI", "KRS", "myDATA", "gov.gr"] as const;
+
 export function HeroVisualStrip() {
   const prefersReducedMotion = useReducedMotion();
   const [imageIndex, setImageIndex] = useState(0);
@@ -184,28 +186,35 @@ export function HeroVisualStrip() {
         </div>
       </div>
 
-      <div className="relative min-h-[360px] overflow-hidden bg-primary text-primary-foreground">
-        <div className="relative flex h-full flex-col justify-end p-5">
-          <div>
-            <div className="mb-6 grid grid-cols-3 gap-3">
-              {["AADE", "EFKA", "ERGANI", "KRS", "myDATA", "gov.gr"].map((node, index) => (
-                <span
-                  className={cn(
-                    "flex aspect-square items-center justify-center border border-primary-foreground/16 bg-primary-foreground/5 text-center font-mono text-[0.62rem] uppercase text-primary-foreground/58",
-                    index === 3 && "border-primary-foreground bg-primary-foreground text-primary"
-                  )}
-                  key={node}
-                >
-                  {node}
-                </span>
-              ))}
-            </div>
-            <p className="max-w-56 text-balance font-heading text-3xl font-medium leading-tight">
-              Controlled connection beats scattered portals.
-            </p>
+      <HeroConnectionPanel />
+    </div>
+  );
+}
+
+export function HeroConnectionPanel() {
+  return (
+    <div className="relative min-h-[360px] overflow-hidden bg-primary text-primary-foreground">
+      <div className="relative flex h-full flex-col justify-end p-5">
+        <div>
+          <div className="mb-6 grid grid-cols-3 gap-3">
+            {authorityNodes.map((node, index) => (
+              <span
+                className={cn(
+                  "flex aspect-square items-center justify-center border border-primary-foreground/16 bg-primary-foreground/5 text-center font-mono text-[0.62rem] uppercase text-primary-foreground/58",
+                  index === 3 && "border-primary-foreground bg-primary-foreground text-primary"
+                )}
+                key={node}
+              >
+                {node}
+              </span>
+            ))}
           </div>
+          <p className="max-w-56 text-balance font-heading text-3xl font-medium leading-tight">
+            Controlled connection beats scattered portals.
+          </p>
         </div>
       </div>
     </div>
   );
 }
+

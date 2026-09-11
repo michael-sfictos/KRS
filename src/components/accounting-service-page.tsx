@@ -40,7 +40,7 @@ function Hero({ page }: { page: ServicePageData }) {
       <div className="mx-auto grid max-w-[1400px] lg:min-h-[620px] lg:grid-cols-[0.88fr_1.12fr]">
         <div className="flex flex-col justify-center px-4 py-14 sm:px-6 sm:py-18 lg:px-12 lg:py-20">
           <p className="mono-label text-secondary">{page.eyebrow}</p>
-          <h1 className="hero-headline mt-7 max-w-[680px] text-balance text-5xl sm:text-6xl lg:text-7xl">
+          <h1 className="type-h1 mt-7 max-w-[680px]">
             <Reveal play="mount">{page.title}</Reveal>
           </h1>
           <RevealFade className="mt-7 max-w-[590px] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8" delay={0.12} play="mount">

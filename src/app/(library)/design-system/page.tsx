@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { Reveal, RevealFade } from "@/components/reveal";
 import { cn } from "@/lib/utils";
 
+import { TypeRamp } from "./type-ramp";
+
 export const metadata: Metadata = {
   title: "Design system | KRS AI",
   description: "Color, typography, radius, shadow, and spacing tokens currently used across the KRS website.",
@@ -145,17 +147,17 @@ const washes = [
 const typeFaces = [
   {
     name: "Fraunces",
-    role: "Display, H1 to H4",
-    sample: "Clarity for every stage of your business.",
-    className: "type-h3",
-    detail: "Editorial voice. Optical sizing and WONK are on for display. Use for page titles, sections, and large metrics.",
+    role: "Display and metrics",
+    sample: "Accounting, evolved.",
+    className: "font-serif text-[2.5rem] font-normal leading-[1.05] tracking-tight",
+    detail: "Editorial voice. Optical sizing and WONK are on for display. Use for hero display, closing statements, and large metrics.",
   },
   {
     name: "Inter",
-    role: "H5, H6, body, UI",
-    sample: "KRS combines Greek accounting expertise with a more visible operating file.",
-    className: "type-lead text-muted-foreground",
-    detail: "Workhorse for reading and controls. Body, buttons, navigation, form labels, and smaller headings stay Inter.",
+    role: "H1 to H6, body, UI",
+    sample: "Clarity for every stage of your business.",
+    className: "type-h3",
+    detail: "Workhorse for structure, reading, and controls. Page titles through H6, body, buttons, navigation, and form labels stay Inter.",
   },
   {
     name: "JetBrains Mono",
@@ -192,7 +194,7 @@ const headingStyles = [
     name: "H1",
     token: "type-h1",
     tag: "h1",
-    spec: "Fraunces 400, 54 / 72 / 88, leading 0.94, tracking -0.03em",
+    spec: "Inter 400, 54 / 72 / 88, leading 0.94, tracking -0.03em",
     use: "Page title on pricing, services, onboarding, and library pages.",
     sample: "Clarity for every stage of your business.",
     className: "type-h1",
@@ -201,7 +203,7 @@ const headingStyles = [
     name: "H2",
     token: "type-h2",
     tag: "h2",
-    spec: "Fraunces 400, 48 / 60 / 72, leading 0.95, tracking -0.03em",
+    spec: "Inter 400, 48 / 60 / 72, leading 0.95, tracking -0.03em",
     use: "Major section titles. One thought, two lines at most.",
     sample: "A plan for the structure you run.",
     className: "type-h2",
@@ -210,7 +212,7 @@ const headingStyles = [
     name: "H3",
     token: "type-h3",
     tag: "h3",
-    spec: "Fraunces 500, 36 / 48 / 60, leading 1.02, tracking -0.03em",
+    spec: "Inter 500, 36 / 48 / 60, leading 1.02, tracking -0.03em",
     use: "Split panels, service subheads, and onboarding titles.",
     sample: "Start with the right advisor.",
     className: "type-h3",
@@ -219,7 +221,7 @@ const headingStyles = [
     name: "H4",
     token: "type-h4",
     tag: "h4",
-    spec: "Fraunces 500, 30 / 36, leading 1.15, tracking -0.03em",
+    spec: "Inter 500, 30 / 36, leading 1.15, tracking -0.03em",
     use: "Plan names, quotes, and nested section titles.",
     sample: "Operating company",
     className: "type-h4",
@@ -487,8 +489,8 @@ export default function DesignSystemPage() {
             Display for the hero. H1 to H6 for structure. Inter for everything you read and click.
           </h2>
           <p className="type-lead mt-5 max-w-2xl text-muted-foreground">
-            Use the class names below instead of one-off sizes. Fraunces carries the voice through display and
-            H1 to H4. Inter takes over from H5 down, including body, captions, and UI.
+            Use the class names below instead of one-off sizes. Fraunces stays on display and metrics.
+            Inter carries H1 to H6, body, captions, and UI.
           </p>
 
           <nav aria-label="Type categories" className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
@@ -537,7 +539,7 @@ export default function DesignSystemPage() {
           </TypeGroup>
 
           <TypeGroup
-            description="H1 is the page title. H2 starts a section. H3 and H4 stay Fraunces. H5 and H6 switch to Inter so smaller titles stay sharp in cards and forms."
+            description="H1 is the page title. H2 starts a section. H3 and H4 sit under that. All heading levels use Inter so titles stay in one family from the page down to cards and forms."
             id="type-headings"
             title="Headings"
           >
@@ -843,48 +845,6 @@ type TypeStyle = {
   sample: string;
   className: string;
 };
-
-const typeRampSteps = [
-  { name: "Display", className: "type-display", sample: "Aa" },
-  { name: "Display XL", className: "type-display-xl", sample: "KRS" },
-  { name: "H1", className: "type-h1", sample: "Clarity" },
-  { name: "H2", className: "type-h2", sample: "A plan" },
-  { name: "H3", className: "type-h3", sample: "Start here" },
-  { name: "H4", className: "type-h4", sample: "Operating" },
-  { name: "H5", className: "type-h5", sample: "Monthly truth" },
-  { name: "H6", className: "type-h6", sample: "Listed prices" },
-  { name: "Lead", className: "type-lead", sample: "Choose a plan that fits today." },
-  { name: "Body", className: "type-body", sample: "Each plan includes the recurring work." },
-  { name: "Body sm", className: "type-body-sm", sample: "AADE and myDATA are part of the context." },
-  { name: "Caption", className: "type-caption", sample: "The estimate excludes VAT." },
-  { name: "Overline", className: "type-overline text-secondary", sample: "Pricing and plans" },
-  { name: "UI", className: "type-ui", sample: "Book a consultation" },
-  { name: "Metric", className: "type-metric", sample: "€149" },
-] as const;
-
-function TypeRamp() {
-  return (
-    <div className="mt-12 border border-primary/12 bg-[#FDF8F0]">
-      <div className="border-b border-primary/12 px-5 py-5 sm:px-8">
-        <p className="type-label">Type scale</p>
-        <p className="type-caption mt-1 text-muted-foreground">
-          Live sizes at the current viewport. Display sits at the top. Reading and UI sit at the bottom.
-        </p>
-      </div>
-      <div>
-        {typeRampSteps.map((step) => (
-          <div
-            className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-end gap-4 border-t border-primary/10 px-5 py-6 first:border-t-0 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-8 sm:px-8 sm:py-8"
-            key={step.name}
-          >
-            <span className="type-caption pb-1 font-mono text-muted-foreground">{step.name}</span>
-            <p className={cn("min-w-0", step.className)}>{step.sample}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function TypePoster({
   style,

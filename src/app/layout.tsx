@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Fraunces, IBM_Plex_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://krs-zeta.vercel.app";
@@ -34,6 +34,13 @@ const jetBrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
+const ibmPlexSans = IBM_Plex_Sans({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-sans",
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: siteTitle,
@@ -60,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${jetBrainsMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${ibmPlexSans.variable} ${jetBrainsMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

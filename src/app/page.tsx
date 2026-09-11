@@ -16,11 +16,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
-import { HeroVisualStrip } from "@/components/hero-visual-strip";
+import { AgentsSectionLegacy } from "@/components/agents-section-legacy";
+import { StatsSection } from "@/components/stats-section";
+import { HeroSectionLegacy } from "@/components/hero-section-legacy";
+import { HeroVideoSection } from "@/components/hero-video-section";
 import { Reveal, RevealFade } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { ProcessTimeline } from "@/components/process-timeline";
-import { ServicesTabs } from "@/components/services-tabs";
+import { ServicesBento } from "@/components/services-bento";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TestimonialsCarousel } from "@/components/testimonials-carousel";
@@ -32,6 +35,9 @@ const mediaSignals = [
   { label: "Naftemporiki", mark: "N", note: "Tax technology", href: "https://www.naftemporiki.gr/" },
   { label: "Startupper", mark: "S", note: "Founder finance", href: "https://www.startupper.gr/" },
 ];
+
+const pressTickerCopies = 8;
+const pressTickerDuration = `${34 * pressTickerCopies}s`;
 
 const processSteps = [
   {
@@ -153,16 +159,31 @@ const careersClockTicks = Array.from({ length: 12 }, (_, index) => ({
   highlighted: index < 6,
 }));
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ hero?: string; agents?: string }>;
+}) {
+  const { hero, agents } = await searchParams;
+
   return (
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <SiteHeader />
-      <HeroSection />
-      <MediaSection />
-      <ManifestoSection />
+      <div
+        className={
+          hero === "legacy"
+            ? "flex min-h-[calc(100dvh-4.5rem)] flex-col"
+            : "-mt-18 flex min-h-[100dvh] flex-col"
+        }
+      >
+        {hero === "legacy" ? <HeroSectionLegacy /> : <HeroVideoSection />}
+        <MediaSection />
+      </div>
+      <StatsSection />
       <ServicesSection />
+      <ManifestoSection />
       <SlimCta />
-      <AgentsSection />
+      {agents === "legacy" ? <AgentsSectionLegacy /> : <AgentsSection />}
       <ProcessSection />
       <WhySection />
       <TestimonialSection />
@@ -176,84 +197,47 @@ export default function Home() {
   );
 }
 
-function HeroSection() {
-  return (
-    <section className="relative overflow-hidden border-b border-primary/12 bg-[#FDF8F0]">
-      <div className="relative mx-auto max-w-[1400px] px-4 pb-8 pt-10 sm:px-6 lg:px-12 lg:pt-16">
-        <div className="grid grid-cols-12 items-end gap-6 lg:gap-8">
-          <div className="col-span-12 lg:col-span-8">
-            <h1 className="hero-headline max-w-5xl text-balance text-[56px] text-foreground sm:text-[82px] md:text-[104px] lg:text-[116px] xl:text-[148px]">
-              <Reveal play="mount">Accounting</Reveal>
-              <Reveal delay={0.08} play="mount">
-                <span className="hero-headline-accent italic text-secondary">evolved into</span>
-              </Reveal>
-              <Reveal delay={0.16} play="mount">
-                agentic AI.
-              </Reveal>
-            </h1>
-          </div>
-          <RevealFade className="col-span-12 lg:col-span-4 lg:pb-3" delay={0.24} play="mount">
-            <p className="mono-label mb-4 text-secondary">Statement of intent</p>
-            <p className="max-w-md text-lg leading-8 text-foreground/72">
-              KRS combines licensed accounting and tax professionals with agentic workflows that organize filings,
-              documents, payroll obligations, and advisory questions before they become urgent.
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Button asChild className="h-12 rounded-full px-6 text-base shadow-[var(--shadow-md)]" variant="secondary">
-                <a href="/onboarding">
-                  Schedule an initial consultation
-                  <ArrowRight className="size-5" />
-                </a>
-              </Button>
-              <Button asChild className="h-12 rounded-full border-primary/20 bg-card/60 px-6 text-base" variant="outline">
-                <a href="#services">
-                  Discover our service
-                  <ArrowRight className="size-5" />
-                </a>
-              </Button>
-            </div>
-          </RevealFade>
-        </div>
-
-        <HeroVisualStrip />
-      </div>
-    </section>
-  );
-}
-
 function MediaSection() {
+  const sequence = Array.from({ length: pressTickerCopies }, () => mediaSignals).flat();
+
   return (
-    <section className="border-y border-primary/12 bg-card py-10" id="media">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <div className="grid gap-8 lg:grid-cols-[0.42fr_1fr] lg:items-center">
-          <div>
-            <h2 className="text-3xl font-semibold leading-tight">
-              <Reveal>Known where finance operators pay attention.</Reveal>
-            </h2>
-          </div>
-          <div className="overflow-hidden py-4">
-            <div className="ticker-track flex w-max gap-3">
-              {[...mediaSignals, ...mediaSignals].map((item, index) => (
-                <a
-                  className="group/media grid w-72 grid-cols-[auto_1fr] gap-4 border-r border-primary/12 pr-6 outline-none transition-colors hover:text-primary focus-visible:text-primary"
-                  href={item.href}
-                  key={`${item.label}-${index}`}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <span className="mt-0.5 flex size-9 items-center justify-center border border-primary/16 bg-background font-heading text-sm font-semibold text-secondary transition-colors group-hover/media:border-secondary group-hover/media:bg-secondary group-hover/media:text-secondary-foreground">
-                    {item.mark}
-                  </span>
-                  <div>
-                    <p className="font-semibold underline decoration-primary/0 underline-offset-4 transition group-hover/media:decoration-secondary group-focus-visible/media:decoration-secondary">
-                      {item.label}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">{item.note}</p>
-                  </div>
-                </a>
-              ))}
+    <section className="shrink-0 border-y border-primary/12 bg-card py-6" id="media">
+      <h2 className="sr-only">Press</h2>
+      <div className="overflow-hidden">
+        <div className="ticker-track flex w-max" style={{ animationDuration: pressTickerDuration }}>
+          {[0, 1].map((copy) => (
+            <div
+              aria-hidden={copy === 1 ? true : undefined}
+              className="flex shrink-0 gap-3 pr-3"
+              key={copy}
+            >
+              {sequence.map((item, index) => {
+                const decorative = copy === 1 || index >= mediaSignals.length;
+
+                return (
+                  <a
+                    aria-hidden={decorative ? true : undefined}
+                    className="group/media grid w-72 grid-cols-[auto_1fr] items-center gap-4 border-r border-primary/12 pr-6 outline-none transition-colors hover:text-primary focus-visible:text-primary"
+                    href={item.href}
+                    key={`${copy}-${item.label}-${index}`}
+                    rel="noreferrer"
+                    tabIndex={decorative ? -1 : undefined}
+                    target="_blank"
+                  >
+                    <span className="flex size-9 items-center justify-center border border-primary/16 bg-background font-heading text-sm font-semibold text-secondary transition-colors group-hover/media:border-secondary group-hover/media:bg-secondary group-hover/media:text-secondary-foreground">
+                      {item.mark}
+                    </span>
+                    <div>
+                      <p className="font-semibold underline decoration-primary/0 underline-offset-4 transition group-hover/media:decoration-secondary group-focus-visible/media:decoration-secondary">
+                        {item.label}
+                      </p>
+                      <p className="mt-0.5 text-sm text-muted-foreground">{item.note}</p>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -343,10 +327,10 @@ function ServicesSection() {
         <SectionIntro
           className="lg:grid-cols-[0.65fr_0.35fr]"
           eyebrow="Index of service"
-          text="Four service lines, one operating file: advisory, accounting, payroll, and statutory returns move through the same controlled system."
-          title="Business services designed for decision speed and compliance discipline."
+          text="Five service lines, one operating file: advisory, accounting, payroll, consulting, and funding move through the same controlled system."
+          title="Accounting, tax, payroll, and advice."
         />
-        <ServicesTabs />
+        <ServicesBento />
       </div>
     </section>
   );
@@ -381,7 +365,7 @@ function ProcessSection() {
           className="lg:grid-cols-[0.65fr_0.35fr]"
           eyebrow="Your start at KRS AI"
           text="The timeline remains simple: start, monthly close, annual filings, and ongoing advisory. Each phase has visible evidence and a clear owner."
-          title="A timeline for accounting work that normally disappears into inboxes."
+          title="From day one to year-end."
         />
         <ProcessTimeline steps={processSteps} />
       </div>
@@ -397,7 +381,7 @@ function WhySection() {
           <div>
             <p className="mono-label text-secondary">Why KRS AI?</p>
             <h2 className="mt-5 max-w-3xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              <Reveal>A precise operating layer for founders, finance teams, and owners.</Reveal>
+              <Reveal>Built for founders and finance teams.</Reveal>
             </h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
               The benefit is not a prettier portal. It is fewer unknowns, earlier questions, and better-reviewed
@@ -448,7 +432,7 @@ function FieldNotesSection() {
           <div>
             <p className="mono-label text-secondary">From the KRS blog</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              <Reveal>Tax and accounting news from Greece.</Reveal>
+              <Reveal>Tax news from Greece.</Reveal>
             </h2>
           </div>
           <a className="inline-flex items-center gap-2 text-sm font-semibold transition hover:gap-3" href="#">
@@ -547,7 +531,7 @@ function CareersSection() {
         <div>
           <p className="mono-label text-secondary">FEATURE / SPRING EDITION</p>
           <h2 className="mt-6 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-            <Reveal>Join the team building a 6-hour working day with Agentic AI.</Reveal>
+            <Reveal>Join a 6-hour working day.</Reveal>
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-primary-foreground/72">
             KRS AI is built around focused work, healthy lifestyle, and fewer repetitive loops. Agentic workflows handle
@@ -587,7 +571,7 @@ function FaqSection() {
           <div>
             <p className="mono-label text-secondary">FAQ</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              <Reveal>What to know before you start.</Reveal>
+              <Reveal>Before you start.</Reveal>
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-7 text-muted-foreground">
@@ -621,7 +605,7 @@ function SocialVideosSection() {
           <div>
             <p className="mono-label text-secondary">Video podcasts</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
-              <Reveal>The founder on business and entrepreneurship.</Reveal>
+              <Reveal>The founder on building a company.</Reveal>
             </h2>
           </div>
           <a
@@ -690,7 +674,7 @@ function FinalCta() {
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-12 items-end gap-8">
         <div className="col-span-12 lg:col-span-8">
           <p className="mono-label mb-6 text-primary-foreground">TAKE THE NEXT STEP</p>
-          <h2 className="text-balance text-[72px] font-light leading-[0.86] text-primary-foreground sm:text-[110px] md:text-[148px] lg:text-[180px]">
+          <h2 className="type-display-xl text-primary-foreground">
             <Reveal>Begin</Reveal>
             <Reveal delay={0.1}>together.</Reveal>
           </h2>

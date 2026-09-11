@@ -80,6 +80,56 @@
   --ring: #ae882f;
 }
 
+/* KRS2 platform theme (tweakcn) — scoped to product UI, not the marketing page. */
+.krs-app {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(220.91 39.29% 10.98%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(220.91 39.29% 10.98%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(220.91 39.29% 10.98%);
+  --primary: hsl(212.83 96.36% 10.78%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(42.05 57.47% 43.33%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(220 14.29% 95.88%);
+  --muted-foreground: hsl(220 8.94% 46.08%);
+  --accent: hsl(0 0% 100%);
+  --accent-foreground: hsl(220.91 39.29% 10.98%);
+  --destructive: hsl(0 84.24% 60.2%);
+  --destructive-foreground: hsl(0 0% 98.04%);
+  --border: hsl(220 13.04% 90.98%);
+  --input: hsl(220 13.04% 90.98%);
+  --ring: hsl(27.53 73.74% 61.18%);
+  --sidebar: hsl(0 3.23% 93.92%);
+  --sidebar-foreground: hsl(220.91 39.29% 10.98%);
+  --sidebar-primary: hsl(212.83 96.36% 10.78%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(0 0% 100%);
+  --sidebar-accent-foreground: hsl(220.91 39.29% 10.98%);
+  --sidebar-border: hsl(220 13.04% 90.98%);
+  --sidebar-ring: hsl(27.53 73.74% 61.18%);
+  --chart-1: hsl(215.19 54.29% 48.04%);
+  --chart-2: hsl(27.53 73.74% 61.18%);
+  --chart-3: hsl(33.75 68.57% 72.55%);
+  --radius: 0.2rem;
+  --radius-sm: calc(0.2rem - 4px);
+  --radius-md: calc(0.2rem - 2px);
+  --radius-lg: 0.2rem;
+  --radius-xl: calc(0.2rem + 4px);
+  --radius-2xl: calc(0.2rem + 8px);
+  --radius-3xl: 1.25rem;
+  --shadow-2xs: 0px 3px 0px 0px hsl(0 0% 0% / 0.03);
+  --shadow-xs: 0px 3px 0px 0px hsl(0 0% 0% / 0.03);
+  --shadow-sm: 0px 3px 0px 0px hsl(0 0% 0% / 0.05), 0px 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow: 0px 3px 0px 0px hsl(0 0% 0% / 0.05), 0px 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow-md: 0px 3px 0px 0px hsl(0 0% 0% / 0.05), 0px 2px 4px -1px hsl(0 0% 0% / 0.05);
+  --shadow-lg: 0px 3px 0px 0px hsl(0 0% 0% / 0.05), 0px 4px 6px -1px hsl(0 0% 0% / 0.05);
+  --font-sans: var(--font-ibm-plex-sans), "IBM Plex Sans", ui-sans-serif, sans-serif, system-ui;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -214,6 +264,11 @@
   h1,
   h2,
   h3,
+  h4 {
+    font-family: var(--font-sans);
+    letter-spacing: -0.03em;
+  }
+
   blockquote {
     font-family: var(--font-heading);
     letter-spacing: -0.03em;
@@ -247,7 +302,7 @@
   }
 
   .type-h1 {
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-size: 54px;
     font-weight: 400;
     letter-spacing: -0.03em;
@@ -256,7 +311,7 @@
   }
 
   .type-h2 {
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-size: 48px;
     font-weight: 400;
     letter-spacing: -0.03em;
@@ -265,7 +320,7 @@
   }
 
   .type-h3 {
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-size: 36px;
     font-weight: 500;
     letter-spacing: -0.03em;
@@ -274,7 +329,7 @@
   }
 
   .type-h4 {
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-size: 30px;
     font-weight: 500;
     letter-spacing: -0.03em;
@@ -494,15 +549,8 @@
     position: absolute;
   }
 
-  .hero-headline {
-    font-weight: 400;
-    letter-spacing: -0.0486em;
-    line-height: 1.07;
-    font-optical-sizing: auto;
-    font-variation-settings: "wght" 400, "WONK" 1;
-  }
-
   .hero-headline-accent {
+    font-family: var(--font-heading);
     font-weight: 300;
     font-optical-sizing: auto;
     font-variation-settings: "wght" 300, "WONK" 1;
