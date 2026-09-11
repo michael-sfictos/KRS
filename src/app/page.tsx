@@ -301,7 +301,7 @@ function SectionIntro({
         <p className={cn("mono-label", inverted ? "text-secondary" : "text-secondary")}>{eyebrow}</p>
         <h2
           className={cn(
-            "mt-5 max-w-4xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl lg:text-7xl",
+            "type-h3 mt-5 max-w-4xl text-balance",
             inverted ? "text-primary-foreground" : "text-foreground"
           )}
         >
@@ -380,7 +380,7 @@ function WhySection() {
         <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div>
             <p className="mono-label text-secondary">Why KRS AI?</p>
-            <h2 className="mt-5 max-w-3xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+            <h2 className="type-h3 mt-5 max-w-3xl text-balance">
               <Reveal>Built for founders and finance teams.</Reveal>
             </h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
@@ -431,7 +431,7 @@ function FieldNotesSection() {
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mono-label text-secondary">From the KRS blog</p>
-            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+            <h2 className="type-h3 mt-5 text-balance">
               <Reveal>Tax news from Greece.</Reveal>
             </h2>
           </div>
@@ -530,7 +530,7 @@ function CareersSection() {
 
         <div>
           <p className="mono-label text-secondary">FEATURE / SPRING EDITION</p>
-          <h2 className="mt-6 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+          <h2 className="type-h3 mt-6 text-balance">
             <Reveal>Join a 6-hour working day.</Reveal>
           </h2>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-primary-foreground/72">
@@ -570,7 +570,7 @@ function FaqSection() {
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mono-label text-secondary">FAQ</p>
-            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+            <h2 className="type-h3 mt-5 text-balance">
               <Reveal>Before you start.</Reveal>
             </h2>
           </div>
@@ -604,7 +604,7 @@ function SocialVideosSection() {
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mono-label text-secondary">Video podcasts</p>
-            <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95] sm:text-6xl">
+            <h2 className="type-h3 mt-5 text-balance">
               <Reveal>The founder on building a company.</Reveal>
             </h2>
           </div>

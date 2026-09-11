@@ -212,7 +212,7 @@ const headingStyles = [
     name: "H3",
     token: "type-h3",
     tag: "h3",
-    spec: "Inter 500, 36 / 48 / 60, leading 1.02, tracking -0.03em",
+    spec: "Inter 400, 36 / 48 / 60, leading 1.02, tracking -0.03em",
     use: "Split panels, service subheads, and onboarding titles.",
     sample: "Start with the right advisor.",
     className: "type-h3",

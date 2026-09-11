@@ -77,7 +77,7 @@ function MetricValue({
   delay?: number;
 }) {
   return (
-    <span className="font-heading inline-flex items-baseline gap-1 text-6xl font-medium leading-none tracking-[-0.04em] text-secondary sm:text-7xl">
+    <span className="font-heading inline-flex items-baseline gap-1 text-6xl font-medium leading-none tracking-[-0.04em] text-primary sm:text-7xl">
       <span className="inline-flex tabular-nums">
         {value.split("").map((character, index) =>
           /\d/.test(character) ? (

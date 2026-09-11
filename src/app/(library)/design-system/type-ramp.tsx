@@ -9,7 +9,7 @@ const typeRampSteps = [
   { name: "Display XL", className: "type-display-xl", sample: "KRS", weight: 300 },
   { name: "H1", className: "type-h1", sample: "Clarity", weight: 400 },
   { name: "H2", className: "type-h2", sample: "A plan", weight: 400 },
-  { name: "H3", className: "type-h3", sample: "Start here", weight: 500 },
+  { name: "H3", className: "type-h3", sample: "Start here", weight: 400 },
   { name: "H4", className: "type-h4", sample: "Operating", weight: 500 },
   { name: "H5", className: "type-h5", sample: "Monthly truth", weight: 600 },
   { name: "H6", className: "type-h6", sample: "Listed prices", weight: 600 },

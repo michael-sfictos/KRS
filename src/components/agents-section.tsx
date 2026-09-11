@@ -84,7 +84,7 @@ export function AgentsSection() {
         <div className="grid gap-6 lg:grid-cols-[0.65fr_0.35fr] lg:items-end">
           <div>
             <p className="mono-label text-secondary">The operating file</p>
-            <h2 className="mt-5 max-w-4xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl lg:text-7xl">
+            <h2 className="type-h3 mt-5 max-w-4xl text-balance">
               <Reveal>One system. Connected to everything.</Reveal>
             </h2>
           </div>
