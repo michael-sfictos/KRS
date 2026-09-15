@@ -37,6 +37,8 @@ export async function POST(request: Request) {
     isShortText(payload.fullName) &&
     isShortText(payload.workEmail) &&
     /^\S+@\S+\.\S+$/.test(payload.workEmail as string) &&
+    typeof payload.phone === "string" &&
+    /^\+30\d{6,15}$/.test(payload.phone.replace(/\s/g, "")) &&
     isShortText(payload.company) &&
     isShortText(payload.companyStage) &&
     isShortText(payload.teamSize) &&

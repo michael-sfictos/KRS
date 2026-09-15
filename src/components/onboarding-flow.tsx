@@ -2,16 +2,15 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check, ChevronDown, Mail, RotateCcw } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
-import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
+import { ArrowLeft, ArrowRight, Check, Mail, RotateCcw } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 
 import { cn } from "@/lib/utils";
 
 type FormState = {
   fullName: string;
   workEmail: string;
-  countryCode: string;
   phone: string;
   company: string;
   companyStage: string;
@@ -32,7 +31,6 @@ type SubmitStatus = "idle" | "submitting" | "success" | "email" | "error";
 const initialState: FormState = {
   fullName: "",
   workEmail: "",
-  countryCode: "+30",
   phone: "",
   company: "",
   companyStage: "",
@@ -47,53 +45,13 @@ const initialState: FormState = {
   website: "",
 };
 
-const countryCodes = [
-  { code: "+30", label: "GR +30" },
-  { code: "+357", label: "CY +357" },
-  { code: "+1", label: "US/CA +1" },
-  { code: "+44", label: "UK +44" },
-  { code: "+49", label: "DE +49" },
-  { code: "+33", label: "FR +33" },
-  { code: "+39", label: "IT +39" },
-  { code: "+34", label: "ES +34" },
-  { code: "+31", label: "NL +31" },
-  { code: "+32", label: "BE +32" },
-  { code: "+41", label: "CH +41" },
-  { code: "+43", label: "AT +43" },
-  { code: "+351", label: "PT +351" },
-  { code: "+353", label: "IE +353" },
-  { code: "+46", label: "SE +46" },
-  { code: "+47", label: "NO +47" },
-  { code: "+45", label: "DK +45" },
-  { code: "+358", label: "FI +358" },
-  { code: "+48", label: "PL +48" },
-  { code: "+40", label: "RO +40" },
-  { code: "+359", label: "BG +359" },
-  { code: "+355", label: "AL +355" },
-  { code: "+90", label: "TR +90" },
-  { code: "+971", label: "AE +971" },
-  { code: "+61", label: "AU +61" },
-  { code: "+64", label: "NZ +64" },
-  { code: "+81", label: "JP +81" },
-  { code: "+86", label: "CN +86" },
-  { code: "+91", label: "IN +91" },
-  { code: "+55", label: "BR +55" },
-  { code: "+27", label: "ZA +27" },
-] as const;
-
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const digitsOnly = (value: string) => value.replace(/\D/g, "");
 
-const normalizeCountryCode = (value: string) => {
-  const digits = digitsOnly(value).slice(0, 3);
-  return digits ? `+${digits}` : "";
-};
-
-const formatPhoneForSubmit = (countryCode: string, phone: string) => {
+const formatPhoneForSubmit = (phone: string) => {
   const national = digitsOnly(phone);
   if (!national) return "";
-  const code = normalizeCountryCode(countryCode) || "+30";
-  return `${code}${national}`;
+  return `+30${national}`;
 };
 
 const progressLabels = ["About you", "Your business", "Call preference"] as const;
@@ -146,13 +104,10 @@ export function OnboardingFlow() {
       }
       if (formData.company.trim().length < 2) nextErrors.company = "Please enter your company name.";
       const phoneDigits = digitsOnly(formData.phone);
-      const countryDigits = digitsOnly(formData.countryCode);
-      if (phoneDigits && !countryDigits) {
-        nextErrors.phone = "Enter a country code, for example +30.";
-      } else if (phoneDigits && (phoneDigits.length < 6 || phoneDigits.length > 15)) {
-        nextErrors.phone = "Enter a valid phone number, or leave this field blank.";
-      } else if (countryDigits && !phoneDigits) {
-        nextErrors.phone = "Enter a phone number, or clear the country code.";
+      if (!phoneDigits) {
+        nextErrors.phone = "Please enter your phone number.";
+      } else if (phoneDigits.length < 6 || phoneDigits.length > 15) {
+        nextErrors.phone = "Enter a valid phone number.";
       }
     }
 
@@ -181,11 +136,11 @@ export function OnboardingFlow() {
   };
 
   const openEmailFallback = () => {
-    const phone = formatPhoneForSubmit(formData.countryCode, formData.phone);
+    const phone = formatPhoneForSubmit(formData.phone);
     const body = [
       `Name: ${formData.fullName}`,
       `Work email: ${formData.workEmail.trim()}`,
-      `Phone: ${phone || "Not provided"}`,
+      `Phone: ${phone}`,
       `Company: ${formData.company}`,
       `Company status: ${formData.companyStage}`,
       `Team size: ${formData.teamSize}`,
@@ -217,7 +172,7 @@ export function OnboardingFlow() {
     const payload = {
       ...formData,
       workEmail: formData.workEmail.trim().toLowerCase(),
-      phone: formatPhoneForSubmit(formData.countryCode, formData.phone),
+      phone: formatPhoneForSubmit(formData.phone),
     };
 
     try {
@@ -371,10 +326,7 @@ export function OnboardingFlow() {
                     value={formData.workEmail}
                   />
                   <PhoneField
-                    countryCode={formData.countryCode}
                     error={errors.phone}
-                    label="Phone (optional)"
-                    onCountryCodeChange={(value) => updateField("countryCode", value)}
                     onPhoneChange={(value) => updateField("phone", digitsOnly(value))}
                     phone={formData.phone}
                   />
@@ -644,202 +596,32 @@ function EmailField({
 }
 
 function PhoneField({
-  label,
-  countryCode,
   phone,
   error,
-  onCountryCodeChange,
   onPhoneChange,
 }: {
-  label: string;
-  countryCode: string;
   phone: string;
   error?: string;
-  onCountryCodeChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
 }) {
   const errorId = "phone-error";
-  const listboxId = useId();
-  const comboboxRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const filteredCountries = countryCodes.filter((country) => {
-    const query = countryCode.replace("+", "").trim();
-    if (!query) return true;
-    return country.code.includes(query) || country.label.toLowerCase().includes(query.toLowerCase());
-  });
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!comboboxRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    return () => document.removeEventListener("mousedown", handlePointerDown);
-  }, [isOpen]);
-
-  const selectCountry = (code: string) => {
-    setActiveIndex(0);
-    onCountryCodeChange(code);
-    setIsOpen(false);
-  };
-
-  const handleCountryKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = [
-      "Backspace",
-      "Delete",
-      "ArrowLeft",
-      "ArrowRight",
-      "Tab",
-      "Home",
-      "End",
-      "Enter",
-      "Escape",
-      "ArrowUp",
-      "ArrowDown",
-    ];
-
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      if (!isOpen) {
-        setIsOpen(true);
-        return;
-      }
-      setActiveIndex((current) => Math.min(current + 1, Math.max(filteredCountries.length - 1, 0)));
-      return;
-    }
-
-    if (event.key === "ArrowUp") {
-      event.preventDefault();
-      if (!isOpen) {
-        setIsOpen(true);
-        return;
-      }
-      setActiveIndex((current) => Math.max(current - 1, 0));
-      return;
-    }
-
-    if (event.key === "Enter" && isOpen && filteredCountries[activeIndex]) {
-      event.preventDefault();
-      selectCountry(filteredCountries[activeIndex].code);
-      return;
-    }
-
-    if (event.key === "Escape") {
-      setIsOpen(false);
-      return;
-    }
-
-    if (allowedKeys.includes(event.key) || event.metaKey || event.ctrlKey) return;
-    if (event.key === "+" && event.currentTarget.selectionStart === 0) return;
-    if (!/^\d$/.test(event.key)) event.preventDefault();
-  };
 
   return (
-    <fieldset>
-      <legend className="text-sm font-semibold">{label}</legend>
+    <div>
+      <label className="text-sm font-semibold" htmlFor="phone">
+        Phone
+      </label>
       <div className="mt-2 flex">
-        <label className="sr-only" htmlFor="countryCode">
-          Country code
-        </label>
-        <div className="relative shrink-0" ref={comboboxRef}>
-          <div className="flex">
-            <input
-              aria-autocomplete="list"
-              aria-controls={listboxId}
-              aria-expanded={isOpen}
-              aria-label="Country code"
-              autoComplete="tel-country-code"
-              className="h-12 w-[4.75rem] border border-r-0 border-primary/20 bg-transparent px-3 text-sm font-semibold text-foreground outline-none transition placeholder:text-muted-foreground/65 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18"
-              id="countryCode"
-              inputMode="tel"
-              maxLength={4}
-              name="countryCode"
-              onBlur={(event) => {
-                const relatedTarget = event.relatedTarget as Node | null;
-                if (comboboxRef.current?.contains(relatedTarget)) return;
-                const normalized = normalizeCountryCode(event.target.value);
-                onCountryCodeChange(normalized || "+30");
-                setIsOpen(false);
-              }}
-              onChange={(event) => {
-                setActiveIndex(0);
-                const next = event.target.value;
-                setIsOpen(true);
-                if (next === "" || next === "+") {
-                  onCountryCodeChange(next === "+" ? "+" : "");
-                  return;
-                }
-                onCountryCodeChange(normalizeCountryCode(next));
-              }}
-              onFocus={() => {
-                setActiveIndex(0);
-                setIsOpen(true);
-              }}
-              onKeyDown={handleCountryKeyDown}
-              onPaste={(event) => {
-                event.preventDefault();
-                setActiveIndex(0);
-                setIsOpen(true);
-                onCountryCodeChange(normalizeCountryCode(event.clipboardData.getData("text")));
-              }}
-              placeholder="+30"
-              role="combobox"
-              spellCheck={false}
-              type="tel"
-              value={countryCode}
-            />
-            <button
-              aria-controls={listboxId}
-              aria-expanded={isOpen}
-              aria-label="Browse country codes"
-              className="flex h-12 w-9 items-center justify-center border border-r-0 border-primary/20 bg-transparent text-muted-foreground outline-none transition hover:border-primary/38 hover:text-foreground focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18"
-              onClick={() => setIsOpen((current) => !current)}
-              tabIndex={-1}
-              type="button"
-            >
-              <ChevronDown className={cn("size-3.5 transition", isOpen && "rotate-180")} strokeWidth={1.75} />
-            </button>
-          </div>
-
-          {isOpen && filteredCountries.length > 0 && (
-            <ul
-              className="absolute left-0 top-full z-20 mt-1 max-h-56 w-[13.5rem] overflow-auto border border-primary/15 bg-[#FDF8F0] py-1 shadow-[var(--shadow-md)]"
-              id={listboxId}
-              role="listbox"
-            >
-              {filteredCountries.map((country, index) => {
-                const selected = country.code === countryCode;
-                const active = index === activeIndex;
-
-                return (
-                  <li key={country.code} role="option" aria-selected={selected}>
-                    <button
-                      className={cn(
-                        "flex w-full items-center justify-between px-3 py-2.5 text-left text-sm font-semibold text-foreground transition hover:bg-primary/6",
-                        (active || selected) && "bg-primary/8"
-                      )}
-                      onMouseDown={(event) => event.preventDefault()}
-                      onClick={() => selectCountry(country.code)}
-                      type="button"
-                    >
-                      <span>{country.label}</span>
-                      {selected && <Check className="size-3.5 text-secondary" strokeWidth={2.25} />}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
+        <span
+          aria-hidden="true"
+          className="flex h-12 shrink-0 items-center border border-r-0 border-primary/20 px-3 text-sm font-semibold text-foreground"
+        >
+          +30
+        </span>
         <input
           aria-describedby={error ? errorId : undefined}
           aria-invalid={Boolean(error)}
+          aria-required
           autoComplete="tel-national"
           className="h-12 w-full min-w-0 border border-primary/20 bg-transparent px-4 text-base text-foreground outline-none transition placeholder:text-muted-foreground/65 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18"
           enterKeyHint="next"
@@ -876,7 +658,7 @@ function PhoneField({
         />
       </div>
       {error && <FieldError id={errorId}>{error}</FieldError>}
-    </fieldset>
+    </div>
   );
 }
 
