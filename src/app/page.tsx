@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
+  Check,
   Gauge,
   MessageSquareText,
   Network,
@@ -16,9 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
-import { AgentsSectionLegacy } from "@/components/agents-section-legacy";
 import { StatsSection } from "@/components/stats-section";
-import { HeroSectionLegacy } from "@/components/hero-section-legacy";
 import { HeroVideoSection } from "@/components/hero-video-section";
 import { Reveal, RevealFade } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
@@ -159,31 +158,19 @@ const careersClockTicks = Array.from({ length: 12 }, (_, index) => ({
   highlighted: index < 6,
 }));
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ hero?: string; agents?: string }>;
-}) {
-  const { hero, agents } = await searchParams;
-
+export default function Home() {
   return (
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <SiteHeader />
-      <div
-        className={
-          hero === "legacy"
-            ? "flex min-h-[calc(100dvh-4.5rem)] flex-col"
-            : "-mt-18 flex min-h-[100dvh] flex-col"
-        }
-      >
-        {hero === "legacy" ? <HeroSectionLegacy /> : <HeroVideoSection />}
+      <div className="-mt-18 flex min-h-[100dvh] flex-col">
+        <HeroVideoSection />
         <MediaSection />
       </div>
       <StatsSection />
       <ServicesSection />
       <ManifestoSection />
       <SlimCta />
-      {agents === "legacy" ? <AgentsSectionLegacy /> : <AgentsSection />}
+      <AgentsSection />
       <ProcessSection />
       <WhySection />
       <TestimonialSection />
@@ -298,7 +285,7 @@ function SectionIntro({
   return (
     <div className={cn("grid gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-end", className)}>
       <div>
-        <p className={cn("mono-label", inverted ? "text-secondary" : "text-secondary")}>{eyebrow}</p>
+        <p className="mono-label text-secondary">{eyebrow}</p>
         <h2
           className={cn(
             "type-h3 mt-5 max-w-4xl text-balance",
@@ -326,7 +313,7 @@ function ServicesSection() {
       <div className="mx-auto max-w-[1400px]">
         <SectionIntro
           className="lg:grid-cols-[0.65fr_0.35fr]"
-          eyebrow="Index of service"
+          eyebrow="What we handle"
           text="Five service lines, one operating file: advisory, accounting, payroll, consulting, and funding move through the same controlled system."
           title="Accounting, tax, payroll, and advice."
         />
@@ -348,7 +335,7 @@ function SlimCta() {
         </div>
         <Button asChild className="h-11 w-fit rounded-full bg-primary px-5">
           <a href="/onboarding">
-            Schedule an initial consultation
+            Schedule an initial free consultation
             <ArrowRight className="size-4" />
           </a>
         </Button>
@@ -654,12 +641,18 @@ function SocialVideosSection() {
   );
 }
 
+const contactPromises = [
+  "Initial consultation 100% free",
+  "Personalized expert advice",
+  "Guaranteed fast response",
+];
+
 function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-secondary px-4 py-24 text-primary sm:px-6 lg:px-12 lg:py-36" id="contact">
-      <div className="absolute inset-0 opacity-18">
+    <section className="relative overflow-hidden bg-secondary-200 px-4 py-24 text-primary sm:px-6 lg:px-12 lg:py-36" id="contact">
+      <div className="absolute inset-0 opacity-12">
         <svg className="h-full w-full" preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 420" aria-hidden="true">
-          <g fill="#F4EFE6">
+          <g fill="#011936">
             {Array.from({ length: 36 }).map((_, index) => (
               <circle
                 cx={80 + (index % 12) * 70}
@@ -671,37 +664,37 @@ function FinalCta() {
           </g>
         </svg>
       </div>
-      <div className="relative mx-auto grid max-w-[1400px] grid-cols-12 items-end gap-8">
+      <div className="relative mx-auto grid max-w-[1400px] grid-cols-12 items-start gap-8">
         <div className="col-span-12 lg:col-span-8">
-          <p className="mono-label mb-6 text-primary-foreground">TAKE THE NEXT STEP</p>
-          <h2 className="type-display-xl text-primary-foreground">
+          <h2 className="type-display-xl text-primary">
             <Reveal>Begin</Reveal>
             <Reveal delay={0.1}>together.</Reveal>
           </h2>
         </div>
-        <div className="col-span-12 lg:col-span-4 lg:pb-6">
-          <p className="max-w-md text-lg leading-8 text-primary/74">
-            Bring us your current accounting file, tax questions, payroll obligations, and deadline pressure. We will map
-            the path forward with a KRS advisor.
+        <div className="col-span-12 lg:col-span-4">
+          <h4 className="type-h4 max-w-md text-balance text-primary">
+            We take care of admin. You take care of business.
+          </h4>
+          <p className="mt-4 max-w-md text-lg leading-8 text-primary/74">
+            Our helpful team is on standby to get you set up and running without the admin headache.
           </p>
-          <div className="mt-8 flex flex-col gap-3">
-            <Button asChild className="h-13 justify-between rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90">
-              <a href="/onboarding">
-                Get free advice now
-                <ArrowRight className="size-5" />
-              </a>
-            </Button>
-            <Button
-              asChild
-              className="h-13 justify-between rounded-full border-primary-foreground/72 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-              variant="outline"
-            >
-              <a href="#services">
-                Review service lines
-                <ArrowRight className="size-5" />
-              </a>
-            </Button>
-          </div>
+          <ul className="mt-6 grid max-w-md gap-2.5 text-base leading-6 text-primary">
+            {contactPromises.map((item) => (
+              <li className="flex items-start gap-2.5" key={item}>
+                <Check className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <Button
+            asChild
+            className="mt-8 h-13 w-full justify-between rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90"
+          >
+            <a href="/onboarding">
+              Schedule a consultation
+              <ArrowRight className="size-5" />
+            </a>
+          </Button>
         </div>
       </div>
     </section>

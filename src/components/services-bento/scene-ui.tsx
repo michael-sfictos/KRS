@@ -51,13 +51,15 @@ export function UiBadge({
   children,
   variant = "outline",
   className,
+  demoSpot,
 }: {
   children: React.ReactNode;
   variant?: "default" | "secondary" | "outline" | "destructive";
   className?: string;
+  demoSpot?: number;
 }) {
   return (
-    <Badge className={className} variant={variant}>
+    <Badge className={className} data-demo-spot={demoSpot} variant={variant}>
       {children}
     </Badge>
   );
@@ -67,13 +69,17 @@ export function UiButton({
   children,
   variant = "default",
   className,
+  demoSpot,
 }: {
   children: React.ReactNode;
   variant?: "default" | "secondary" | "outline" | "ghost";
   className?: string;
+  demoSpot?: number;
 }) {
   return (
-    <span className={cn(buttonVariants({ variant, size: "xs" }), className)}>{children}</span>
+    <span className={cn(buttonVariants({ variant, size: "xs" }), className)} data-demo-spot={demoSpot}>
+      {children}
+    </span>
   );
 }
 
@@ -82,11 +88,13 @@ export function UiCheckbox({
   reducedMotion,
   delay = 0,
   active,
+  demoSpot,
 }: {
   checked: boolean;
   reducedMotion: boolean;
   delay?: number;
   active: boolean;
+  demoSpot?: number;
 }) {
   return (
     <span
@@ -94,6 +102,7 @@ export function UiCheckbox({
         "flex size-4 shrink-0 items-center justify-center rounded-[4px] border",
         checked ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background",
       )}
+      data-demo-spot={demoSpot}
     >
       <motion.span
         animate={{ opacity: checked ? 1 : 0, scale: checked ? 1 : 0.65 }}

@@ -26,6 +26,7 @@ export function ConsultingScene({ active, reducedMotion }: ServiceSceneProps) {
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="rounded-[var(--radius-lg)] border border-border bg-card px-3 py-2 shadow-xs"
+            data-demo-spot={index === 0 ? 1 : undefined}
             initial={false}
             key={item.label}
             transition={sceneTransition(reducedMotion, 0.06 + index * 0.08, active)}
@@ -58,6 +59,7 @@ export function ConsultingScene({ active, reducedMotion }: ServiceSceneProps) {
           y: complete ? 0 : 8,
         }}
         className="mx-3 mb-3 mt-3 rounded-[var(--radius-lg)] border border-border bg-muted/80 px-3 py-2"
+        data-demo-spot={2}
         initial={false}
         transition={sceneTransition(reducedMotion, 0.62, active)}
       >

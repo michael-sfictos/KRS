@@ -9,14 +9,17 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useInView, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 
 type BentoSceneContextValue = {
   activeId: string | null;
+  featuredId: string | null;
   activate: (id: string) => void;
   deactivate: (id: string) => void;
+  reportVisibility: (id: string, ratio: number) => void;
   reducedMotion: boolean;
   canHover: boolean;
+  demoEnabled: boolean;
 };
 
 const BentoSceneContext = createContext<BentoSceneContextValue | null>(null);
@@ -24,21 +27,35 @@ const BentoSceneContext = createContext<BentoSceneContextValue | null>(null);
 export function BentoSceneProvider({ children }: { children: ReactNode }) {
   const reducedMotion = Boolean(useReducedMotion());
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [featuredId, setFeaturedId] = useState<string | null>(null);
   const [canHover, setCanHover] = useState(false);
+  const [demoEnabled, setDemoEnabled] = useState(false);
+  const ratiosRef = useRef(new Map<string, number>());
 
   useEffect(() => {
-    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const sync = () => setCanHover(media.matches);
+    const hover = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const compact = window.matchMedia("(max-width: 1023px)");
+    const sync = () => {
+      setCanHover(hover.matches);
+      setDemoEnabled(!reducedMotion && (compact.matches || !hover.matches));
+    };
     sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
+    hover.addEventListener("change", sync);
+    compact.addEventListener("change", sync);
+    return () => {
+      hover.removeEventListener("change", sync);
+      compact.removeEventListener("change", sync);
+    };
+  }, [reducedMotion]);
 
   useEffect(() => {
-    if (canHover) {
-      setActiveId(null);
+    if (demoEnabled) {
+      return;
     }
-  }, [canHover]);
+
+    setFeaturedId(null);
+    ratiosRef.current.clear();
+  }, [demoEnabled]);
 
   const activate = useCallback((id: string) => {
     setActiveId(id);
@@ -48,9 +65,38 @@ export function BentoSceneProvider({ children }: { children: ReactNode }) {
     setActiveId((current) => (current === id ? null : current));
   }, []);
 
+  const reportVisibility = useCallback((id: string, ratio: number) => {
+    const ratios = ratiosRef.current;
+    if (ratio <= 0) {
+      ratios.delete(id);
+    } else {
+      ratios.set(id, ratio);
+    }
+
+    let nextId: string | null = null;
+    let best = 0.32;
+    for (const [key, value] of ratios) {
+      if (value > best) {
+        best = value;
+        nextId = key;
+      }
+    }
+
+    setFeaturedId((current) => (current === nextId ? current : nextId));
+  }, []);
+
   return (
     <BentoSceneContext.Provider
-      value={{ activeId, activate, deactivate, reducedMotion, canHover }}
+      value={{
+        activeId,
+        featuredId,
+        activate,
+        deactivate,
+        reportVisibility,
+        reducedMotion,
+        canHover,
+        demoEnabled,
+      }}
     >
       {children}
     </BentoSceneContext.Provider>
@@ -64,25 +110,54 @@ export function useHoverScene(id: string) {
     throw new Error("useHoverScene must be used within BentoSceneProvider");
   }
 
-  const { activeId, activate, deactivate, reducedMotion, canHover } = context;
+  const {
+    activeId,
+    featuredId,
+    activate,
+    deactivate,
+    reportVisibility,
+    reducedMotion,
+    canHover,
+    demoEnabled,
+  } = context;
   const ref = useRef<HTMLAnchorElement>(null);
-  const inView = useInView(ref, { amount: 0.5 });
 
   useEffect(() => {
-    if (reducedMotion || canHover) {
+    if (!demoEnabled) {
       return;
     }
 
-    if (inView) {
-      activate(id);
+    const element = ref.current;
+    if (!element) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        reportVisibility(id, entry.intersectionRatio);
+      },
+      { threshold: [0, 0.2, 0.35, 0.5, 0.75, 1] },
+    );
+
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      reportVisibility(id, 0);
+    };
+  }, [demoEnabled, id, reportVisibility]);
+
+  const featured = demoEnabled && featuredId === id;
+
+  useEffect(() => {
+    if (featured) {
       return;
     }
 
     deactivate(id);
-  }, [activate, canHover, deactivate, id, inView, reducedMotion]);
+  }, [deactivate, featured, id]);
 
   const onPointerEnter = () => {
-    if (!canHover || reducedMotion) {
+    if (reducedMotion || (!canHover && !demoEnabled)) {
       return;
     }
 
@@ -90,7 +165,11 @@ export function useHoverScene(id: string) {
   };
 
   const onPointerLeave = () => {
-    if (!canHover || reducedMotion) {
+    if (reducedMotion || (!canHover && !demoEnabled)) {
+      return;
+    }
+
+    if (featured) {
       return;
     }
 
@@ -116,7 +195,12 @@ export function useHoverScene(id: string) {
   return {
     ref,
     active: reducedMotion || activeId === id,
+    featured,
+    demoEnabled,
+    canHover,
     reducedMotion,
+    activate,
+    deactivate,
     onBlur,
     onFocus,
     onPointerEnter,

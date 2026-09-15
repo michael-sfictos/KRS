@@ -59,6 +59,7 @@ export function AccountingScene({ active, reducedMotion }: ServiceSceneProps) {
                   active={active}
                   checked={checked}
                   delay={0.18 + index * 0.1}
+                  demoSpot={row.sure ? index + 1 : undefined}
                   reducedMotion={reducedMotion}
                 />
                 <div className="min-w-0">
@@ -96,7 +97,9 @@ export function AccountingScene({ active, reducedMotion }: ServiceSceneProps) {
         </span>
         <div className="flex items-center gap-1.5">
           <UiButton variant="outline">Review</UiButton>
-          <UiButton variant={ready ? "secondary" : "default"}>Approve</UiButton>
+          <UiButton demoSpot={3} variant={ready ? "secondary" : "default"}>
+            Approve
+          </UiButton>
         </div>
       </div>
     </SceneFrame>

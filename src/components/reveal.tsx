@@ -45,13 +45,13 @@ function RevealFrame({
   return (
     <MotionTag
       animate={play === "mount" || skipMotion ? "shown" : undefined}
-      className={cn(clip && "overflow-hidden pb-[0.1em]", as === "span" && "block", className)}
+      className={cn(clip && "overflow-hidden -mb-[0.18em]", as === "span" && "block", className)}
       initial={skipMotion ? false : "hidden"}
       viewport={{ once: true, amount: 0.2 }}
       whileInView={!skipMotion && play === "view" ? "shown" : undefined}
     >
       <MotionTag
-        className="block"
+        className={cn("block", clip && "pb-[0.32em]")}
         transition={{ duration: skipMotion ? 0 : 0.7, delay: skipMotion ? 0 : delay, ease: revealEase }}
         variants={variants}
       >

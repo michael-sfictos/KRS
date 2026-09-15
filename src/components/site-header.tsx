@@ -307,8 +307,8 @@ const languageOptions = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-primary/12 bg-background/88 backdrop-blur-xl">
-      <nav className="relative mx-auto flex h-18 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-12">
+    <header className="sticky top-0 z-50 border-b border-primary/12 bg-background/88 px-4 backdrop-blur-xl sm:px-6 lg:px-12">
+      <nav className="relative mx-auto flex h-18 max-w-[1400px] items-center justify-between">
         <Link aria-label="KRS AI home" className="flex items-center" href="/">
           <Image
             alt="KRS AI"

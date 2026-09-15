@@ -29,7 +29,7 @@ export function HeroSectionLegacy() {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col">
               <Button asChild className="h-12 rounded-full px-6 text-base shadow-[var(--shadow-md)]" variant="secondary">
                 <a href="/onboarding">
-                  Schedule an initial consultation
+                  Schedule an initial free consultation
                   <ArrowRight className="size-5" />
                 </a>
               </Button>

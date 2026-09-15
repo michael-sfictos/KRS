@@ -32,15 +32,13 @@ export function AnimatedBeam({
   containerRef,
   fromRef,
   toRef,
-  curvature = 0,
-  duration = 6,
+  duration = 4,
   delay = 0,
-  repeat = Infinity,
   reverse = false,
-  pathColor = "rgba(244, 239, 230, 0.4)",
-  pathWidth = 1.2,
-  pathOpacity = 0.45,
-  highlightOpacity = 0.95,
+  pathColor = "rgba(244, 239, 230, 0.22)",
+  pathWidth = 1.15,
+  pathOpacity = 1,
+  highlightOpacity = 1,
   gradientStartColor = "#ae882f",
   gradientStopColor = "#f4efe6",
   startXOffset = 0,
@@ -50,15 +48,10 @@ export function AnimatedBeam({
 }: AnimatedBeamProps) {
   const id = useId().replace(/:/g, "");
   const [geometry, setGeometry] = useState({
-    endX: 0,
-    endY: 0,
     height: 0,
     path: "",
-    startX: 0,
-    startY: 0,
     width: 0,
   });
-  const repeatCount = repeat === Infinity ? "indefinite" : String(repeat);
 
   useLayoutEffect(() => {
     let frame = 0;
@@ -77,24 +70,17 @@ export function AnimatedBeam({
       const containerRect = container.getBoundingClientRect();
       const fromRect = from.getBoundingClientRect();
       const toRect = to.getBoundingClientRect();
+      const goingRight = fromRect.left < toRect.left;
 
-      const startX = fromRect.left - containerRect.left + fromRect.width / 2 + startXOffset;
+      const startX = (goingRight ? fromRect.right : fromRect.left) - containerRect.left + startXOffset;
       const startY = fromRect.top - containerRect.top + fromRect.height / 2 + startYOffset;
-      const endX = toRect.left - containerRect.left + toRect.width / 2 + endXOffset;
+      const endX = (goingRight ? toRect.left : toRect.right) - containerRect.left + endXOffset;
       const endY = toRect.top - containerRect.top + toRect.height / 2 + endYOffset;
-      const distanceX = endX - startX;
-      const controlX1 = startX + distanceX * 0.46;
-      const controlX2 = startX + distanceX * 0.54;
+      const controlX = (startX + endX) / 2;
 
       setGeometry({
-        endX,
-        endY,
         height: containerRect.height,
-        path: `M ${startX},${startY} C ${controlX1},${startY + curvature} ${controlX2},${
-          endY + curvature
-        } ${endX},${endY}`,
-        startX,
-        startY,
+        path: `M ${startX} ${startY} C ${controlX} ${startY}, ${controlX} ${endY}, ${endX} ${endY}`,
         width: containerRect.width,
       });
 
@@ -114,9 +100,12 @@ export function AnimatedBeam({
       observer?.disconnect();
       window.removeEventListener("resize", updatePath);
     };
-  }, [containerRef, curvature, endXOffset, endYOffset, fromRef, startXOffset, startYOffset, toRef]);
+  }, [containerRef, endXOffset, endYOffset, fromRef, startXOffset, startYOffset, toRef]);
 
   if (!geometry.path || !geometry.height || !geometry.width) return null;
+
+  const travelFrom = reverse ? "110%;-30%" : "-30%;110%";
+  const travelTo = reverse ? "140%;0%" : "0%;140%";
 
   return (
     <svg
@@ -127,50 +116,43 @@ export function AnimatedBeam({
       viewBox={`0 0 ${geometry.width} ${geometry.height}`}
       width={geometry.width}
     >
+      <defs>
+        <linearGradient gradientUnits="userSpaceOnUse" id={id} x1="0" x2="0" y1="0" y2="0">
+          <stop offset="0" stopColor={gradientStartColor} stopOpacity="0" />
+          <stop offset="0.5" stopColor={gradientStartColor} />
+          <stop offset="1" stopColor={gradientStopColor} stopOpacity="0.9" />
+          <animate
+            attributeName="x1"
+            begin={`${delay}s`}
+            dur={`${duration}s`}
+            repeatCount="indefinite"
+            values={travelFrom}
+          />
+          <animate
+            attributeName="x2"
+            begin={`${delay}s`}
+            dur={`${duration}s`}
+            repeatCount="indefinite"
+            values={travelTo}
+          />
+        </linearGradient>
+      </defs>
       <path
         className="agent-beam-route"
         d={geometry.path}
-        pathLength={1}
         stroke={pathColor}
         strokeLinecap="round"
         strokeOpacity={pathOpacity}
         strokeWidth={pathWidth}
       />
       <path
-        className="agent-beam-highlight"
+        className="agent-beam-highlight motion-reduce:hidden"
         d={geometry.path}
-        filter="drop-shadow(0 0 4px rgba(174, 136, 47, 0.58))"
-        pathLength={1}
         stroke={`url(#${id})`}
-        strokeDasharray="0.46 0.54"
         strokeLinecap="round"
         strokeOpacity={highlightOpacity}
         strokeWidth={pathWidth + 0.55}
-      >
-        <animate
-          attributeName="stroke-dashoffset"
-          dur={`${duration}s`}
-          from={reverse ? "0" : "1"}
-          repeatCount={repeatCount}
-          to={reverse ? "1" : "0"}
-          begin={`${delay}s`}
-        />
-      </path>
-      <defs>
-        <linearGradient
-          gradientUnits="userSpaceOnUse"
-          id={id}
-          x1={reverse ? geometry.endX : geometry.startX}
-          x2={reverse ? geometry.startX : geometry.endX}
-          y1={reverse ? geometry.endY : geometry.startY}
-          y2={reverse ? geometry.startY : geometry.endY}
-        >
-          <stop offset="0%" stopColor={gradientStartColor} stopOpacity="0.18" />
-          <stop offset="25%" stopColor={gradientStartColor} stopOpacity="0.55" />
-          <stop offset="55%" stopColor={gradientStartColor} />
-          <stop offset="100%" stopColor={gradientStopColor} stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
+      />
     </svg>
   );
 }

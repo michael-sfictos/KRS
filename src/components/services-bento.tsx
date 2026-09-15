@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 
 import { AccountingScene } from "@/components/services-bento/accounting-scene";
 import { ConsultingScene } from "@/components/services-bento/consulting-scene";
 import { FundingScene } from "@/components/services-bento/funding-scene";
+import { SceneGhostCursor } from "@/components/services-bento/ghost-cursor";
 import { PayrollScene } from "@/components/services-bento/payroll-scene";
 import { sceneEase, type ServiceSceneProps } from "@/components/services-bento/scene-motion";
 import { TaxAdvisoryScene } from "@/components/services-bento/tax-advisory-scene";
@@ -92,9 +93,24 @@ function ServiceBentoCard({
   index: number;
 }) {
   const reduce = useReducedMotion();
-  const { ref, active, reducedMotion, onBlur, onFocus, onPointerEnter, onPointerLeave } =
-    useHoverScene(service.id);
+  const {
+    ref,
+    active,
+    featured,
+    demoEnabled,
+    canHover,
+    reducedMotion,
+    activate,
+    deactivate,
+    onBlur,
+    onFocus,
+    onPointerEnter,
+    onPointerLeave,
+  } = useHoverScene(service.id);
   const Scene = service.Scene;
+  const [pointerInside, setPointerInside] = useState(false);
+  const engage = useCallback(() => activate(service.id), [activate, service.id]);
+  const release = useCallback(() => deactivate(service.id), [deactivate, service.id]);
 
   return (
     <motion.div
@@ -105,27 +121,44 @@ function ServiceBentoCard({
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
     >
       <Link
-        className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-border bg-card text-card-foreground shadow-sm outline-none transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className={cn(
+          "group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-border bg-card text-card-foreground shadow-sm outline-none transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          active && "-translate-y-0.5 shadow-md",
+        )}
         data-scene-active={active ? "true" : "false"}
         href={service.href}
         onBlur={onBlur}
         onFocus={onFocus}
         onMouseEnter={onPointerEnter}
         onMouseLeave={onPointerLeave}
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
+        onPointerEnter={() => {
+          setPointerInside(true);
+          onPointerEnter();
+        }}
+        onPointerLeave={() => {
+          setPointerInside(false);
+          onPointerLeave();
+        }}
         ref={ref}
       >
         <div className="relative z-10 px-5 pt-5 pb-3">
           <div className="flex items-start justify-between gap-4">
             <h3 className="text-lg font-medium tracking-tight">{service.title}</h3>
-            <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight
+              className={cn(
+                "mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1",
+                active && "translate-x-1",
+              )}
+            />
           </div>
           <p className="mt-1.5 max-w-md text-sm leading-6 text-muted-foreground">{service.text}</p>
         </div>
         <div aria-hidden="true" className="relative min-h-0 flex-1 px-4 pb-4">
           <Scene active={active} reducedMotion={reducedMotion} />
         </div>
+        {demoEnabled && featured && !(canHover && pointerInside) ? (
+          <SceneGhostCursor onEngage={engage} onRelease={release} playing />
+        ) : null}
       </Link>
     </motion.div>
   );

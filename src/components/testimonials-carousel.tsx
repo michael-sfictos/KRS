@@ -2,56 +2,91 @@
 
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useLayoutEffect, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Reveal } from "@/components/reveal";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const testimonials = [
   {
-    label: "founder testimonial",
     quote:
       "KRS gives us the operating clarity we wanted from an internal finance team, without losing the judgement of real tax advisors.",
     name: "Nikos Vardakis",
     role: "Co-founder, HelioStack Technologies",
+    company: "HelioStack",
+    logo: "heliostack",
   },
   {
-    label: "operator testimonial",
     quote:
       "The monthly close is no longer a chase. We see what is missing, who owns it, and which filings need advisor review.",
     name: "Eleni Markou",
     role: "Managing Director, Agora Foods",
+    company: "Agora",
+    logo: "agora",
   },
   {
-    label: "finance lead testimonial",
     quote:
       "KRS turned payroll, myDATA, and tax questions into one accountable operating file instead of scattered reminders.",
     name: "Dimitris Pappas",
     role: "Finance Lead, Meridian Labs",
+    company: "Meridian",
+    logo: "meridian",
   },
-];
+] as const;
 
-const QUOTE_LINE_HEIGHT = 1.08;
-const QUOTE_MIN_SIZE = 24;
+type CompanyLogoId = (typeof testimonials)[number]["logo"];
 
-function quoteBaseSize(quote: string) {
-  if (quote.length > 118) {
-    return 40;
-  }
-
-  if (quote.length > 98) {
-    return 44;
-  }
-
-  return 48;
+function CompanyLogo({ company, logo }: { company: string; logo: CompanyLogoId }) {
+  return (
+    <div className="h-8 text-primary" aria-label={company}>
+      {logo === "heliostack" ? (
+        <svg aria-hidden="true" className="h-8 w-auto" viewBox="0 0 178 32">
+          <g fill="currentColor">
+            <path d="M4.2 3.2h18.4L18.8 9.4H.6z" />
+            <path d="M4.2 10.4h18.4L18.8 16.6H.6z" />
+            <path d="M4.2 17.6h18.4L18.8 23.8H.6z" />
+            <path d="M4.2 24.8h18.4L18.8 31H.6z" />
+            <text fontFamily="var(--font-sans), ui-sans-serif, sans-serif" fontSize="16" fontWeight="700" letterSpacing="-0.05em" x="30" y="22">
+              HelioStack
+            </text>
+          </g>
+        </svg>
+      ) : null}
+      {logo === "agora" ? (
+        <svg aria-hidden="true" className="h-8 w-auto" viewBox="0 0 128 32">
+          <g fill="currentColor">
+            <path d="M14 2.4 27 13.2H1z" />
+            <rect height="15.2" width="2.3" x="3.6" y="13.4" />
+            <rect height="15.2" width="2.3" x="8.4" y="13.4" />
+            <rect height="15.2" width="2.3" x="13.2" y="13.4" />
+            <rect height="15.2" width="2.3" x="18" y="13.4" />
+            <rect height="15.2" width="2.3" x="22.8" y="13.4" />
+            <rect height="2" width="26" x="1" y="28.4" />
+            <text fontFamily="var(--font-sans), ui-sans-serif, sans-serif" fontSize="16" fontWeight="700" letterSpacing="-0.04em" x="34" y="22">
+              Agora
+            </text>
+          </g>
+        </svg>
+      ) : null}
+      {logo === "meridian" ? (
+        <svg aria-hidden="true" className="h-8 w-auto" fill="none" viewBox="0 0 156 32">
+          <g stroke="currentColor" strokeWidth="1.7">
+            <circle cx="14" cy="16" r="12" />
+            <ellipse cx="14" cy="16" rx="5.2" ry="12" />
+            <path d="M2 16h24M14 4v24" />
+          </g>
+          <text fill="currentColor" fontFamily="var(--font-sans), ui-sans-serif, sans-serif" fontSize="16" fontWeight="700" letterSpacing="-0.04em" x="34" y="22">
+            Meridian
+          </text>
+        </svg>
+      ) : null}
+    </div>
+  );
 }
 
 export function TestimonialsCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const quoteFrameRef = useRef<HTMLDivElement>(null);
-  const quoteRef = useRef<HTMLQuoteElement>(null);
   const active = testimonials[activeIndex] ?? testimonials[0];
   const total = testimonials.length;
 
@@ -71,54 +106,14 @@ export function TestimonialsCarousel() {
     return () => window.clearInterval(interval);
   }, [controls]);
 
-  useLayoutEffect(() => {
-    const frame = quoteFrameRef.current;
-    const quote = quoteRef.current;
-    if (!frame || !quote) return;
-
-    let animationFrame = 0;
-
-    const applyQuoteSize = (size: number) => {
-      quote.style.fontSize = `${size}px`;
-      quote.style.lineHeight = `${Math.round(size * QUOTE_LINE_HEIGHT)}px`;
-    };
-
-    const fitQuote = () => {
-      const responsiveBase = window.innerWidth < 640 ? 34 : window.innerWidth < 1024 ? 40 : quoteBaseSize(active.quote);
-      let size = Math.min(quoteBaseSize(active.quote), responsiveBase);
-      applyQuoteSize(size);
-
-      while ((quote.scrollHeight > frame.clientHeight || quote.scrollWidth > frame.clientWidth) && size > QUOTE_MIN_SIZE) {
-        size -= 1;
-        applyQuoteSize(size);
-      }
-    };
-
-    fitQuote();
-
-    const resizeObserver = new ResizeObserver(() => {
-      window.cancelAnimationFrame(animationFrame);
-      animationFrame = window.requestAnimationFrame(fitQuote);
-    });
-
-    resizeObserver.observe(frame);
-    window.addEventListener("resize", fitQuote);
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", fitQuote);
-    };
-  }, [active.quote]);
-
   return (
     <section className="bg-background px-4 py-24 sm:px-6 lg:px-12">
       <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-stretch">
         <div className="flex flex-col justify-between border-t border-primary/12 pt-6">
           <div>
-            <p className="mono-label text-secondary">Client testimony</p>
+            <p className="mono-label text-secondary">Customer testimonials</p>
             <h2 className="mt-5 text-balance text-5xl font-normal leading-[0.95]">
-              <Reveal>What finance leaders notice first.</Reveal>
+              <Reveal>Don&apos;t take our word for it. Take theirs.</Reveal>
             </h2>
           </div>
 
@@ -169,22 +164,19 @@ export function TestimonialsCarousel() {
               />
             </div>
             <div className="flex min-h-0 flex-col bg-card p-8 sm:p-10 lg:p-11" aria-live="polite">
-              <Badge className="rounded-full bg-secondary text-secondary-foreground" variant="secondary">
-                {active.label}
-              </Badge>
-              <div className="mt-8 min-h-0 flex-1 overflow-hidden" ref={quoteFrameRef}>
-                <blockquote
-                  className="text-balance font-semibold"
-                  ref={quoteRef}
-                  style={{
-                    fontSize: quoteBaseSize(active.quote),
-                    lineHeight: `${Math.round(quoteBaseSize(active.quote) * QUOTE_LINE_HEIGHT)}px`,
-                  }}
+              <CompanyLogo company={active.company} logo={active.logo} />
+              <div className="flex min-h-0 flex-1 flex-col justify-center py-6">
+                <span
+                  aria-hidden="true"
+                  className="font-heading -mb-2.5 block select-none text-5xl font-semibold leading-[0.35] text-primary sm:text-6xl"
                 >
+                  {"\u201C"}
+                </span>
+                <blockquote className="font-heading text-balance text-[30px] font-light leading-[1.32]">
                   {active.quote}
                 </blockquote>
               </div>
-              <div className="mt-6 shrink-0 border-t border-primary/12 pt-6">
+              <div className="shrink-0 border-t border-primary/12 pt-6">
                 <p className="font-semibold">{active.name}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{active.role}</p>
               </div>

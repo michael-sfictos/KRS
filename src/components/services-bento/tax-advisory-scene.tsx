@@ -19,6 +19,7 @@ export function TaxAdvisoryScene({ active, reducedMotion }: ServiceSceneProps) {
         <motion.div
           animate={{ opacity: 1, y: 0 }}
           className="max-w-[92%] rounded-[var(--radius-xl)] bg-muted px-3 py-2"
+          data-demo-spot={1}
           initial={false}
           transition={sceneTransition(reducedMotion, 0.05, active)}
         >
@@ -34,6 +35,7 @@ export function TaxAdvisoryScene({ active, reducedMotion }: ServiceSceneProps) {
             y: replied ? 0 : 10,
           }}
           className="ml-auto max-w-[94%] rounded-[var(--radius-xl)] border border-border bg-card px-3 py-2 shadow-xs"
+          data-demo-spot={2}
           initial={false}
           transition={sceneTransition(reducedMotion, 0.32, active)}
         >

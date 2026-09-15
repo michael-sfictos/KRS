@@ -48,7 +48,9 @@ export function PayrollScene({ active, reducedMotion }: ServiceSceneProps) {
                   <p className="text-[11px] text-muted-foreground">{employee.role}</p>
                 </div>
               </div>
-              <UiBadge variant={ready ? "default" : "outline"}>{ready ? "Ready" : "Pending"}</UiBadge>
+              <UiBadge demoSpot={index === 1 ? 1 : undefined} variant={ready ? "default" : "outline"}>
+                {ready ? "Ready" : "Pending"}
+              </UiBadge>
             </motion.div>
           );
         })}
@@ -64,7 +66,7 @@ export function PayrollScene({ active, reducedMotion }: ServiceSceneProps) {
             transition={sceneTransition(reducedMotion, 0.48 + index * 0.1, active)}
           >
             <span className="text-[11px] text-muted-foreground">{item}</span>
-            <UiBadge variant={complete ? "secondary" : "outline"}>
+            <UiBadge demoSpot={index === 0 ? 2 : 3} variant={complete ? "secondary" : "outline"}>
               {complete ? "Filed" : "Queued"}
             </UiBadge>
           </motion.div>

@@ -72,6 +72,7 @@ export function FundingScene({ active, reducedMotion }: ServiceSceneProps) {
                 active={active}
                 checked={ticked}
                 delay={0.62 + index * 0.08}
+                demoSpot={index + 1}
                 reducedMotion={reducedMotion}
               />
               <span className={cn("text-[12px]", ticked ? "text-foreground" : "text-muted-foreground")}>

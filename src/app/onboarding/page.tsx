@@ -20,7 +20,7 @@ export default function OnboardingPage() {
   return (
     <main className="min-h-[100dvh] bg-[#FDF8F0] text-foreground">
       <header className="border-b border-primary/12 bg-[#FDF8F0]">
-        <div className="mx-auto flex h-18 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-12">
+        <div className="flex h-18 w-full items-center justify-between px-4 sm:px-6 lg:px-12">
           <Link aria-label="KRS AI home" href="/">
             <Image
               alt="KRS AI"

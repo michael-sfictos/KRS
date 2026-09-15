@@ -96,13 +96,22 @@ export function StatsSection() {
   return (
     <section className="border-y border-primary/12 bg-card px-4 py-24 sm:px-6 lg:px-12" id="stat">
       <div className="mx-auto max-w-[1400px]">
-        <h2 className="max-w-4xl text-balance text-5xl font-normal leading-[0.95] sm:text-6xl lg:text-7xl">
-          <Reveal>The operating file, in numbers.</Reveal>
-        </h2>
-        <RevealFade className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground" delay={0.08}>
-          Greek founders and finance teams keep accounting, payroll, tax, and filings in one reviewed system. This is
-          how that practice is scoped.
-        </RevealFade>
+        <div className="grid gap-6 lg:grid-cols-[0.65fr_0.35fr] lg:items-end">
+          <div>
+            <p className="mono-label text-secondary">The practice</p>
+            <h2 className="type-h3 mt-5 max-w-4xl text-balance text-foreground">
+              <Reveal>
+                The operating file,
+                <br />
+                in numbers.
+              </Reveal>
+            </h2>
+          </div>
+          <RevealFade className="max-w-xl text-lg leading-8 text-muted-foreground" delay={0.1}>
+            Greek founders and finance teams keep accounting, payroll, tax, and filings in one reviewed system. This is
+            how that practice is scoped.
+          </RevealFade>
+        </div>
 
         <div className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
           {stats.map((stat, index) => (
