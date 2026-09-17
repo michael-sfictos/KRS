@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
@@ -17,6 +18,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
+import { CareersClock } from "@/components/careers-clock";
 import { StatsSection } from "@/components/stats-section";
 import { HeroVideoSection } from "@/components/hero-video-section";
 import { Reveal, RevealFade } from "@/components/reveal";
@@ -152,11 +154,6 @@ const faqs = [
       "You can ask about VAT, payroll obligations, entity structure, deductibility, deadlines, filings, monthly reports, and operational tax choices. KRS routes the question to the right advisor with the relevant file context.",
   },
 ];
-
-const careersClockTicks = Array.from({ length: 12 }, (_, index) => ({
-  angle: index * 30,
-  highlighted: index < 6,
-}));
 
 export default function Home() {
   return (
@@ -480,36 +477,14 @@ function CareersSection() {
               <div className="flex items-center justify-center">
                 <Image alt="KRS AI" className="h-8 w-auto" height={416} src="/logos/Full%20logo%20Dark.png" unoptimized width={1008} />
               </div>
-              <div className="relative mx-auto flex aspect-square w-[74%] items-center justify-center rounded-full border border-primary/10 bg-primary text-primary-foreground">
-                <span aria-hidden="true" className="pointer-events-none absolute inset-5 rounded-full">
-                  {careersClockTicks.map((tick) => (
-                    <span
-                      className="absolute left-1/2 top-1/2 h-full w-px"
-                      key={tick.angle}
-                      style={{ transform: `translate(-50%, -50%) rotate(${tick.angle}deg)` }}
-                    >
-                      <span
-                        className={cn(
-                          "absolute left-1/2 top-1 -translate-x-1/2 rounded-full",
-                          tick.highlighted ? "h-9 w-1.5 bg-secondary" : "h-5 w-px bg-primary-foreground/18"
-                        )}
-                      />
-                    </span>
-                  ))}
-                </span>
-                <div className="relative flex size-44 items-center justify-center rounded-full border border-secondary/70">
-                  <span className="absolute right-9 top-9 size-3 rounded-full bg-secondary" />
-                  <div className="relative z-10 text-center">
-                    <p className="font-heading text-7xl font-medium leading-none text-secondary">6h</p>
-                    <p className="mono-label mt-2 text-primary-foreground/62">focused day</p>
-                  </div>
-                </div>
+              <div className="relative mx-auto flex aspect-square w-[74%] items-center justify-center">
+                <CareersClock className="w-full" />
               </div>
               <div className="text-center">
                 <p className="font-heading text-balance text-4xl font-normal leading-none">
                   Six focused hours. Work worth doing.
                 </p>
-                <p className="mono-label mt-5 text-muted-foreground">Athens / Remote / Healthy rhythm</p>
+                <p className="mono-label mt-5 text-muted-foreground">Athens / On site / Six-hour day</p>
               </div>
             </div>
           </div>
@@ -539,10 +514,10 @@ function CareersSection() {
             ))}
           </div>
           <Button asChild className="mt-10 h-12 rounded-full bg-primary-foreground px-6 text-primary hover:bg-primary-foreground/90">
-            <a href="#careers">
-              See open positions
+            <Link href="/careers">
+              See open roles
               <ArrowRight className="size-4" />
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

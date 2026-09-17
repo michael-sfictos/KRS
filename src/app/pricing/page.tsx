@@ -1,10 +1,9 @@
-import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight, FileText, Landmark, UsersRound } from "lucide-react";
 
 import { PricingCalculator } from "@/components/pricing-calculator";
 import { PricingPlans } from "@/components/pricing-plans";
-import { Reveal, RevealFade } from "@/components/reveal";
+import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import {
@@ -52,41 +51,6 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen overflow-x-clip bg-background text-foreground">
       <SiteHeader />
-      <section className="border-b border-primary/12 bg-[#FDF8F0]">
-        <div className="mx-auto grid max-w-[1400px] gap-12 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.04fr_0.96fr] lg:items-end lg:gap-18 lg:px-12">
-          <div className="max-w-3xl">
-            <p className="mono-label text-secondary">Pricing and plans</p>
-            <h1 className="mt-5 text-balance text-[54px] leading-[0.94] sm:text-7xl lg:text-[88px]">
-              <Reveal play="mount">Clarity for every stage of your business.</Reveal>
-            </h1>
-            <RevealFade className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground" delay={0.12} play="mount">
-              KRS combines Greek accounting expertise with a more visible operating file. Choose a plan that fits today,
-              then extend it as your obligations, team, and reporting needs grow.
-            </RevealFade>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="h-12 rounded-full px-6 shadow-[var(--shadow-md)]" variant="secondary">
-                <a href="#calculator">
-                  Calculate your estimate
-                  <ArrowRight className="size-4" strokeWidth={1.75} />
-                </a>
-              </Button>
-              <Button asChild className="h-12 rounded-full border-primary/20 bg-transparent px-6" variant="outline">
-                <a href="/onboarding">Talk to an advisor</a>
-              </Button>
-            </div>
-          </div>
-          <figure className="relative min-h-88 overflow-hidden border border-primary/15 bg-primary shadow-[var(--shadow-lg)] sm:min-h-112">
-            <Image
-              alt="Business founder and KRS advisor reviewing financial documents"
-              className="object-cover"
-              fill
-              priority
-              sizes="(min-width: 1024px) 46vw, 100vw"
-              src="/images/krs-pricing-advisory-session.png"
-            />
-          </figure>
-        </div>
-      </section>
 
       <PricingPlans />
 

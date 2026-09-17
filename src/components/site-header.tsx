@@ -12,7 +12,7 @@ type MegaMenuLink = {
 };
 
 type MegaMenuColumn = {
-  title: string;
+  title?: string;
   links: MegaMenuLink[];
 };
 
@@ -26,12 +26,13 @@ type MegaNavItem = {
   features?: MegaMenuFeature[];
   ctaLabel: string;
   ctaHref: string;
+  hidden?: boolean;
 };
 
 const navItems: MegaNavItem[] = [
   {
     label: "Services",
-    ctaLabel: "Talk to our team",
+    ctaLabel: "Book an initial free consultation",
     ctaHref: "/onboarding",
     columns: [
       {
@@ -76,12 +77,6 @@ const navItems: MegaNavItem[] = [
     ],
     features: [
       {
-        eyebrow: "Book a demo",
-        label: "Talk to our expert team",
-        description: "See how the operating file works before onboarding.",
-        href: "/onboarding",
-      },
-      {
         eyebrow: "Guide",
         label: "Taxes, Accounting, and Tips for Starting a Business",
         description: "A practical entry point for founders and operators.",
@@ -90,6 +85,7 @@ const navItems: MegaNavItem[] = [
     ],
   },
   {
+    hidden: true,
     label: "Industries",
     ctaLabel: "Book a free demo",
     ctaHref: "/onboarding",
@@ -142,6 +138,7 @@ const navItems: MegaNavItem[] = [
     ],
   },
   {
+    hidden: true,
     label: "Guides",
     ctaLabel: "Explore our guides",
     ctaHref: "/#field-notes",
@@ -194,32 +191,24 @@ const navItems: MegaNavItem[] = [
   },
   {
     label: "About Us",
-    ctaLabel: "Book a free demo",
+    ctaLabel: "Book an initial free consultation",
     ctaHref: "/onboarding",
     columns: [
       {
-        title: "About KRS AI",
         links: [
-          { label: "About us", description: "KRS AI's story and mission", href: "/#about" },
+          { label: "About us", description: "KRS AI's story and mission", href: "/about" },
           { label: "Why KRS AI?", description: "Benefits of our platform and advice", href: "/#why" },
-          { label: "Careers", description: "Open positions at KRS AI", href: "/#careers" },
-          { label: "FAQs", description: "Answers to common questions", href: "/#faq" },
+          { label: "Careers", description: "Open positions at KRS AI", href: "/careers" },
           { label: "Contact us", description: "Personal contact with our team", href: "/onboarding" },
         ],
       },
     ],
     features: [
       {
-        eyebrow: "Learn more",
-        label: "Book a Demo",
-        description: "Talk to our expert team.",
-        href: "/onboarding",
-      },
-      {
-        eyebrow: "Learn more",
+        eyebrow: "Careers",
         label: "Open positions",
         description: "Your start at KRS AI.",
-        href: "/#careers",
+        href: "/careers",
       },
     ],
   },
@@ -229,7 +218,6 @@ const navItems: MegaNavItem[] = [
     ctaHref: "/pricing",
     columns: [
       {
-        title: "Pricing",
         links: [
           {
             label: "Pricing plans",
@@ -321,9 +309,11 @@ export function SiteHeader() {
           />
         </Link>
         <div className="hidden h-full items-center gap-2 lg:flex">
-          {navItems.map((item) => (
-            <HeaderMegaNavItem item={item} key={item.label} />
-          ))}
+          {navItems
+            .filter((item) => !item.hidden)
+            .map((item) => (
+              <HeaderMegaNavItem item={item} key={item.label} />
+            ))}
         </div>
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 border-l border-primary/12 pl-4 sm:flex">
@@ -352,7 +342,7 @@ export function SiteHeader() {
             </div>
           </div>
           <Button asChild className="hidden h-10 rounded-full px-5 sm:inline-flex" variant="ghost">
-            <a href="https://krs-platform-staging-6xbnf.ondigitalocean.app/">Log-in</a>
+            <a href="https://krs-platform-staging-6xbnf.ondigitalocean.app/portal/login">Client login</a>
           </Button>
           <Button asChild className="h-10 rounded-full px-5 shadow-sm">
             <a href="/onboarding">
@@ -364,6 +354,18 @@ export function SiteHeader() {
       </nav>
     </header>
   );
+}
+
+function megaMenuPanelWidth(item: MegaNavItem, hasFeaturePanel: boolean) {
+  if (!hasFeaturePanel) {
+    return "w-[min(420px,calc(100vw-3rem))]";
+  }
+
+  if (item.columns.length === 1) {
+    return "w-[min(680px,calc(100vw-3rem))]";
+  }
+
+  return "w-[min(1040px,calc(100vw-3rem))]";
 }
 
 function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
@@ -387,7 +389,7 @@ function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
       <div
         className={cn(
           "mega-menu-panel absolute left-1/2 top-full z-50 pt-3 transition duration-200 ease-out",
-          hasFeaturePanel ? "w-[min(1040px,calc(100vw-3rem))]" : "w-[min(420px,calc(100vw-3rem))]"
+          megaMenuPanelWidth(item, hasFeaturePanel)
         )}
       >
         <div
@@ -407,9 +409,9 @@ function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
                     : "grid-cols-1"
               )}
             >
-              {item.columns.map((column) => (
-                <div key={column.title}>
-                  <p className="mono-label mb-3 text-muted-foreground">{column.title}</p>
+              {item.columns.map((column, columnIndex) => (
+                <div key={column.title ?? column.links[0]?.href ?? columnIndex}>
+                  {column.title ? <p className="mono-label mb-3 text-muted-foreground">{column.title}</p> : null}
                   <ul>
                     {column.links.map((link) => (
                       <li className="border-t border-primary/10 first:border-t-0" key={link.label}>
@@ -467,13 +469,12 @@ function HeaderMegaNavItem({ item }: { item: MegaNavItem }) {
                 ))}
               </div>
 
-              <a
-                className="mt-6 inline-flex h-11 w-fit items-center justify-center gap-2 rounded-full bg-primary-foreground px-5 text-sm font-semibold text-primary transition hover:bg-primary-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
-                href={item.ctaHref}
-              >
-                {item.ctaLabel}
-                <ArrowRight className="size-4" strokeWidth={1.75} />
-              </a>
+              <Button asChild className="mt-6 h-11 w-full rounded-full px-5 text-sm font-semibold" variant="secondary">
+                <a href={item.ctaHref}>
+                  {item.ctaLabel}
+                  <ArrowRight className="size-4" strokeWidth={1.75} />
+                </a>
+              </Button>
             </div>
           ) : null}
         </div>

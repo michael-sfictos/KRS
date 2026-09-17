@@ -1,10 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ArrowRight, Check, Minus, Plus } from "lucide-react";
+import { useId, useMemo, useState } from "react";
+import { ArrowRight, Check, Info, Minus, Plus } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
+
+const volumeTiers = [
+  { id: "0-50", label: "0-50", documents: 20 },
+  { id: "51-100", label: "51-100", documents: 75 },
+  { id: "101-300", label: "101-300", documents: 200 },
+  { id: "301-500", label: "301-500", documents: 400 },
+  { id: "500+", label: "500+", documents: 550 },
+] as const;
+
+type VolumeTierId = (typeof volumeTiers)[number]["id"];
 
 const structures = [
   { id: "professional", label: "Sole trader", base: 79, formation: 90 },
@@ -13,7 +24,107 @@ const structures = [
   { id: "custom", label: "Custom", base: 499, formation: 1200 },
 ] as const;
 
-function Stepper({
+const calculatorFieldsetClassName = "m-0 min-w-0 border-0 p-0";
+const calculatorLegendClassName = "block w-full max-w-full px-0 ps-0 text-sm font-semibold text-foreground";
+const calculatorInputGroupClassName = "grid gap-2";
+const calculatorInputHeaderClassName = "grid gap-0.5";
+
+function calculatorChoiceButtonClass(active: boolean) {
+  return cn(
+    "min-h-12 border px-4 text-left text-sm font-semibold transition",
+    active
+      ? "border-primary bg-primary text-primary-foreground"
+      : "border-primary/15 bg-card text-foreground hover:border-primary/42"
+  );
+}
+
+function InfoTooltip({ content }: { content: string }) {
+  const [open, setOpen] = useState(false);
+  const tooltipId = useId();
+
+  return (
+    <span
+      className="relative inline-flex align-text-bottom"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        aria-controls={tooltipId}
+        aria-expanded={open}
+        aria-label="What counts toward monthly transactions"
+        className="inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-primary/22 text-muted-foreground transition hover:border-primary/40 hover:bg-muted/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        <Info className="size-3.5" strokeWidth={2} />
+      </button>
+      <span
+        className={cn(
+          "pointer-events-none absolute right-0 top-full z-30 mt-2 w-[min(18rem,calc(100vw-3rem))] border border-primary/15 bg-background p-3 text-left text-xs leading-5 text-muted-foreground shadow-[var(--shadow-md)] transition-opacity",
+          open ? "visible opacity-100" : "invisible opacity-0"
+        )}
+        id={tooltipId}
+        role="tooltip"
+      >
+        {content}
+      </span>
+    </span>
+  );
+}
+
+function VolumeSegments({
+  label,
+  note,
+  tooltip,
+  value,
+  onChange,
+}: {
+  label: string;
+  note: string;
+  tooltip: string;
+  value: VolumeTierId | null;
+  onChange: (value: VolumeTierId) => void;
+}) {
+  return (
+    <div className={calculatorInputGroupClassName}>
+      <div className={calculatorInputHeaderClassName}>
+        <p className="text-sm font-semibold leading-5 text-foreground">{label}</p>
+        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm leading-5 text-muted-foreground">
+          <span>{note}</span>
+          <InfoTooltip content={tooltip} />
+        </p>
+      </div>
+      <div
+        aria-label="Transactions and invoices per month."
+        className="grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-0 sm:border sm:border-primary/18"
+        role="group"
+      >
+        {volumeTiers.map((tier) => {
+          const active = value === tier.id;
+
+          return (
+            <button
+              aria-pressed={active}
+              className={cn(
+                "min-h-11 px-2 text-center text-sm font-semibold transition",
+                "border border-primary/15 bg-card hover:border-primary/42",
+                "sm:border-0 sm:border-r sm:border-primary/18 sm:last:border-r-0",
+                active && "border-primary bg-primary text-primary-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground sm:z-10"
+              )}
+              key={tier.id}
+              onClick={() => onChange(tier.id)}
+              type="button"
+            >
+              {tier.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function NumericStepper({
   label,
   value,
   onChange,
@@ -25,27 +136,30 @@ function Stepper({
   note: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-t border-primary/12 py-4 first:border-t-0 first:pt-0">
-      <div>
-        <p className="font-semibold text-foreground">{label}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{note}</p>
+    <div className={calculatorInputGroupClassName}>
+      <div className={calculatorInputHeaderClassName}>
+        <p className="text-sm font-semibold leading-5 text-foreground">{label}</p>
+        <p className="text-sm leading-5 text-muted-foreground">{note}</p>
       </div>
-      <div className="flex shrink-0 items-center border border-primary/18 bg-background">
+      <div className="flex h-12 w-full items-stretch overflow-hidden rounded-lg border border-primary/18 bg-background">
         <button
           aria-label={`Decrease ${label}`}
-          className="grid size-9 place-items-center text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35"
+          className="grid w-12 shrink-0 place-items-center border-r border-primary/18 text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35"
           disabled={value === 0}
           onClick={() => onChange(Math.max(0, value - 1))}
           type="button"
         >
           <Minus className="size-4" strokeWidth={1.75} />
         </button>
-        <span aria-live="polite" className="grid w-9 place-items-center text-sm font-semibold tabular-nums text-foreground">
+        <span
+          aria-live="polite"
+          className="flex flex-1 items-center justify-center text-sm font-semibold tabular-nums text-foreground"
+        >
           {value}
         </span>
         <button
           aria-label={`Increase ${label}`}
-          className="grid size-9 place-items-center text-muted-foreground transition hover:bg-muted hover:text-foreground"
+          className="grid w-12 shrink-0 place-items-center border-l border-primary/18 text-muted-foreground transition hover:bg-muted hover:text-foreground"
           onClick={() => onChange(value + 1)}
           type="button"
         >
@@ -57,18 +171,24 @@ function Stepper({
 }
 
 export function PricingCalculator() {
-  const [journey, setJourney] = useState<"existing" | "formation">("existing");
-  const [structure, setStructure] = useState<(typeof structures)[number]["id"]>("ike-epe");
-  const [documents, setDocuments] = useState(20);
+  const [journey, setJourney] = useState<"existing" | "formation" | null>(null);
+  const [structure, setStructure] = useState<(typeof structures)[number]["id"] | null>(null);
+  const [volumeTier, setVolumeTier] = useState<VolumeTierId | null>(null);
   const [employees, setEmployees] = useState(0);
 
   const estimate = useMemo(() => {
-    const selected = structures.find((item) => item.id === structure) ?? structures[1];
-    const documentAdjustment = Math.max(0, Math.ceil((documents - 20) / 25)) * 25;
+    if (!structure || !volumeTier) return null;
+
+    const selected = structures.find((item) => item.id === structure);
+    const tier = volumeTiers.find((item) => item.id === volumeTier);
+    if (!selected || !tier) return null;
+
+    const documentAdjustment = Math.max(0, Math.ceil((tier.documents - 20) / 25)) * 25;
     const payrollAdjustment = employees * 14;
     return selected.base + documentAdjustment + payrollAdjustment;
-  }, [documents, employees, structure]);
-  const selected = structures.find((item) => item.id === structure) ?? structures[1];
+  }, [employees, structure, volumeTier]);
+
+  const selectedStructure = structure ? structures.find((item) => item.id === structure) : undefined;
 
   return (
     <section aria-labelledby="calculator-heading" className="border-y border-primary/12 bg-muted/55" id="calculator">
@@ -89,50 +209,70 @@ export function PricingCalculator() {
         </div>
 
         <div className="border border-primary/16 bg-background p-5 shadow-[var(--shadow-lg)] sm:p-8">
-          <fieldset>
-            <legend className="text-sm font-semibold text-foreground">Where are you today?</legend>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              <button aria-pressed={journey === "existing"} className={`min-h-12 border px-4 text-left text-sm font-semibold transition ${journey === "existing" ? "border-primary bg-primary text-primary-foreground" : "border-primary/15 bg-card text-foreground hover:border-primary/42"}`} onClick={() => setJourney("existing")} type="button">I have a business</button>
-              <button aria-pressed={journey === "formation"} className={`min-h-12 border px-4 text-left text-sm font-semibold transition ${journey === "formation" ? "border-primary bg-primary text-primary-foreground" : "border-primary/15 bg-card text-foreground hover:border-primary/42"}`} onClick={() => setJourney("formation")} type="button">I&apos;m starting a business</button>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend className="mt-8 text-sm font-semibold text-foreground">Your business structure</legend>
-            <div className="mt-4 grid gap-2 sm:grid-cols-4">
-              {structures.map((item) => {
-                const active = structure === item.id;
-                return (
-                  <button
-                    aria-pressed={active}
-                    className={`min-h-22 border p-3 text-left text-sm font-semibold leading-5 transition ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-primary/15 bg-card text-foreground hover:border-primary/42"
-                    }`}
-                    key={item.id}
-                    onClick={() => setStructure(item.id)}
-                    type="button"
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </fieldset>
+          <div className="grid gap-8">
+            <fieldset className={calculatorFieldsetClassName}>
+              <legend className={calculatorLegendClassName}>Where are you today?</legend>
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                <button aria-pressed={journey === "existing"} className={calculatorChoiceButtonClass(journey === "existing")} onClick={() => setJourney("existing")} type="button">I have a business</button>
+                <button aria-pressed={journey === "formation"} className={calculatorChoiceButtonClass(journey === "formation")} onClick={() => setJourney("formation")} type="button">I&apos;m starting a business</button>
+              </div>
+            </fieldset>
+            <fieldset className={calculatorFieldsetClassName}>
+              <legend className={calculatorLegendClassName}>Your business structure</legend>
+              <div className="mt-2 grid gap-2 sm:grid-cols-4">
+                {structures.map((item) => {
+                  const active = structure === item.id;
+                  return (
+                    <button
+                      aria-pressed={active}
+                      className={calculatorChoiceButtonClass(active)}
+                      key={item.id}
+                      onClick={() => setStructure(item.id)}
+                      type="button"
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+          </div>
 
-          <div className="mt-8">
-            <Stepper label="Monthly documents" note="Invoices, receipts, and bank movements" onChange={setDocuments} value={documents} />
-            <Stepper label="Employees" note="Payroll administration and ERGANI workflow" onChange={setEmployees} value={employees} />
+          <div className="mt-8 grid gap-8">
+            <VolumeSegments
+              label="Bookkeeping"
+              note="Transactions and invoices per month."
+              onChange={setVolumeTier}
+              tooltip="Includes all bank transactions (such as card payments, bank fees and transfers) as well as purchase and sales invoices. Please estimate the average across all entities."
+              value={volumeTier}
+            />
+            <NumericStepper label="Employees" note="Payroll administration and ERGANI workflow" onChange={setEmployees} value={employees} />
           </div>
 
           <div className="mt-8 grid gap-5 border-t border-primary/12 pt-7 sm:grid-cols-[1fr_auto] sm:items-end">
             <div>
               <p className="mono-label text-secondary">Indicative monthly fee</p>
               <p className="mt-2 font-heading text-6xl leading-none tracking-tight text-foreground">
-                €{estimate}
-                <span className="ml-2 font-sans text-base font-medium tracking-normal text-muted-foreground">/ month</span>
+                {estimate !== null ? (
+                  <>
+                    €{estimate}
+                    <span className="ml-2 font-sans text-base font-medium tracking-normal text-muted-foreground">/ month</span>
+                  </>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
               </p>
-              {journey === "formation" ? <p className="mt-3 text-sm leading-6 text-muted-foreground">Estimated one-time formation support from <span className="font-semibold text-foreground">€{selected.formation}</span>, excluding VAT.</p> : null}
+              {estimate === null ? (
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  Choose your structure and monthly volume to see an indicative fee.
+                </p>
+              ) : null}
+              {journey === "formation" && selectedStructure ? (
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  Estimated one-time formation support from{" "}
+                  <span className="font-semibold text-foreground">€{selectedStructure.formation}</span>, excluding VAT.
+                </p>
+              ) : null}
             </div>
             <Button asChild className="h-12 rounded-full px-6 shadow-[var(--shadow-md)]" variant="secondary">
               <a href="/onboarding">

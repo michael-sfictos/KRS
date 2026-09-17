@@ -67,13 +67,19 @@ const industries = [
   "Creative and media",
   "Other",
 ] as const;
-const payrollOptions = ["Yes", "Not yet", "Soon"] as const;
+const payrollOptions = ["Yes", "Not yet"] as const;
 const serviceOptions = ["Tax advisory", "Accounting and myDATA", "Payroll", "Business advisory", "Funding and grants"] as const;
 const timelineOptions = ["This week", "Within two weeks", "I am flexible"] as const;
 const callWindows = ["Morning, 09:00-12:00", "Midday, 12:00-15:00", "Afternoon, 15:00-18:00"] as const;
 
+const fieldLabelClassName = "block text-sm font-semibold";
+const fieldsetClassName = "m-0 min-w-0 border-0 p-0";
+
 const inputClassName =
-  "mt-2 h-12 w-full border border-primary/20 bg-transparent px-4 text-base text-foreground outline-none transition placeholder:text-muted-foreground/65 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18";
+  "mt-2 h-12 w-full border border-primary/20 bg-transparent px-4 text-base font-normal text-foreground outline-none transition placeholder:font-normal placeholder:text-muted-foreground/55 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18";
+
+const choiceControlClassName =
+  "border border-primary/18 bg-transparent text-sm font-semibold text-primary transition hover:border-primary/42 hover:bg-primary/4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary";
 
 export function OnboardingFlow() {
   const prefersReducedMotion = useReducedMotion();
@@ -360,12 +366,15 @@ export function OnboardingFlow() {
                     value={formData.teamSize}
                   />
 
-                  <div className="grid gap-6 sm:grid-cols-2">
-                    <label className="text-sm font-semibold" htmlFor="industry">
+                  <div className="grid items-start gap-6 sm:grid-cols-2">
+                    <label className={fieldLabelClassName} htmlFor="industry">
                       Industry
                       <select
                         aria-invalid={Boolean(errors.industry)}
-                        className={cn(inputClassName, "appearance-none")}
+                        className={cn(
+                          "mt-2 h-12 w-full appearance-none px-4 text-left outline-none",
+                          choiceControlClassName
+                        )}
                         id="industry"
                         onChange={(event) => updateField("industry", event.target.value)}
                         value={formData.industry}
@@ -380,7 +389,7 @@ export function OnboardingFlow() {
                       {errors.industry && <FieldError>{errors.industry}</FieldError>}
                     </label>
                     <OptionGroup
-                      columns="grid-cols-3"
+                      columns="grid-cols-2"
                       error={errors.payroll}
                       label="Do you run payroll?"
                       onSelect={(value) => updateField("payroll", value)}
@@ -433,7 +442,7 @@ export function OnboardingFlow() {
                     value={formData.callWindow}
                   />
 
-                  <label className="text-sm font-semibold" htmlFor="notes">
+                  <label className={fieldLabelClassName} htmlFor="notes">
                     Anything we should know before the call? (optional)
                     <textarea
                       className={cn(inputClassName, "h-28 resize-none py-3 leading-6")}
@@ -531,7 +540,7 @@ function TextField({
   autoComplete?: string;
 }) {
   return (
-    <label className="text-sm font-semibold" htmlFor={name}>
+    <label className={fieldLabelClassName} htmlFor={name}>
       {label}
       <input
         aria-invalid={Boolean(error)}
@@ -567,7 +576,7 @@ function EmailField({
   const errorId = `${name}-error`;
 
   return (
-    <label className="text-sm font-semibold" htmlFor={name}>
+    <label className={fieldLabelClassName} htmlFor={name}>
       {label}
       <input
         aria-describedby={error ? errorId : undefined}
@@ -607,10 +616,8 @@ function PhoneField({
   const errorId = "phone-error";
 
   return (
-    <div>
-      <label className="text-sm font-semibold" htmlFor="phone">
-        Phone
-      </label>
+    <label className={fieldLabelClassName}>
+      Phone
       <div className="mt-2 flex">
         <span
           aria-hidden="true"
@@ -623,7 +630,7 @@ function PhoneField({
           aria-invalid={Boolean(error)}
           aria-required
           autoComplete="tel-national"
-          className="h-12 w-full min-w-0 border border-primary/20 bg-transparent px-4 text-base text-foreground outline-none transition placeholder:text-muted-foreground/65 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18"
+          className="h-12 w-full min-w-0 border border-primary/20 bg-transparent px-4 text-base font-normal text-foreground outline-none transition placeholder:font-normal placeholder:text-muted-foreground/55 hover:border-primary/38 focus-visible:border-secondary focus-visible:ring-3 focus-visible:ring-secondary/18"
           enterKeyHint="next"
           id="phone"
           inputMode="numeric"
@@ -658,7 +665,7 @@ function PhoneField({
         />
       </div>
       {error && <FieldError id={errorId}>{error}</FieldError>}
-    </div>
+    </label>
   );
 }
 
@@ -678,9 +685,9 @@ function OptionGroup({
   columns?: string;
 }) {
   return (
-    <fieldset>
-      <legend className="text-sm font-semibold">{label}</legend>
-      <div className={cn("mt-3 grid gap-2", columns)}>
+    <fieldset className={fieldsetClassName}>
+      <legend className={cn(fieldLabelClassName, "w-full max-w-full px-0 ps-0")}>{label}</legend>
+      <div className={cn("mt-2 grid gap-2", columns)}>
         {options.map((option) => {
           const selected = value === option;
 
@@ -688,7 +695,8 @@ function OptionGroup({
             <button
               aria-pressed={selected}
               className={cn(
-                "flex min-h-12 items-center justify-between gap-3 border border-primary/18 px-4 py-3 text-left text-sm font-semibold text-primary transition hover:border-primary/42 hover:bg-primary/4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px",
+                "flex min-h-12 items-center justify-between gap-3 px-4 py-3 text-left active:translate-y-px",
+                choiceControlClassName,
                 selected && "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
               )}
               key={option}
@@ -720,9 +728,9 @@ function MultiOptionGroup({
   error?: string;
 }) {
   return (
-    <fieldset>
-      <legend className="text-sm font-semibold">{label}</legend>
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+    <fieldset className={fieldsetClassName}>
+      <legend className={cn(fieldLabelClassName, "w-full max-w-full px-0 ps-0")}>{label}</legend>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2">
         {options.map((option) => {
           const selected = values.includes(option);
 
@@ -730,7 +738,8 @@ function MultiOptionGroup({
             <button
               aria-pressed={selected}
               className={cn(
-                "flex min-h-12 items-center justify-between gap-3 border border-primary/18 px-4 py-3 text-left text-sm font-semibold text-primary transition hover:border-primary/42 hover:bg-primary/4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px",
+                "flex min-h-12 items-center justify-between gap-3 px-4 py-3 text-left active:translate-y-px",
+                choiceControlClassName,
                 selected && "border-secondary bg-secondary/12"
               )}
               key={option}
