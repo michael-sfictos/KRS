@@ -73,10 +73,10 @@ const services: ServiceCard[] = [
   },
 ];
 
-export function ServicesBento() {
+export function ServicesBento({ className }: { className?: string } = {}) {
   return (
     <BentoSceneProvider>
-      <div className="krs-app mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-12">
+      <div className={cn("krs-app mt-14 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-12", className)}>
         {services.map((service, index) => (
           <ServiceBentoCard index={index} key={service.id} service={service} />
         ))}

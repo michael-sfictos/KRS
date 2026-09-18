@@ -99,7 +99,7 @@ const footerLinkGroups: FooterLinkGroup[] = [
       { label: "About KRS AI", href: "/about" },
       { label: "Guides", href: "#field-notes" },
       { label: "Careers", href: "/careers" },
-      { label: "Why KRS AI", href: "#why" },
+      { label: "Why KRS AI", href: "/why" },
       { label: "FAQs", href: "#faq" },
       { label: "Press", href: "#media" },
       { label: "Structure", href: "#" },

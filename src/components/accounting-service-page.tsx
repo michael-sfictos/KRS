@@ -36,17 +36,17 @@ export function ServicePage({ page }: { page: ServicePageData }) {
 
 function Hero({ page }: { page: ServicePageData }) {
   return (
-    <section className="border-b border-primary/12 bg-[#fdf8f0]">
+    <section className="border-b border-primary/12 bg-[#fdf8f0] px-4 sm:px-6 lg:px-12">
       <div className="mx-auto grid max-w-[1400px] lg:min-h-[620px] lg:grid-cols-[0.88fr_1.12fr]">
-        <div className="flex flex-col justify-center px-4 py-14 sm:px-6 sm:py-18 lg:px-12 lg:py-20">
+        <div className="flex flex-col justify-center py-14 sm:py-16 lg:py-16">
           <p className="mono-label text-secondary">{page.eyebrow}</p>
-          <h1 className="type-h1 mt-7 max-w-[680px]">
+          <h1 className="type-h1 mt-6 max-w-[680px]">
             <Reveal play="mount">{page.title}</Reveal>
           </h1>
-          <RevealFade className="mt-7 max-w-[590px] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8" delay={0.12} play="mount">
+          <RevealFade className="mt-6 max-w-[590px] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8" delay={0.12} play="mount">
             {page.description}
           </RevealFade>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button asChild className="h-12 rounded-full px-6 text-sm">
               <Link href="/onboarding">
                 {ctaLabel}

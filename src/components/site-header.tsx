@@ -39,14 +39,14 @@ const navItems: MegaNavItem[] = [
         title: "Our Services",
         links: [
           {
-            label: "Tax Advisory",
-            description: "Personal advice on our platform - tax strategy, advice and audit",
-            href: "/services/tax-advisory",
-          },
-          {
             label: "Accounting",
             description: "Digital accounting for businesses - formation, records, finance and closure",
             href: "/services/accounting",
+          },
+          {
+            label: "Tax Advisory",
+            description: "Personal advice on our platform - tax strategy, advice and audit",
+            href: "/services/tax-advisory",
           },
           {
             label: "Payroll Accounting",
@@ -197,7 +197,7 @@ const navItems: MegaNavItem[] = [
       {
         links: [
           { label: "About us", description: "KRS AI's story and mission", href: "/about" },
-          { label: "Why KRS AI?", description: "Benefits of our platform and advice", href: "/#why" },
+          { label: "Why KRS AI?", description: "Benefits of our platform and advice", href: "/why" },
           { label: "Careers", description: "Open positions at KRS AI", href: "/careers" },
           { label: "Contact us", description: "Personal contact with our team", href: "/onboarding" },
         ],

@@ -371,6 +371,13 @@ function WhySection() {
               The benefit is not a prettier portal. It is fewer unknowns, earlier questions, and better-reviewed
               decisions across accounting, payroll, tax, and filings.
             </p>
+            <Link
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold transition hover:gap-3 hover:text-secondary"
+              href="/why"
+            >
+              See why KRS
+              <ArrowRight className="size-4" />
+            </Link>
           </div>
           <div className="gradient-shell shadow-[var(--shadow-lg)]">
             <Image
