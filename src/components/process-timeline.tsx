@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -23,6 +23,7 @@ export type ProcessStep = {
 
 type ProcessTimelineProps = {
   steps: ProcessStep[];
+  proofs?: ReactNode[];
 };
 
 const timelineIcons = [BadgeCheck, CalendarClock, FileCheck2, MessageSquareText];
@@ -473,7 +474,7 @@ function OnboardingEvidencePath() {
   );
 }
 
-export function ProcessTimeline({ steps }: ProcessTimelineProps) {
+export function ProcessTimeline({ steps, proofs }: ProcessTimelineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -509,6 +510,7 @@ export function ProcessTimeline({ steps }: ProcessTimelineProps) {
             index={index}
             key={step.title}
             onVisible={handleVisible}
+            proof={proofs?.[index]}
             step={step}
           />
         ))}
@@ -522,11 +524,13 @@ function TimelineRow({
   index,
   active,
   onVisible,
+  proof,
 }: {
   step: ProcessStep;
   index: number;
   active: boolean;
   onVisible: (index: number) => void;
+  proof?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -564,7 +568,25 @@ function TimelineRow({
       </div>
 
       <div className="col-start-2 mt-4 w-full min-w-0 lg:col-start-3 lg:row-start-1 lg:mt-0 lg:justify-self-start">
-        <TimelineProofPanel active={active} index={index} step={step} />
+        {proof ? (
+          <motion.div
+            animate={{ opacity: active ? 1 : 0.74, y: active ? 0 : 10 }}
+            className="w-full max-w-xl"
+            initial={false}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+          >
+            <div
+              className={cn(
+                "border border-primary/12 bg-card shadow-[var(--shadow-sm)] transition duration-500",
+                active ? "border-secondary/45 opacity-100" : "opacity-70",
+              )}
+            >
+              {proof}
+            </div>
+          </motion.div>
+        ) : (
+          <TimelineProofPanel active={active} index={index} step={step} />
+        )}
       </div>
     </div>
   );

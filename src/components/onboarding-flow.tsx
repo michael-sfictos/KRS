@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check, Mail, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
@@ -18,15 +17,10 @@ type FormState = {
   industry: string;
   payroll: string;
   services: string[];
-  timeline: string;
-  callWindow: string;
-  notes: string;
-  privacy: boolean;
   website: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
-type SubmitStatus = "idle" | "submitting" | "success" | "email" | "error";
 
 const initialState: FormState = {
   fullName: "",
@@ -38,10 +32,6 @@ const initialState: FormState = {
   industry: "",
   payroll: "",
   services: [],
-  timeline: "",
-  callWindow: "",
-  notes: "",
-  privacy: false,
   website: "",
 };
 
@@ -54,7 +44,7 @@ const formatPhoneForSubmit = (phone: string) => {
   return `+30${national}`;
 };
 
-const progressLabels = ["About you", "Your business", "Call preference"] as const;
+const progressLabels = ["About you", "Your business", "Pick a time"] as const;
 const companyStages = ["Operating company", "Starting a company", "Switching advisor", "Group or holding"] as const;
 const teamSizes = ["Just me", "2-10 people", "11-50 people", "51+ people"] as const;
 const industries = [
@@ -69,8 +59,9 @@ const industries = [
 ] as const;
 const payrollOptions = ["Yes", "Not yet"] as const;
 const serviceOptions = ["Tax advisory", "Accounting and myDATA", "Payroll", "Business advisory", "Funding and grants"] as const;
-const timelineOptions = ["This week", "Within two weeks", "I am flexible"] as const;
-const callWindows = ["Morning, 09:00-12:00", "Midday, 12:00-15:00", "Afternoon, 15:00-18:00"] as const;
+
+const bookingsPageUrl =
+  "https://bookings.cloud.microsoft/book/MichaelSfictos@pgroup.gr/?ismsaljsauthenabled";
 
 const fieldLabelClassName = "block text-sm font-semibold";
 const fieldsetClassName = "m-0 min-w-0 border-0 p-0";
@@ -81,14 +72,22 @@ const inputClassName =
 const choiceControlClassName =
   "border border-primary/18 bg-transparent text-sm font-semibold text-primary transition hover:border-primary/42 hover:bg-primary/4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary";
 
-export function OnboardingFlow() {
+export function OnboardingFlow({
+  compact = false,
+  defaultServices,
+}: {
+  compact?: boolean;
+  defaultServices?: readonly string[];
+} = {}) {
   const prefersReducedMotion = useReducedMotion();
-  const [formData, setFormData] = useState<FormState>(initialState);
+  const [formData, setFormData] = useState<FormState>(() =>
+    defaultServices?.length ? { ...initialState, services: [...defaultServices] } : initialState,
+  );
   const [errors, setErrors] = useState<FormErrors>({});
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [status, setStatus] = useState<SubmitStatus>("idle");
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const leadSent = useRef(false);
 
   useEffect(() => {
     if (step > 0) headingRef.current?.focus();
@@ -97,7 +96,6 @@ export function OnboardingFlow() {
   const updateField = <Key extends keyof FormState>(key: Key, value: FormState[Key]) => {
     setFormData((current) => ({ ...current, [key]: value }));
     setErrors((current) => ({ ...current, [key]: undefined }));
-    if (status === "error") setStatus("idle");
   };
 
   const validateStep = (currentStep: number) => {
@@ -125,12 +123,6 @@ export function OnboardingFlow() {
       if (formData.services.length === 0) nextErrors.services = "Choose at least one area where you need help.";
     }
 
-    if (currentStep === 2) {
-      if (!formData.timeline) nextErrors.timeline = "Choose a preferred timeframe.";
-      if (!formData.callWindow) nextErrors.callWindow = "Choose the best part of the day for a call.";
-      if (!formData.privacy) nextErrors.privacy = "Please confirm that KRS may contact you about this request.";
-    }
-
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -141,110 +133,33 @@ export function OnboardingFlow() {
     setStep((current) => Math.max(0, current - 1));
   };
 
-  const openEmailFallback = () => {
-    const phone = formatPhoneForSubmit(formData.phone);
-    const body = [
-      `Name: ${formData.fullName}`,
-      `Work email: ${formData.workEmail.trim()}`,
-      `Phone: ${phone}`,
-      `Company: ${formData.company}`,
-      `Company status: ${formData.companyStage}`,
-      `Team size: ${formData.teamSize}`,
-      `Industry: ${formData.industry}`,
-      `Payroll: ${formData.payroll}`,
-      `Help needed: ${formData.services.join(", ")}`,
-      `Preferred timing: ${formData.timeline}`,
-      `Preferred call window: ${formData.callWindow}`,
-      `Additional context: ${formData.notes || "None"}`,
-    ].join("\n");
-    const mailto = `mailto:hello@krs.ai?subject=${encodeURIComponent(`Consultation request from ${formData.company}`)}&body=${encodeURIComponent(body)}`;
+  const sendLead = () => {
+    if (leadSent.current) return;
+    leadSent.current = true;
 
-    setStatus("email");
-    window.location.href = mailto;
+    void fetch("/api/onboarding", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,
+        workEmail: formData.workEmail.trim().toLowerCase(),
+        phone: formatPhoneForSubmit(formData.phone),
+        booking: "microsoft_bookings",
+      }),
+    }).catch(() => {
+      leadSent.current = false;
+    });
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!validateStep(step)) return;
+    if (!validateStep(step) || step >= 2) return;
 
-    if (step < 2) {
-      setDirection(1);
-      setStep((current) => current + 1);
-      return;
-    }
+    if (step === 1) sendLead();
 
-    setStatus("submitting");
-
-    const payload = {
-      ...formData,
-      workEmail: formData.workEmail.trim().toLowerCase(),
-      phone: formatPhoneForSubmit(formData.phone),
-    };
-
-    try {
-      const response = await fetch("/api/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setStatus("success");
-        return;
-      }
-
-      if (response.status === 503) {
-        openEmailFallback();
-        return;
-      }
-
-      setStatus("error");
-    } catch {
-      openEmailFallback();
-    }
+    setDirection(1);
+    setStep((current) => current + 1);
   };
-
-  if (status === "success" || status === "email") {
-    return (
-      <motion.div
-        animate={{ opacity: 1, y: 0 }}
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
-        transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <span className="flex size-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
-          {status === "success" ? <Check className="size-6" strokeWidth={2} /> : <Mail className="size-6" strokeWidth={1.75} />}
-        </span>
-        <p className="mono-label mt-8 text-secondary">Consultation request</p>
-        <h2 className="mt-4 max-w-xl text-balance text-4xl font-medium leading-tight sm:text-5xl">
-          {status === "success" ? "Your request is with KRS." : "One last click in your email app."}
-        </h2>
-        <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-          {status === "success"
-            ? "A KRS advisor will review your answers and confirm a suitable call time within one business day."
-            : "Your answers are prepared in a new email. Send it and a KRS advisor will confirm a suitable call time."}
-        </p>
-        <div className="mt-9 flex flex-col gap-3 border-t border-primary/14 pt-7 sm:flex-row">
-          {status === "email" && (
-            <button
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
-              onClick={openEmailFallback}
-              type="button"
-            >
-              Open prepared email
-              <Mail className="size-4" strokeWidth={1.75} />
-            </button>
-          )}
-          <Link
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-6 text-sm font-semibold text-primary transition hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
-            href="/"
-          >
-            Return to KRS
-            <ArrowRight className="size-4" strokeWidth={1.75} />
-          </Link>
-        </div>
-      </motion.div>
-    );
-  }
 
   return (
     <div>
@@ -274,7 +189,8 @@ export function OnboardingFlow() {
         ))}
       </ol>
 
-      <form className="mt-8" noValidate onSubmit={handleSubmit}>
+      {step < 2 && (
+      <form className={compact ? "mt-6" : "mt-8"} noValidate onSubmit={handleSubmit}>
         <input
           autoComplete="off"
           className="absolute -left-[9999px]"
@@ -297,14 +213,26 @@ export function OnboardingFlow() {
             {step === 0 && (
               <div>
                 <p className="mono-label text-secondary">A few essentials</p>
-                <h2 className="mt-4 text-balance text-3xl font-medium leading-tight sm:text-4xl" ref={headingRef} tabIndex={-1}>
+                <h2
+                  className={cn(
+                    "mt-4 text-balance font-medium leading-tight",
+                    compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl",
+                  )}
+                  ref={headingRef}
+                  tabIndex={-1}
+                >
                   Let&apos;s make the first call useful.
                 </h2>
-                <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+                <p
+                  className={cn(
+                    "mt-4 max-w-xl text-muted-foreground",
+                    compact ? "text-sm leading-6" : "leading-7",
+                  )}
+                >
                   We use these details to match you with the right advisor and reply personally.
                 </p>
 
-                <div className="mt-8 grid gap-x-5 gap-y-6 sm:grid-cols-2">
+                <div className={cn("grid gap-x-5 gap-y-6 sm:grid-cols-2", compact ? "mt-6" : "mt-8")}>
                   <TextField
                     autoComplete="name"
                     error={errors.fullName}
@@ -343,14 +271,26 @@ export function OnboardingFlow() {
             {step === 1 && (
               <div>
                 <p className="mono-label text-secondary">Your business</p>
-                <h2 className="mt-4 text-balance text-3xl font-medium leading-tight sm:text-4xl" ref={headingRef} tabIndex={-1}>
+                <h2
+                  className={cn(
+                    "mt-4 text-balance font-medium leading-tight",
+                    compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl",
+                  )}
+                  ref={headingRef}
+                  tabIndex={-1}
+                >
                   Give us the shape of your business.
                 </h2>
-                <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+                <p
+                  className={cn(
+                    "mt-4 max-w-xl text-muted-foreground",
+                    compact ? "text-sm leading-6" : "leading-7",
+                  )}
+                >
                   A quick profile helps us bring the right tax, accounting, or payroll context to the call.
                 </p>
 
-                <div className="mt-8 grid gap-7">
+                <div className={cn("grid", compact ? "mt-6 gap-5" : "mt-8 gap-7")}>
                   <OptionGroup
                     error={errors.companyStage}
                     label="Where are you today?"
@@ -413,67 +353,88 @@ export function OnboardingFlow() {
                 </div>
               </div>
             )}
-
-            {step === 2 && (
-              <div>
-                <p className="mono-label text-secondary">Call preference</p>
-                <h2 className="mt-4 text-balance text-3xl font-medium leading-tight sm:text-4xl" ref={headingRef} tabIndex={-1}>
-                  When should we talk?
-                </h2>
-                <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
-                  Choose a general window. A KRS advisor will confirm the exact time by email within one business day.
-                </p>
-
-                <div className="mt-8 grid gap-7">
-                  <OptionGroup
-                    columns="sm:grid-cols-3"
-                    error={errors.timeline}
-                    label="Preferred timeframe"
-                    onSelect={(value) => updateField("timeline", value)}
-                    options={timelineOptions}
-                    value={formData.timeline}
-                  />
-                  <OptionGroup
-                    columns="sm:grid-cols-3"
-                    error={errors.callWindow}
-                    label="Best part of the day (Athens time)"
-                    onSelect={(value) => updateField("callWindow", value)}
-                    options={callWindows}
-                    value={formData.callWindow}
-                  />
-
-                  <label className={fieldLabelClassName} htmlFor="notes">
-                    Anything we should know before the call? (optional)
-                    <textarea
-                      className={cn(inputClassName, "h-28 resize-none py-3 leading-6")}
-                      id="notes"
-                      maxLength={1000}
-                      onChange={(event) => updateField("notes", event.target.value)}
-                      placeholder="A deadline, current challenge, or question you want us to prepare for."
-                      value={formData.notes}
-                    />
-                  </label>
-
-                  <div>
-                    <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-muted-foreground">
-                      <input
-                        checked={formData.privacy}
-                        className="mt-1 size-4 shrink-0 accent-[#AE882F]"
-                        onChange={(event) => updateField("privacy", event.target.checked)}
-                        type="checkbox"
-                      />
-                      <span>I agree that KRS may contact me about this consultation request.</span>
-                    </label>
-                    {errors.privacy && <FieldError>{errors.privacy}</FieldError>}
-                  </div>
-                </div>
-              </div>
-            )}
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-9 flex items-center justify-between gap-4 border-t border-primary/14 pt-6">
-          {step > 0 ? (
+        {step < 2 && (
+          <div className={cn("flex items-center justify-between gap-4 border-t border-primary/14", compact ? "mt-7 pt-5" : "mt-9 pt-6")}>
+            {step > 0 ? (
+              <button
+                className="inline-flex h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold text-primary transition hover:bg-primary/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px sm:px-4"
+                onClick={moveBack}
+                type="button"
+              >
+                <ArrowLeft className="size-4" strokeWidth={1.75} />
+                Back
+              </button>
+            ) : (
+              <span />
+            )}
+
+            <button
+              className="inline-flex h-12 min-w-36 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
+              type="submit"
+            >
+              Continue
+              <ArrowRight className="size-4" strokeWidth={1.75} />
+            </button>
+          </div>
+        )}
+      </form>
+      )}
+
+      {step === 2 && (
+        <div className={compact ? "mt-6" : "mt-8"}>
+          <p className="mono-label text-secondary">Pick a time</p>
+          <h2
+            className={cn(
+              "mt-4 text-balance font-medium leading-tight",
+              compact ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl",
+            )}
+            ref={headingRef}
+            tabIndex={-1}
+          >
+            When should we talk?
+          </h2>
+          <p
+            className={cn(
+              "mt-4 max-w-xl text-muted-foreground",
+              compact ? "text-sm leading-6" : "leading-7",
+            )}
+          >
+            Choose a time on the calendar. The call is booked immediately, and you will get a confirmation invite.
+          </p>
+
+          <div
+            className={cn(
+              "mt-6 w-full border border-primary/12",
+              compact ? "h-[min(78vh,800px)] min-h-[640px]" : "h-[min(82vh,900px)] min-h-[720px]",
+            )}
+          >
+            <iframe
+              allow="storage-access *; clipboard-write; fullscreen"
+              height="100%"
+              scrolling="yes"
+              src={bookingsPageUrl}
+              style={{ border: 0 }}
+              title="Book a consultation with KRS"
+              width="100%"
+            />
+          </div>
+          <p className="mt-3 text-sm text-muted-foreground">
+            If the calendar stays blank,{" "}
+            <a
+              className="font-semibold text-primary underline-offset-4 transition hover:text-secondary hover:underline"
+              href={bookingsPageUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              open it in a new tab
+            </a>
+            .
+          </p>
+
+          <div className={cn("border-t border-primary/14", compact ? "mt-7 pt-5" : "mt-9 pt-6")}>
             <button
               className="inline-flex h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold text-primary transition hover:bg-primary/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px sm:px-4"
               onClick={moveBack}
@@ -482,40 +443,9 @@ export function OnboardingFlow() {
               <ArrowLeft className="size-4" strokeWidth={1.75} />
               Back
             </button>
-          ) : (
-            <span />
-          )}
-
-          <button
-            className="inline-flex h-12 min-w-36 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px disabled:cursor-wait disabled:opacity-65"
-            disabled={status === "submitting"}
-            type="submit"
-          >
-            {status === "submitting" ? (
-              <>
-                Sending
-                <RotateCcw className="size-4 animate-spin" strokeWidth={1.75} />
-              </>
-            ) : step === 2 ? (
-              <>
-                Request my consultation
-                <ArrowRight className="size-4" strokeWidth={1.75} />
-              </>
-            ) : (
-              <>
-                Continue
-                <ArrowRight className="size-4" strokeWidth={1.75} />
-              </>
-            )}
-          </button>
-        </div>
-
-        {status === "error" && (
-          <div className="mt-5 border border-destructive/28 bg-destructive/6 px-4 py-3 text-sm leading-6 text-destructive" role="alert">
-            We could not send your request. Please try again, or email hello@krs.ai directly.
           </div>
-        )}
-      </form>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,12 +3,10 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  Check,
   Gauge,
   MessageSquareText,
   Network,
   PanelsTopLeft,
-  Sparkles,
 } from "lucide-react";
 
 import {
@@ -19,6 +17,8 @@ import {
 } from "@/components/ui/accordion";
 import { AgentsSection } from "@/components/agents-section";
 import { CareersClock } from "@/components/careers-clock";
+import { ContactCta } from "@/components/contact-cta";
+import { FieldNotesSection } from "@/components/field-notes-section";
 import { StatsSection } from "@/components/stats-section";
 import { HeroVideoSection } from "@/components/hero-video-section";
 import { Reveal, RevealFade } from "@/components/reveal";
@@ -27,6 +27,7 @@ import { ProcessTimeline } from "@/components/process-timeline";
 import { ServicesBento } from "@/components/services-bento";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { SlimCta } from "@/components/slim-cta";
 import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 import { cn } from "@/lib/utils";
 
@@ -87,27 +88,6 @@ const benefits: Array<{ value: string; text: string; icon: LucideIcon }> = [
     value: "Realtime transparency",
     text: "across missing documents, filings, and monthly close status.",
     icon: Gauge,
-  },
-];
-
-const fieldNotes = [
-  {
-    type: "News",
-    read: "08 min",
-    title: "VAT and myDATA changes Greek SMEs should track.",
-    text: "What recently changed for invoices, filings, and monthly close, and what to do before the next deadline.",
-  },
-  {
-    type: "Guide",
-    read: "11 min",
-    title: "How to keep myDATA current through the year.",
-    text: "A practical way to collect invoices, review each month, and avoid a scramble at year-end.",
-  },
-  {
-    type: "Insight",
-    read: "17 min",
-    title: "The tax question founders ask too late.",
-    text: "How company structure, payroll, and reporting choices affect the business before you need outside capital.",
   },
 ];
 
@@ -175,7 +155,7 @@ export default function Home() {
       <CareersSection />
       <FaqSection />
       <SocialVideosSection />
-      <FinalCta />
+      <ContactCta />
       <SiteFooter />
     </main>
   );
@@ -320,27 +300,6 @@ function ServicesSection() {
   );
 }
 
-function SlimCta() {
-  return (
-    <section className="border-y border-primary/12 bg-card px-4 py-8 sm:px-6 lg:px-12">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-5 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-4">
-          <span className="hidden size-11 items-center justify-center rounded-full bg-primary text-primary-foreground sm:flex">
-            <Sparkles className="size-5 text-secondary" />
-          </span>
-          <p className="font-heading text-balance text-2xl font-medium leading-tight">Ready for an accounting file that stays ready?</p>
-        </div>
-        <Button asChild className="h-11 w-fit rounded-full bg-primary px-5">
-          <a href="/onboarding">
-            Schedule an initial free consultation
-            <ArrowRight className="size-4" />
-          </a>
-        </Button>
-      </div>
-    </section>
-  );
-}
-
 function ProcessSection() {
   return (
     <section className="relative overflow-hidden border-y border-primary/12 bg-muted/55 px-4 py-24 text-foreground sm:px-6 lg:px-12" id="process">
@@ -413,65 +372,6 @@ function WhySection() {
 
 function TestimonialSection() {
   return <TestimonialsCarousel />;
-}
-
-function FieldNotesSection() {
-  return (
-    <section className="bg-card px-4 pb-24 sm:px-6 lg:px-12" id="field-notes">
-      <div className="mx-auto max-w-[1400px] border-t border-primary/16 pt-16">
-        <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mono-label text-secondary">From the KRS blog</p>
-            <h2 className="type-h3 mt-5 text-balance">
-              <Reveal>Tax news from Greece.</Reveal>
-            </h2>
-          </div>
-          <a className="inline-flex items-center gap-2 text-sm font-semibold transition hover:gap-3" href="#">
-            Read all articles
-            <ArrowRight className="size-4" />
-          </a>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-3">
-          {fieldNotes.map((note, index) => (
-            <article className="group cursor-pointer" key={note.title}>
-              <div
-                className={cn(
-                  "relative mb-5 aspect-[4/5] overflow-hidden bg-primary",
-                  index === 1 && "bg-secondary",
-                  index === 2 && "bg-tertiary"
-                )}
-              >
-                {index === 0 ? (
-                  <Image
-                    alt=""
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                    fill
-                    sizes="(min-width: 768px) 30vw, 100vw"
-                    src="/images/krs-athens-operations.png"
-                  />
-                ) : (
-                  <div className="relative flex h-full flex-col justify-between p-7 text-primary-foreground">
-                    <p className="relative mono-label text-primary-foreground/58">note / 0{index + 1}</p>
-                    <p className="font-heading relative text-balance text-5xl font-normal leading-[0.92]">
-                      {index === 1 ? "The month closes before year-end." : "Advisory begins with evidence."}
-                    </p>
-                  </div>
-                )}
-              </div>
-              <div className="mb-3 flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                <span>{note.type}</span>
-                <span>/</span>
-                <span>{note.read}</span>
-              </div>
-              <h3 className="text-2xl font-semibold leading-tight">{note.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">{note.text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
 }
 
 function CareersSection() {
@@ -623,62 +523,3 @@ function SocialVideosSection() {
   );
 }
 
-const contactPromises = [
-  "Initial consultation 100% free",
-  "Personalized expert advice",
-  "Guaranteed fast response",
-];
-
-function FinalCta() {
-  return (
-    <section className="relative overflow-hidden bg-secondary-200 px-4 py-24 text-primary sm:px-6 lg:px-12 lg:py-36" id="contact">
-      <div className="absolute inset-0 opacity-12">
-        <svg className="h-full w-full" preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 420" aria-hidden="true">
-          <g fill="#011936">
-            {Array.from({ length: 36 }).map((_, index) => (
-              <circle
-                cx={80 + (index % 12) * 70}
-                cy={80 + Math.floor(index / 12) * 120 + (index % 2) * 18}
-                key={index}
-                r={index % 3 === 0 ? 2.2 : 1.4}
-              />
-            ))}
-          </g>
-        </svg>
-      </div>
-      <div className="relative mx-auto grid max-w-[1400px] grid-cols-12 items-start gap-8">
-        <div className="col-span-12 lg:col-span-8">
-          <h2 className="type-display-xl text-primary">
-            <Reveal>Begin</Reveal>
-            <Reveal delay={0.1}>together.</Reveal>
-          </h2>
-        </div>
-        <div className="col-span-12 lg:col-span-4">
-          <h4 className="type-h4 max-w-md text-balance text-primary">
-            We take care of admin. You take care of business.
-          </h4>
-          <p className="mt-4 max-w-md text-lg leading-8 text-primary/74">
-            Our helpful team is on standby to get you set up and running without the admin headache.
-          </p>
-          <ul className="mt-6 grid max-w-md gap-2.5 text-base leading-6 text-primary">
-            {contactPromises.map((item) => (
-              <li className="flex items-start gap-2.5" key={item}>
-                <Check className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
-                {item}
-              </li>
-            ))}
-          </ul>
-          <Button
-            asChild
-            className="mt-8 h-13 w-full justify-between rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90"
-          >
-            <a href="/onboarding">
-              Schedule a consultation
-              <ArrowRight className="size-5" />
-            </a>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}

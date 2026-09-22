@@ -14,6 +14,7 @@ type ConsultationRequest = {
   callWindow?: unknown;
   notes?: unknown;
   privacy?: unknown;
+  booking?: unknown;
   website?: unknown;
 };
 
@@ -48,10 +49,10 @@ export async function POST(request: Request) {
     payload.services.length > 0 &&
     payload.services.length <= 5 &&
     payload.services.every((service) => isShortText(service, 80)) &&
-    isShortText(payload.timeline) &&
-    isShortText(payload.callWindow) &&
     (payload.notes === undefined || payload.notes === "" || isShortText(payload.notes, 1000)) &&
-    payload.privacy === true;
+    (payload.timeline === undefined || payload.timeline === "" || isShortText(payload.timeline)) &&
+    (payload.callWindow === undefined || payload.callWindow === "" || isShortText(payload.callWindow)) &&
+    (payload.booking === undefined || payload.booking === "" || isShortText(payload.booking, 80));
 
   if (!validRequest) {
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
@@ -84,8 +85,9 @@ export async function POST(request: Request) {
         industry: payload.industry,
         payroll: payload.payroll,
         services: payload.services,
-        timeline: payload.timeline,
-        callWindow: payload.callWindow,
+        timeline: payload.timeline ?? "",
+        callWindow: payload.callWindow ?? "",
+        booking: typeof payload.booking === "string" ? payload.booking : "",
         notes: typeof payload.notes === "string" ? payload.notes : "",
       }),
       cache: "no-store",

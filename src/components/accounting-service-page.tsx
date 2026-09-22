@@ -135,7 +135,7 @@ function InlineCta({ page }: { page: ServicePageData }) {
   );
 }
 
-function Benefits({ page }: { page: ServicePageData }) {
+export function Benefits({ page }: { page: ServicePageData }) {
   return (
     <section className="bg-primary px-4 py-20 text-primary-foreground sm:px-6 sm:py-24 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-[1400px]">
@@ -180,7 +180,7 @@ function Benefits({ page }: { page: ServicePageData }) {
   );
 }
 
-function SwitchProcess({ page }: { page: ServicePageData }) {
+export function SwitchProcess({ page }: { page: ServicePageData }) {
   return (
     <section className="border-y border-primary/12 bg-[#fdf8f0] px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-[1400px]">
@@ -273,7 +273,7 @@ function ServiceTestimonials({ page }: { page: ServicePageData }) {
   );
 }
 
-function ServiceFaq({ page }: { page: ServicePageData }) {
+export function ServiceFaq({ page }: { page: ServicePageData }) {
   return (
     <section className="border-t border-primary/12 px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
       <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-20">

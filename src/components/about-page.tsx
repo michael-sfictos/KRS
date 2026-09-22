@@ -13,7 +13,7 @@ const ctaLabel = "Talk to KRS";
 const inherited = [
   {
     title: "Fragmented admin",
-    text: "Taxisnet, myDATA, ERGANI, the bank, and the accountant's inbox all hold a piece of the truth. None of them hold the file.",
+    text: "Taxisnet, myDATA, ERGANI, the bank, and the accountant's inbox each hold a piece of the truth. None of them is the full picture.",
   },
   {
     title: "Quarterly surprise",
@@ -25,14 +25,14 @@ const inherited = [
   },
   {
     title: "Advice without a trail",
-    text: "A WhatsApp reply is not an operating record. Founders cannot inspect what was decided, by whom, or why.",
+    text: "A WhatsApp reply is not a record. Founders cannot see what was decided, by whom, or why.",
   },
 ];
 
 const practiced = [
   {
-    title: "One operating file",
-    text: "Documents, deadlines, payroll changes, and tax questions sit in the same reviewed sequence.",
+    title: "One platform",
+    text: "Bookkeeping, payroll, tax questions and deadlines sit together, reviewed by your advisor.",
   },
   {
     title: "Monthly close, named review",
@@ -55,7 +55,7 @@ const principles = [
   },
   {
     title: "Evidence over black boxes",
-    text: "Every action in the file can be inspected, explained, and handed to the person who owns it.",
+    text: "Every action on the platform can be inspected, explained, and handed to the person who owns it.",
   },
   {
     title: "A six-hour focused day",
@@ -79,7 +79,7 @@ const stats = [
   {
     label: "Practice started",
     value: "2011",
-    text: "Licensed accounting and tax work in Greece, now prepared through an AI-native operating layer.",
+    text: "Licensed accounting and tax work in Greece, now run on software we built.",
   },
   {
     label: "Structured response",
@@ -94,9 +94,24 @@ const stats = [
     text: "The team works a six-hour day so the reserved professional work stays sharp.",
   },
   {
-    label: "Operating file",
+    label: "One platform",
     value: "1",
-    text: "One place for documents, deadlines, filings, and advisor questions instead of scattered portals.",
+    text: "Bookkeeping, payroll, tax and filings in one place, not scattered portals.",
+  },
+];
+
+const careersOffer = [
+  {
+    title: "Six hours. Eight-hour pay.",
+    text: "KRS pays for eight hours and asks for six of focused work, so the reserved professional work stays sharp.",
+  },
+  {
+    title: "The platform takes the chasing",
+    text: "Document routing, missing documents, and portal loops sit in the software. Advisors spend the day on review.",
+  },
+  {
+    title: "Named review is the job",
+    text: "Licensed work, a visible trail, and a reviewer beside you. You are never asked to hide behind a black box.",
   },
 ];
 
@@ -130,14 +145,17 @@ function Hero() {
         <div className="flex flex-col justify-center px-4 py-14 sm:px-6 sm:py-16 lg:px-12 lg:py-16">
           <p className="mono-label text-secondary">About us</p>
           <h1 className="type-h1 mt-6">
-            <Reveal play="mount">We keep the file.</Reveal>
+            <Reveal play="mount">Accountants.</Reveal>
+            <Reveal delay={0.08} play="mount">
+              Software.
+            </Reveal>
           </h1>
           <RevealFade
             className="mt-6 max-w-[34rem] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8"
             delay={0.12}
             play="mount"
           >
-            Licensed accountants, an AI operating layer, and one file for documents, deadlines, and advice.
+            Named advisors handle bookkeeping, payroll and tax. The platform keeps the work in one place.
           </RevealFade>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button asChild className="h-12 rounded-full px-6 text-sm">
@@ -208,8 +226,8 @@ function Origin() {
             people, ship its own tools, and still do the reserved work of a licensed practice.
           </RevealFade>
           <RevealFade className="mt-5 max-w-2xl text-lg leading-8 text-primary-foreground/72" delay={0.14}>
-            That practice now keeps accounting, payroll, tax, and filings in one operating file. AI prepares the work.
-            Advisors remain accountable for the review. You still run the company.
+            Today that means licensed accountants and tax advisors, working on software we built. AI prepares the work.
+            Advisors remain accountable. You still run the company.
           </RevealFade>
           <blockquote className="mt-12 max-w-xl border-l border-secondary pl-6">
             <p className="font-heading text-2xl font-light leading-snug text-secondary sm:text-3xl">
@@ -232,11 +250,11 @@ function Practice() {
       <div className="mx-auto grid max-w-[1400px] lg:grid-cols-2">
         <div className="bg-muted/55 px-4 py-20 sm:px-6 sm:py-24 lg:px-12">
           <h2 className="type-h3 max-w-lg text-balance">
-            <Reveal>What founders inherit.</Reveal>
+            <Reveal>The usual setup.</Reveal>
           </h2>
           <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">
             Most businesses do not fail at accounting because they lack a tool. They fail because the work is split
-            across people and portals that never share a file.
+            across people and portals that never talk to each other.
           </p>
           <ul className="mt-12 grid gap-8">
             {inherited.map((item) => (
@@ -250,11 +268,11 @@ function Practice() {
 
         <div className="bg-primary px-4 py-20 text-primary-foreground sm:px-6 sm:py-24 lg:px-12">
           <h2 className="type-h3 max-w-lg text-balance">
-            <Reveal>What the file is for.</Reveal>
+            <Reveal>How KRS works.</Reveal>
           </h2>
           <p className="mt-5 max-w-md text-base leading-7 text-primary-foreground/68">
-            KRS is still a licensed practice. The difference is the operating layer: visible work, a named reviewer, and
-            a clock on the question.
+            KRS is still a licensed practice. The difference is the platform: visible work, a named reviewer, and a
+            clock on the question.
           </p>
           <ul className="mt-12 grid gap-8">
             {practiced.map((item) => (
@@ -278,7 +296,7 @@ function Principles() {
           <Reveal>How the practice works.</Reveal>
         </h2>
         <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-          These are the rules we hold ourselves to. If a workflow cannot be inspected, it does not belong in the file.
+          These are the rules we hold ourselves to. If work cannot be inspected, it does not go out.
         </p>
 
         <div className="mt-16 grid gap-x-16 gap-y-12 md:grid-cols-2">
@@ -331,11 +349,11 @@ function Platform() {
       <div className="mx-auto grid max-w-[1400px] items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
         <div>
           <h2 className="type-h3 max-w-xl text-balance">
-            <Reveal>The file makes the work inspectable.</Reveal>
+            <Reveal>See the work as it happens.</Reveal>
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-            KRS built reporting and invoicing tools because the market did not. The operating file is the next layer:
-            questions, documents, and filings in one place a founder can actually see.
+            KRS built reporting and invoicing tools because the market did not. The platform is the next layer:
+            questions, documents and filings in one place you can actually see.
           </p>
           <p className="mt-5 max-w-xl text-lg leading-8 text-muted-foreground">
             Automation prepares. Licensed people decide. You are never asked to trust a black box with a tax return.
@@ -344,7 +362,7 @@ function Platform() {
 
         <div className="gradient-shell shadow-[var(--shadow-lg)]">
           <Image
-            alt="KRS tax advisory file showing a reviewed VAT question and required documents"
+            alt="KRS tax advisory platform showing a reviewed VAT question and required documents"
             className="w-full bg-[#fdf8f0]"
             height={720}
             src="/images/krs-tax-advisory-focused.jpg"
@@ -359,17 +377,14 @@ function Platform() {
 function Careers() {
   return (
     <section className="scroll-mt-24 bg-accent px-4 py-24 text-primary-foreground sm:px-6 lg:px-12" id="careers">
-      <div className="mx-auto max-w-[1400px]">
-        <p className="font-heading text-[clamp(6rem,18vw,14rem)] font-medium leading-none tracking-[-0.06em] text-secondary">
-          6h
-        </p>
-        <div className="mt-8 border-t border-primary-foreground/16 pt-10">
-            <h2 className="type-h3 max-w-3xl text-balance text-primary-foreground">
-              <Reveal>Join a six-hour working day.</Reveal>
-            </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-primary-foreground/72">
-            KRS pays for eight hours and asks for six of focused work. Agentic workflows take the chasing, the routing,
-            and the portal loops, so advisors spend their best hours on judgment.
+      <div className="mx-auto grid max-w-[1400px] items-start gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+        <div>
+          <h2 className="type-h3 max-w-xl text-balance text-primary-foreground">
+            <Reveal>Join the team in Athens.</Reveal>
+          </h2>
+          <p className="mt-6 max-w-xl text-lg leading-8 text-primary-foreground/72">
+            Licensed accountants, payroll specialists, and the people who build our platform. Advisors spend the day on
+            review. Six focused hours, paid as eight.
           </p>
           <Button
             asChild
@@ -381,6 +396,15 @@ function Careers() {
             </Link>
           </Button>
         </div>
+
+        <ul className="border-t border-primary-foreground/16">
+          {careersOffer.map((item) => (
+            <li className="border-b border-primary-foreground/16 py-8" key={item.title}>
+              <h3 className="text-xl font-semibold leading-tight">{item.title}</h3>
+              <p className="mt-3 max-w-md text-sm leading-7 text-primary-foreground/68">{item.text}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -399,7 +423,7 @@ function FinalCta() {
         <div className="col-span-12 lg:col-span-4">
           <h3 className="type-h4 max-w-md text-balance text-primary">We take care of admin. You take care of business.</h3>
           <p className="mt-4 max-w-md text-lg leading-8 text-primary/74">
-            Our team will get the file open, the authorisations in place, and the first close on a calendar.
+            Our team will get you onboarded, the authorisations in place, and the first close on a calendar.
           </p>
           <ul className="mt-6 grid max-w-md gap-2.5 text-base leading-6 text-primary">
             {contactPromises.map((item) => (
