@@ -617,7 +617,7 @@ export default function DesignSystemPage() {
                   </label>
                   <input
                     className="type-body mt-2 h-12 w-full border border-input bg-background px-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                    defaultValue="hello@krs.ai"
+                    defaultValue="krs@krs.gr"
                     id="type-specimen-email"
                     type="email"
                   />

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { ServicePage } from "@/components/accounting-service-page";
+import { FundingPage } from "@/components/funding-page";
 import { fundingGrantsPage } from "@/lib/service-pages";
 
 export const metadata: Metadata = {
@@ -9,6 +9,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services/funding-grants" },
 };
 
-export default function FundingGrantsPage() {
-  return <ServicePage page={fundingGrantsPage} />;
+export default function FundingGrantsRoute() {
+  return <FundingPage />;
 }

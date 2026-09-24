@@ -9,7 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const applyInbox = "hello@krs.ai";
+const applyInbox = "krs@krs.gr";
 
 const reasons = [
   {

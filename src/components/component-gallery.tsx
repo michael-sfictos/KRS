@@ -513,7 +513,7 @@ export function ComponentGallery() {
           >
             <div className="grid gap-4">
               <div className="border border-destructive/28 bg-destructive/6 px-4 py-3 text-sm leading-6 text-destructive" role="alert">
-                We could not send your request. Please try again, or email hello@krs.ai directly.
+                We could not send your request. Please try again, or email krs@krs.gr directly.
               </div>
               <p className="flex gap-2 text-xs leading-5 text-muted-foreground">
                 <Check className="mt-0.5 size-3.5 shrink-0 text-secondary" strokeWidth={2} />

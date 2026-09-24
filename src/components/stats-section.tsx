@@ -100,11 +100,7 @@ export function StatsSection() {
           <div>
             <p className="mono-label text-secondary">The practice</p>
             <h2 className="type-h3 mt-5 max-w-4xl text-balance text-foreground">
-              <Reveal>
-                The operating file,
-                <br />
-                in numbers.
-              </Reveal>
+              <Reveal>The practice, in numbers.</Reveal>
             </h2>
           </div>
           <RevealFade className="max-w-xl text-lg leading-8 text-muted-foreground" delay={0.1}>

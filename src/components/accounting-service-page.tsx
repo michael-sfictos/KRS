@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 
 import {
   Accordion,
@@ -12,10 +12,9 @@ import { Reveal, RevealFade } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 import type { ServicePageData } from "@/lib/service-pages";
 import { cn } from "@/lib/utils";
-
-const ctaLabel = "Talk to KRS";
 
 export function ServicePage({ page }: { page: ServicePageData }) {
   return (
@@ -26,7 +25,7 @@ export function ServicePage({ page }: { page: ServicePageData }) {
       <InlineCta page={page} />
       <Benefits page={page} />
       <SwitchProcess page={page} />
-      <ServiceTestimonials page={page} />
+      <TestimonialsCarousel />
       <ServiceFaq page={page} />
       <FinalCta page={page} />
       <SiteFooter />
@@ -37,48 +36,43 @@ export function ServicePage({ page }: { page: ServicePageData }) {
 function Hero({ page }: { page: ServicePageData }) {
   return (
     <section className="border-b border-primary/12 bg-[#fdf8f0] px-4 sm:px-6 lg:px-12">
-      <div className="mx-auto grid max-w-[1400px] lg:min-h-[620px] lg:grid-cols-[0.88fr_1.12fr]">
-        <div className="flex flex-col justify-center py-14 sm:py-16 lg:py-16">
-          <p className="mono-label text-secondary">{page.eyebrow}</p>
-          <h1 className="type-h1 mt-6 max-w-[680px]">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16">
+        <div className="flex flex-col justify-center py-12 lg:py-16">
+          <span className="inline-flex w-fit items-center rounded-full border border-primary/14 bg-background px-3 py-1 text-xs font-medium text-primary">
+            Consulting
+          </span>
+          <h1 className="mt-5 max-w-[16ch] text-balance text-4xl font-normal leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
             <Reveal play="mount">{page.title}</Reveal>
           </h1>
-          <RevealFade className="mt-6 max-w-[590px] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8" delay={0.12} play="mount">
+          <RevealFade className="mt-5 max-w-[34rem] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8" delay={0.1} play="mount">
             {page.description}
           </RevealFade>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button asChild className="h-12 rounded-full px-6 text-sm">
               <Link href="/onboarding">
-                {ctaLabel}
+                Book an initial free consultation
                 <ArrowRight className="size-4" strokeWidth={1.75} />
               </Link>
             </Button>
             <Link
               className="inline-flex h-12 items-center gap-2 border-b border-primary/30 px-1 text-sm font-semibold transition hover:border-secondary hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
-              href={`#${page.slug}-features`}
+              href="/pricing"
             >
-              {page.exploreLabel}
-              <ChevronRight className="size-4" strokeWidth={1.75} />
+              See pricing
+              <ArrowRight className="size-4" strokeWidth={1.75} />
             </Link>
           </div>
         </div>
 
-        <div className="relative min-h-[420px] overflow-hidden bg-primary sm:min-h-[520px] lg:min-h-full">
+        <div className="relative min-h-[420px] overflow-hidden rounded-[var(--radius-2xl)] bg-primary sm:min-h-[520px] lg:my-16 lg:min-h-[560px]">
           <Image
             alt={page.heroImageAlt}
-            className="object-cover"
+            className="object-cover object-[center_30%]"
             fill
             priority
             sizes="(min-width: 1024px) 56vw, 100vw"
             src={page.heroImage}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/82 via-primary/6 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-primary-foreground sm:p-8 lg:p-10">
-            <p className="max-w-md font-mono text-xs font-semibold uppercase leading-5 tracking-[0.14em]">
-              {page.heroKicker}
-            </p>
-            <span className="font-mono text-xs text-primary-foreground/60">KRS / Athens</span>
-          </div>
         </div>
       </div>
     </section>
@@ -126,7 +120,7 @@ function InlineCta({ page }: { page: ServicePageData }) {
           className="h-12 shrink-0 rounded-full bg-primary px-6 text-primary-foreground hover:bg-primary/90"
         >
           <Link href="/onboarding">
-            {ctaLabel}
+            Book an initial free consultation
             <ArrowRight className="size-4" strokeWidth={1.75} />
           </Link>
         </Button>
@@ -151,7 +145,7 @@ export function Benefits({ page }: { page: ServicePageData }) {
           <div className="relative aspect-[16/9] overflow-hidden bg-[#fdf8f0]">
             <Image
               alt={page.benefitsImageAlt}
-              className="object-contain p-4 sm:p-8"
+              className={page.slug === "consulting" ? "object-cover object-[center_30%]" : "object-contain p-4 sm:p-8"}
               fill
               sizes="(min-width: 1024px) 55vw, 100vw"
               src={page.benefitsImage}
@@ -228,51 +222,6 @@ export function SwitchProcess({ page }: { page: ServicePageData }) {
   );
 }
 
-function ServiceTestimonials({ page }: { page: ServicePageData }) {
-  return (
-    <section className="px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
-      <div className="mx-auto grid max-w-[1400px] overflow-hidden bg-primary lg:grid-cols-[0.4fr_0.6fr]">
-        <div className="relative min-h-[480px]">
-          <Image
-            alt={page.advisorImageAlt}
-            className="object-cover"
-            fill
-            sizes="(min-width: 1024px) 40vw, 100vw"
-            src={page.advisorImage}
-          />
-        </div>
-
-        <div className="p-8 text-primary-foreground sm:p-12 lg:p-14">
-          <p className="mono-label text-secondary">{page.testimonialEyebrow}</p>
-          <h2 className="mt-6 max-w-2xl text-balance text-4xl font-normal leading-tight sm:text-5xl">
-            <Reveal>{page.testimonialTitle}</Reveal>
-          </h2>
-          <div className="mt-10 border-t border-primary-foreground/18">
-            {page.testimonials.map((testimonial, index) => (
-              <figure className="border-b border-primary-foreground/16 py-7" key={testimonial.quote}>
-                <div className="grid gap-4 sm:grid-cols-[42px_1fr]">
-                  <span className="font-mono text-xs font-semibold text-secondary">0{index + 1}</span>
-                  <div>
-                    <blockquote className="text-balance text-xl font-semibold leading-snug sm:text-2xl">
-                      &ldquo;{testimonial.quote}&rdquo;
-                    </blockquote>
-                    <figcaption className="mt-4 text-xs leading-5 text-primary-foreground/52">
-                      {testimonial.role}
-                    </figcaption>
-                  </div>
-                </div>
-              </figure>
-            ))}
-          </div>
-          <p className="mt-6 text-xs leading-5 text-primary-foreground/44">
-            Representative composite wording, not attributed to named customers.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function ServiceFaq({ page }: { page: ServicePageData }) {
   return (
     <section className="border-t border-primary/12 px-4 py-20 sm:px-6 sm:py-24 lg:px-12 lg:py-28">
@@ -322,7 +271,7 @@ function FinalCta({ page }: { page: ServicePageData }) {
             className="h-12 w-fit shrink-0 rounded-full bg-primary-foreground px-6 text-primary hover:bg-primary-foreground/90"
           >
             <Link href="/onboarding">
-              {ctaLabel}
+              Book an initial free consultation
               <ArrowRight className="size-4" strokeWidth={1.75} />
             </Link>
           </Button>

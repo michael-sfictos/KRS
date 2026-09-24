@@ -54,14 +54,14 @@ const navItems: MegaNavItem[] = [
             href: "/services/payroll",
           },
           {
-            label: "Consulting Services",
-            description: "Business plan, funding, and business development support",
-            href: "/services/consulting",
-          },
-          {
             label: "Funding & Grants",
             description: "Local and European grants - we help you find the right funding",
             href: "/services/funding-grants",
+          },
+          {
+            label: "Consulting Services",
+            description: "Business plan, funding, and business development support",
+            href: "/services/consulting",
           },
         ],
       },

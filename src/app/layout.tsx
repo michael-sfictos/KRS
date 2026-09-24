@@ -8,9 +8,9 @@ const siteDescription =
   "Premium accounting, payroll, tax advisory, and agentic compliance operations for modern Greek businesses.";
 const ogImage = {
   url: "/images/ogimage-krs.png",
-  width: 1024,
-  height: 537,
-  alt: "KRS logo on a navy background",
+  width: 1200,
+  height: 630,
+  alt: "KRS logo and the line, Building the financial platform for the businesses of tomorrow",
 };
 
 const fraunces = Fraunces({
@@ -58,6 +58,18 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     images: [ogImage],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/site.webmanifest",
+  other: {
+    "apple-mobile-web-app-title": "KRS",
   },
 };
 

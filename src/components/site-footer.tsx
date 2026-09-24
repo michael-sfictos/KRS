@@ -10,9 +10,9 @@ type FooterLinkGroup = {
 };
 
 const legalStripLinks = [
-  { label: "Terms of service", href: "#" },
-  { label: "Privacy policy", href: "#" },
-  { label: "Cookie policy", href: "#" },
+  { label: "Terms of service", href: "/legal/terms-of-service" },
+  { label: "Privacy policy", href: "/legal/privacy-policy" },
+  { label: "Cookie policy", href: "/legal/cookies" },
   { label: "System status", href: "#" },
 ] as const;
 
@@ -112,8 +112,9 @@ const footerLinkGroups: FooterLinkGroup[] = [
     title: "Legal",
     links: [
       { label: "Imprint", href: "#" },
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms and Conditions", href: "#" },
+      { label: "Privacy Policy", href: "/legal/privacy-policy" },
+      { label: "Terms and Conditions", href: "/legal/terms-of-service" },
+      { label: "Cookie Policy", href: "/legal/cookies" },
       { label: "Trust Center", href: "#" },
     ],
   },
@@ -219,8 +220,8 @@ export function SiteFooter() {
                   +30 210 123 4567
                 </a>
                 <br />
-                <a className="transition-colors hover:text-primary-foreground" href="mailto:hello@krs.ai">
-                  hello@krs.ai
+                <a className="transition-colors hover:text-primary-foreground" href="mailto:krs@krs.gr">
+                  krs@krs.gr
                 </a>
               </p>
             </div>

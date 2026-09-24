@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays, Check, ExternalLink, Phone, RotateCcw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
@@ -17,6 +18,10 @@ type FormState = {
   industry: string;
   payroll: string;
   services: string[];
+  timeline: string;
+  callWindow: string;
+  notes: string;
+  privacy: boolean;
   website: string;
 };
 
@@ -32,6 +37,10 @@ const initialState: FormState = {
   industry: "",
   payroll: "",
   services: [],
+  timeline: "",
+  callWindow: "",
+  notes: "",
+  privacy: false,
   website: "",
 };
 
@@ -44,7 +53,7 @@ const formatPhoneForSubmit = (phone: string) => {
   return `+30${national}`;
 };
 
-const progressLabels = ["About you", "Your business", "Pick a time"] as const;
+const progressLabels = ["About you", "Your business", "The call"] as const;
 const companyStages = ["Operating company", "Starting a company", "Switching advisor", "Group or holding"] as const;
 const teamSizes = ["Just me", "2-10 people", "11-50 people", "51+ people"] as const;
 const industries = [
@@ -59,6 +68,28 @@ const industries = [
 ] as const;
 const payrollOptions = ["Yes", "Not yet"] as const;
 const serviceOptions = ["Tax advisory", "Accounting and myDATA", "Payroll", "Business advisory", "Funding and grants"] as const;
+const timelineOptions = ["This week", "Within two weeks", "I am flexible"] as const;
+const callWindows = ["Morning, 09:00-12:00", "Midday, 12:00-15:00", "Afternoon, 15:00-18:00"] as const;
+
+const callSummary = (timeline: string, callWindow: string) => {
+  const when =
+    timeline === "This week"
+      ? "this week"
+      : timeline === "Within two weeks"
+        ? "within the next two weeks"
+        : "when it suits you";
+  const [start, end] = callWindow.split(", ")[1]?.split("-") ?? [];
+  const part =
+    callWindow.startsWith("Morning")
+      ? "in the morning"
+      : callWindow.startsWith("Midday")
+        ? "around midday"
+        : "in the afternoon";
+
+  return start && end ? `${when}, ${part}, between ${start} and ${end} Athens time` : when;
+};
+type ContactMode = "phone" | "calendar";
+type SubmitStatus = "idle" | "submitting" | "success";
 
 const bookingsPageUrl =
   "https://bookings.cloud.microsoft/book/MichaelSfictos@pgroup.gr/?ismsaljsauthenabled";
@@ -86,8 +117,10 @@ export function OnboardingFlow({
   const [errors, setErrors] = useState<FormErrors>({});
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [contactMode, setContactMode] = useState<ContactMode | null>(null);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const leadSent = useRef(false);
+  const sentBookings = useRef(new Set<string>());
 
   useEffect(() => {
     if (step > 0) headingRef.current?.focus();
@@ -123,6 +156,12 @@ export function OnboardingFlow({
       if (formData.services.length === 0) nextErrors.services = "Choose at least one area where you need help.";
     }
 
+    if (currentStep === 2 && contactMode === "phone") {
+      if (!formData.timeline) nextErrors.timeline = "Choose a preferred timeframe.";
+      if (!formData.callWindow) nextErrors.callWindow = "Choose the best part of the day for a call.";
+      if (!formData.privacy) nextErrors.privacy = "Please confirm that KRS may contact you about this request.";
+    }
+
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -133,33 +172,84 @@ export function OnboardingFlow({
     setStep((current) => Math.max(0, current - 1));
   };
 
-  const sendLead = () => {
-    if (leadSent.current) return;
-    leadSent.current = true;
+  const leadPayload = (booking: "phone_call" | "microsoft_bookings") => ({
+    ...formData,
+    workEmail: formData.workEmail.trim().toLowerCase(),
+    phone: formatPhoneForSubmit(formData.phone),
+    timeline: booking === "phone_call" ? formData.timeline : "",
+    callWindow: booking === "phone_call" ? formData.callWindow : "",
+    notes: booking === "phone_call" ? formData.notes : "",
+    booking,
+  });
 
-    void fetch("/api/onboarding", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...formData,
-        workEmail: formData.workEmail.trim().toLowerCase(),
-        phone: formatPhoneForSubmit(formData.phone),
-        booking: "microsoft_bookings",
-      }),
-    }).catch(() => {
-      leadSent.current = false;
-    });
+  const sendLead = async (booking: "phone_call" | "microsoft_bookings") => {
+    if (sentBookings.current.has(booking)) return true;
+    sentBookings.current.add(booking);
+
+    try {
+      const response = await fetch("/api/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(leadPayload(booking)),
+      });
+
+      if (response.ok) return true;
+      sentBookings.current.delete(booking);
+      return response.status;
+    } catch {
+      sentBookings.current.delete(booking);
+      return 0;
+    }
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validateStep(step) || step >= 2) return;
 
-    if (step === 1) sendLead();
-
     setDirection(1);
     setStep((current) => current + 1);
   };
+
+  const requestPhoneCall = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!validateStep(2) || status === "submitting") return;
+
+    setStatus("submitting");
+    await sendLead("phone_call");
+    setStatus("success");
+  };
+
+  if (status === "success") {
+    const firstName = formData.fullName.trim().split(/\s+/)[0];
+
+    return (
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <span className="flex size-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+          <Check className="size-6" strokeWidth={2} />
+        </span>
+        <p className="mono-label mt-8 text-secondary">Consultation request</p>
+        <h2 className={cn("mt-4 max-w-xl text-balance font-medium leading-tight", compact ? "text-3xl" : "text-4xl sm:text-5xl")}>
+          Thank you{firstName ? `, ${firstName}` : ""}.
+        </h2>
+        <p className={cn("mt-5 max-w-xl text-muted-foreground", compact ? "text-sm leading-6" : "text-base leading-7 sm:text-lg sm:leading-8")}>
+          We will call you {callSummary(formData.timeline, formData.callWindow)}.
+        </p>
+        <div className="mt-9 flex flex-col gap-3 border-t border-primary/14 pt-7 sm:flex-row">
+          <Link
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-6 text-sm font-semibold text-primary transition hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
+            href="/"
+          >
+            Return to KRS
+            <ArrowRight className="size-4" strokeWidth={1.75} />
+          </Link>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <div>
@@ -385,7 +475,7 @@ export function OnboardingFlow({
 
       {step === 2 && (
         <div className={compact ? "mt-6" : "mt-8"}>
-          <p className="mono-label text-secondary">Pick a time</p>
+          <p className="mono-label text-secondary">The call</p>
           <h2
             className={cn(
               "mt-4 text-balance font-medium leading-tight",
@@ -402,37 +492,137 @@ export function OnboardingFlow({
               compact ? "text-sm leading-6" : "leading-7",
             )}
           >
-            Choose a time on the calendar. The call is booked immediately, and you will get a confirmation invite.
+            Ask us to phone you at a time that suits you, or book an exact slot on our calendar.
           </p>
 
-          <div
-            className={cn(
-              "mt-6 w-full border border-primary/12",
-              compact ? "h-[min(78vh,800px)] min-h-[640px]" : "h-[min(82vh,900px)] min-h-[720px]",
-            )}
-          >
-            <iframe
-              allow="storage-access *; clipboard-write; fullscreen"
-              height="100%"
-              scrolling="yes"
-              src={bookingsPageUrl}
-              style={{ border: 0 }}
-              title="Book a consultation with KRS"
-              width="100%"
-            />
-          </div>
-          <p className="mt-3 text-sm text-muted-foreground">
-            If the calendar stays blank,{" "}
-            <a
-              className="font-semibold text-primary underline-offset-4 transition hover:text-secondary hover:underline"
-              href={bookingsPageUrl}
-              rel="noreferrer"
-              target="_blank"
+          <div className={cn("grid gap-3 sm:grid-cols-2", compact ? "mt-6" : "mt-8")} role="group" aria-label="How should we talk?">
+            <button
+              aria-pressed={contactMode === "phone"}
+              className={cn(
+                "flex min-h-28 flex-col items-start gap-2 px-4 py-4 text-left active:translate-y-px",
+                choiceControlClassName,
+                contactMode === "phone" && "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+              )}
+              onClick={() => {
+                setContactMode("phone");
+                setStatus("idle");
+              }}
+              type="button"
             >
-              open it in a new tab
-            </a>
-            .
-          </p>
+              <span className="flex items-center gap-2">
+                <Phone className="size-4" strokeWidth={1.75} />
+                Phone me
+              </span>
+              <span className={cn("text-sm font-normal leading-5", contactMode === "phone" ? "text-primary-foreground/78" : "text-muted-foreground")}>
+                Choose a day window and a time of day. We will call you then.
+              </span>
+            </button>
+            <button
+              aria-pressed={contactMode === "calendar"}
+              className={cn(
+                "flex min-h-28 flex-col items-start gap-2 px-4 py-4 text-left active:translate-y-px",
+                choiceControlClassName,
+                contactMode === "calendar" && "border-primary bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+              )}
+              onClick={() => {
+                setContactMode("calendar");
+                setStatus("idle");
+                setErrors({});
+              }}
+              type="button"
+            >
+              <span className="flex items-center gap-2">
+                <CalendarDays className="size-4" strokeWidth={1.75} />
+                Book on the calendar
+              </span>
+              <span className={cn("text-sm font-normal leading-5", contactMode === "calendar" ? "text-primary-foreground/78" : "text-muted-foreground")}>
+                Pick an exact time. The calendar opens in a new window.
+              </span>
+            </button>
+          </div>
+
+          {contactMode === "phone" && (
+            <form className={cn("grid", compact ? "mt-6 gap-5" : "mt-8 gap-7")} noValidate onSubmit={requestPhoneCall}>
+              <OptionGroup
+                columns="sm:grid-cols-3"
+                error={errors.timeline}
+                label="Preferred timeframe"
+                onSelect={(value) => updateField("timeline", value)}
+                options={timelineOptions}
+                value={formData.timeline}
+              />
+              <OptionGroup
+                columns="sm:grid-cols-3"
+                error={errors.callWindow}
+                label="Best part of the day (Athens time)"
+                onSelect={(value) => updateField("callWindow", value)}
+                options={callWindows}
+                value={formData.callWindow}
+              />
+              <label className={fieldLabelClassName} htmlFor="notes">
+                Anything we should know before the call? (optional)
+                <textarea
+                  className={cn(inputClassName, "h-28 resize-none py-3 leading-6")}
+                  id="notes"
+                  maxLength={1000}
+                  onChange={(event) => updateField("notes", event.target.value)}
+                  placeholder="A deadline, current challenge, or question you want us to prepare for."
+                  value={formData.notes}
+                />
+              </label>
+              <div>
+                <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-muted-foreground">
+                  <input
+                    checked={formData.privacy}
+                    className="mt-1 size-4 shrink-0 accent-[#AE882F]"
+                    onChange={(event) => updateField("privacy", event.target.checked)}
+                    type="checkbox"
+                  />
+                  <span>I agree that KRS may contact me about this consultation request.</span>
+                </label>
+                {errors.privacy && <FieldError>{errors.privacy}</FieldError>}
+              </div>
+              <div className="flex justify-end">
+                <button
+                  className="inline-flex h-12 min-w-36 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px disabled:cursor-wait disabled:opacity-65"
+                  disabled={status === "submitting"}
+                  type="submit"
+                >
+                  {status === "submitting" ? (
+                    <>
+                      Sending
+                      <RotateCcw className="size-4 animate-spin" strokeWidth={1.75} />
+                    </>
+                  ) : (
+                    <>
+                      Request my call
+                      <ArrowRight className="size-4" strokeWidth={1.75} />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          )}
+
+          {contactMode === "calendar" && (
+            <div className={cn("border border-primary/12 px-5 py-5", compact ? "mt-6" : "mt-8")}>
+              <p className={cn("max-w-xl text-muted-foreground", compact ? "text-sm leading-6" : "leading-7")}>
+                The call is booked as soon as you choose a time, and you will get a confirmation invite.
+              </p>
+              <a
+                className="mt-5 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary active:translate-y-px"
+                href={bookingsPageUrl}
+                onClick={() => {
+                  void sendLead("microsoft_bookings");
+                }}
+                rel="noreferrer"
+                target="_blank"
+              >
+                Open calendar
+                <ExternalLink className="size-4" strokeWidth={1.75} />
+              </a>
+            </div>
+          )}
 
           <div className={cn("border-t border-primary/14", compact ? "mt-7 pt-5" : "mt-9 pt-6")}>
             <button
